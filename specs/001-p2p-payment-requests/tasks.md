@@ -21,13 +21,13 @@
 
 **Plan references**: Technical Context, Project Structure, quickstart.md
 
-- [ ] T001 Initialize Next.js 15 project with TypeScript 5.x, React 19, and App Router using pnpm in the repository root
-- [ ] T002 Install runtime dependencies with pnpm: `@supabase/supabase-js`, `@supabase/ssr`, `zod`, and configure Tailwind CSS 4
-- [ ] T003 [P] Create `.env.example` with all required environment variables per quickstart.md
-- [ ] T004 [P] Configure Vitest with TypeScript support and path aliases in `vitest.config.ts`
-- [ ] T005 [P] Configure Playwright with base URL and test directory in `playwright.config.ts`
-- [ ] T006 [P] Configure ESLint and Prettier for TypeScript and Next.js conventions
-- [ ] T007 Add package scripts to `package.json`: `dev`, `build`, `test`, `test:watch`, `test:e2e`, `lint` (run via pnpm)
+- [X] T001 Initialize Next.js 15 project with TypeScript 5.x, React 19, and App Router using pnpm in the repository root
+- [X] T002 Install runtime dependencies with pnpm: `@supabase/supabase-js`, `@supabase/ssr`, `zod`, and configure Tailwind CSS 4
+- [X] T003 [P] Create `.env.example` with all required environment variables per quickstart.md
+- [X] T004 [P] Configure Vitest with TypeScript support and path aliases in `vitest.config.ts`
+- [X] T005 [P] Configure Playwright with base URL and test directory in `playwright.config.ts`
+- [X] T006 [P] Configure ESLint and Prettier for TypeScript and Next.js conventions
+- [X] T007 Add package scripts to `package.json`: `dev`, `build`, `test`, `test:watch`, `test:e2e`, `lint` (run via pnpm)
 
 **Checkpoint**: Project scaffolded — `pnpm dev` starts, `pnpm test` runs, `pnpm test:e2e` is configured.
 
