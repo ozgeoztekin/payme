@@ -1,0 +1,80 @@
+---
+description: PayMe implementation and codebase rules
+globs: ["**/*"]
+alwaysApply: true
+---
+
+# PayMe Implementation Rules
+
+## General
+- Follow the PayMe constitution, spec, clarification, plan, and tasks as the source of truth.
+- Use TypeScript everywhere.
+- Prefer simple, readable implementations over unnecessary abstraction.
+- Document assumptions before implementing ambiguous behavior.
+
+## Architecture
+- Build PayMe as a responsive web application using Next.js.
+- Keep frontend, backend, and domain logic clearly separated.
+- Do not place business logic inside UI components.
+- Do not place core business logic directly inside route handlers or server actions.
+- Centralize domain logic in service modules such as request, payment, wallet, bank account, and audit services.
+
+## Financial Safety
+- Store all monetary values as integer minor units only.
+- Never use floating point values for money.
+- All balance-changing and request state-changing operations must be atomic.
+- Use transaction-safe server-side logic for financial mutations.
+- Never perform financial mutations on the client.
+- Do not allow partial updates to balances, transactions, or request statuses.
+
+## Request Lifecycle
+- Enforce request status transitions through centralized domain logic.
+- Reject invalid transitions explicitly.
+- Expired requests must not be payable or otherwise mutated.
+- Prevent duplicate or concurrent payment submissions.
+
+## Validation and Authorization
+- Validate all state-changing actions on the server.
+- Validate actor permissions, ownership, current status, expiration rules, and sufficient balance where relevant.
+- Client-side validation is for UX only and must not replace backend enforcement.
+- Public request access must be limited to approved public flows only.
+
+## Backend
+- Use Next.js route handlers or server actions for all state-changing operations.
+- Keep handlers thin and delegate business logic to services.
+- Keep database writes controlled through domain services.
+- Write audit logs for all critical business actions.
+
+## Data Modeling
+- Use explicit types and enums for statuses and domain values.
+- Keep schema constraints aligned with product rules.
+- Preserve consistency between payment requests, wallets, transactions, bank accounts, and audit logs.
+
+## Frontend
+- Prefer reusable shared UI components for repeated patterns.
+- Keep components small, composable, and focused.
+- Separate presentation from business logic.
+- Make critical flows clear and trustworthy.
+- Include intentional loading, success, error, empty, and disabled states.
+
+## Styling
+- Use Tailwind CSS as the primary styling approach.
+- Keep styling colocated with components.
+- Use component-scoped CSS modules only when necessary for complex custom styling.
+- Avoid duplicated styling patterns when a reusable component can be created.
+
+## Testing
+- Cover critical user journeys with Playwright end-to-end tests.
+- Cover business rules and validation logic with Vitest unit tests.
+- Prioritize tests for financial correctness, request lifecycle rules, expiration behavior, and balance checks.
+- Regressions in financial flows should be treated as blocking issues.
+
+## Code Quality
+- Prefer shared utilities and services over duplicated logic.
+- Refactor repeated patterns into reusable components or functions.
+- Keep naming explicit and domain-oriented.
+- Favor maintainability and clarity over cleverness.
+
+## Documentation
+- Keep README and setup instructions aligned with implementation.
+- Record notable assumptions and trade-offs in the relevant spec or documentation.
