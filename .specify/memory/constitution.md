@@ -80,6 +80,7 @@ Follow-up TODOs: none
 - Prefer reusable, composable UI components over one-off implementations.
 - Cover every critical user journey with at least one end-to-end test.
 - Document assumptions before implementing any ambiguous behavior; when in doubt, ask rather than guess.
+- Keep styles modular and maintainable.
 
 ## Governance
 
