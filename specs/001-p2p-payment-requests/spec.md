@@ -5,6 +5,16 @@
 **Status**: Draft  
 **Input**: User description: "Build the first core feature for PayMe: a peer-to-peer payment request flow in a responsive web application."
 
+## Clarifications
+
+### Session 2026-04-08
+
+- Q: Expiration period contradiction — spec body says 14 days, assumptions say 7 days. Which is correct? → A: 7 days.
+- Q: Recipient matching — should the system resolve recipient contact to a user ID eagerly at creation, lazily at query time, or hybrid? → A: Lazy matching at query time.
+- Q: Should public/guest endpoints (shareable link page, guest payment, guest bank connection) have rate limiting? → A: Yes, basic IP-based rate limiting on guest payment and bank connection endpoints.
+- Q: When a user with an existing bank account connects a new one, should it replace the existing or be blocked? → A: Replace the existing one.
+- Q: What happens when a signed-in recipient opens the public shareable link for a request addressed to them? → A: Redirect to the authenticated request detail view.
+
 ## User Scenarios & Testing *(mandatory)*
 
 ### User Story 1 — Create a Payment Request (Priority: P1)
@@ -145,7 +155,7 @@ A signed-in recipient of a pending request can decline it, and a signed-in reque
 
 ### User Story 9 — Request Expiration (Priority: P9)
 
-Pending payment requests automatically expire after a defined duration (14 days from creation). When a request expires, it moves to the "expired" state and can no longer be paid, declined, or canceled. Expiration state is clearly visible in both the dashboard and detail views. Requests approaching expiration display a countdown to help users act before the deadline.
+Pending payment requests automatically expire after a defined duration (7 days from creation). When a request expires, it moves to the "expired" state and can no longer be paid, declined, or canceled. Expiration state is clearly visible in both the dashboard and detail views. Requests approaching expiration display a countdown to help users act before the deadline.
 
 **Why this priority**: Expiration prevents indefinite obligation and keeps the request ecosystem clean. It is a business rule that protects both parties but is lower priority because the core flows work without it initially.
 
@@ -163,15 +173,16 @@ Pending payment requests automatically expire after a defined duration (14 days 
 ### Edge Cases
 
 - **Recipient is the same user as the sender**: The system must prevent a user from creating a request to their own email or phone, even if they have both an email and a phone and use the alternate contact.
-- **Recipient contact matches a registered user**: If the recipient email or phone matches a registered user, the request should appear in that user's incoming requests on their dashboard.
-- **Recipient contact does not match any registered user**: The request is still created with a shareable link. If the recipient later registers with that contact, the request should appear in their incoming dashboard.
+- **Recipient contact matches a registered user**: If the recipient email or phone matches a registered user, the request should appear in that user's incoming requests on their dashboard. Matching is performed dynamically at query time (lazy), not stored as a resolved user ID at creation.
+- **Recipient contact does not match any registered user**: The request is still created with a shareable link. If the recipient later registers with that contact, the request automatically appears in their incoming dashboard because matching is lazy — no backfill or migration is needed.
 - **Concurrent payment attempts**: If two parties (e.g., the registered recipient and a guest via the public link) attempt to pay the same request simultaneously, only one payment must succeed. The second must be rejected gracefully.
 - **Payment request created while recipient is already viewing their dashboard**: The new request should be discoverable on refresh or next navigation to the dashboard.
 - **User loses connectivity during payment**: The payment must either complete fully or not at all. The user should be able to return and see the actual state of the request.
 - **Amount at boundary values**: Requests for very small amounts (e.g., $0.01) and very large amounts must be handled. The system should enforce a minimum of $0.01 and a reasonable maximum for MVP purposes.
 - **Note field with special characters or maximum length**: The note field must handle Unicode and enforce a maximum character length gracefully.
 - **Expired request with in-flight payment**: If a request expires while a user is on the payment confirmation screen, the payment submission must be rejected with a clear expiration message.
-- **Multiple bank accounts**: For MVP, users can connect one mocked bank account. Attempting to connect another replaces the existing one or the option is unavailable (see Assumptions).
+- **Multiple bank accounts**: For MVP, users can connect one mocked bank account. Connecting a new one replaces the existing one.
+- **Signed-in user opens public shareable link**: If a signed-in user opens a public shareable link for a request where they are the recipient, the system redirects them to the authenticated detail view (providing wallet funding and full dashboard context).
 - **Shareable link guessing/enumeration**: Public shareable links must use non-guessable identifiers to prevent unauthorized access to request details.
 - **Inactive user attempts restricted actions**: Any attempt by an inactive user to create a request, pay, top up, or perform other restricted actions must be blocked with clear feedback.
 
@@ -204,7 +215,7 @@ Pending payment requests automatically expire after a defined duration (14 days 
 
 **Dashboard**
 
-- **FR-015**: The system MUST provide signed-in users with a dashboard showing incoming requests (where they are the recipient) and outgoing requests (where they are the requester).
+- **FR-015**: The system MUST provide signed-in users with a dashboard showing incoming requests (where they are the recipient, matched dynamically by contact) and outgoing requests (where they are the requester).
 - **FR-016**: The system MUST display for each request entry: amount, counterparty, note preview, created date, status, and expiration information when the request is pending and nearing expiration.
 - **FR-017**: The system MUST allow users to search requests by counterparty information.
 - **FR-018**: The system MUST allow users to filter requests by status.
@@ -248,6 +259,8 @@ Pending payment requests automatically expire after a defined duration (14 days 
 - **FR-041**: The system MUST allow non-users to pay a pending request through a guest mocked bank connection flow on the public page.
 - **FR-042**: The system MUST NOT offer wallet funding to guest users on the public page.
 - **FR-043**: The system MUST display an appropriate read-only state on the public page when the request is paid, declined, canceled, expired, or not found.
+- **FR-043a**: The system MUST apply IP-based rate limiting on guest payment submission and guest bank connection endpoints to prevent abuse.
+- **FR-043b**: The system MUST redirect a signed-in user who opens a public shareable link for a request where they are the recipient to the authenticated request detail view.
 
 **Decline and Cancel**
 
@@ -258,7 +271,7 @@ Pending payment requests automatically expire after a defined duration (14 days 
 
 **Expiration**
 
-- **FR-048**: The system MUST expire pending requests after 14 days from creation.
+- **FR-048**: The system MUST expire pending requests after 7 days from creation.
 - **FR-049**: The system MUST reject all state-changing actions (pay, decline, cancel) on expired requests with a clear "request expired" message.
 - **FR-050**: The system MUST display expiration state and countdown information in dashboard and detail views.
 
