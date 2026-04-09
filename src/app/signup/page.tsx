@@ -7,14 +7,25 @@ import { signUp } from '@/lib/actions/auth-actions';
 export default function SignUpPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [emailSent, setEmailSent] = useState(false);
   const [isPending, startTransition] = useTransition();
 
   async function handleSubmit(formData: FormData) {
     setError(null);
+    const password = formData.get('password') as string;
+    const confirmPassword = formData.get('confirmPassword') as string;
+
+    if (password !== confirmPassword) {
+      setError('Passwords do not match.');
+      return;
+    }
+
     startTransition(async () => {
       const result = await signUp(formData);
       if (result?.error) {
         setError(result.error);
+      } else if (result?.success) {
+        setEmailSent(true);
       }
     });
   }
@@ -46,6 +57,34 @@ export default function SignUpPage() {
           </div>
 
           <div className="bg-white p-8 rounded-2xl shadow-sm">
+            {emailSent ? (
+              <div className="text-center py-4">
+                <div className="inline-flex items-center justify-center w-16 h-16 bg-emerald-100 rounded-full mb-6">
+                  <svg className="w-8 h-8 text-emerald-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <rect x="2" y="4" width="20" height="16" rx="2" />
+                    <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
+                  </svg>
+                </div>
+                <h2 className="text-xl font-bold text-foreground font-[family-name:var(--font-manrope)] mb-2">
+                  Check your email
+                </h2>
+                <p className="text-on-surface-variant text-sm leading-relaxed mb-6">
+                  We&apos;ve sent a confirmation link to your email address.
+                  Click the link to activate your account.
+                </p>
+                <Link
+                  href="/login"
+                  className="inline-flex items-center gap-2 text-indigo-600 font-semibold text-sm hover:underline"
+                >
+                  Back to Sign In
+                  <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <line x1="5" y1="12" x2="19" y2="12" />
+                    <polyline points="12 5 19 12 12 19" />
+                  </svg>
+                </Link>
+              </div>
+            ) : (
+            <>
             <form action={handleSubmit} className="space-y-6">
               {error && (
                 <div className="p-3 rounded-xl bg-red-50 text-red-700 text-sm font-medium">
@@ -140,7 +179,6 @@ export default function SignUpPage() {
                 </button>
               </div>
             </form>
-
             <div className="mt-8 pt-8 border-t border-dashed border-surface-container">
               <p className="text-center text-on-surface-variant text-sm">
                 Already have an account?{' '}
@@ -149,6 +187,8 @@ export default function SignUpPage() {
                 </Link>
               </p>
             </div>
+            </>
+            )}
           </div>
         </div>
       </main>

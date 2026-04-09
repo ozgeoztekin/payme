@@ -2,11 +2,13 @@
 
 import { useState, useTransition } from 'react';
 import Link from 'next/link';
+import { useSearchParams } from 'next/navigation';
 import { signIn } from '@/lib/actions/auth-actions';
 
 export default function LoginPage() {
+  const searchParams = useSearchParams();
   const [showPassword, setShowPassword] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(searchParams.get('error'));
   const [isPending, startTransition] = useTransition();
 
   async function handleSubmit(formData: FormData) {
