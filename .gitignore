@@ -50,3 +50,6 @@ next-env.d.ts
 # IDE
 .vscode/
 .idea/
+
+# design references
+.design-refs/

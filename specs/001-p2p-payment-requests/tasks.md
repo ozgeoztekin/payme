@@ -43,50 +43,50 @@
 
 ### Database & Infrastructure
 
-- [ ] T008 Create database migration with all tables (users, wallets, bank_accounts, payment_requests, payment_transactions, audit_logs), constraints, indexes, and RLS policies in `supabase/migrations/001_initial_schema.sql`
-- [ ] T009 Create `payment_requests_view` with `effective_status` computed column for lazy expiration in `supabase/migrations/001_initial_schema.sql`
-- [ ] T010 Create Postgres functions for atomic financial transactions (`process_payment`, `process_top_up`) invoked via `rpc()` in `supabase/migrations/002_rpc_functions.sql`
-- [ ] T011 Create seed data script with two test users (Alice, Bob), wallets, bank accounts, and sample requests in `supabase/seed.sql`
+- [X] T008 Create database migration with all tables (users, wallets, bank_accounts, payment_requests, payment_transactions, audit_logs), constraints, indexes, and RLS policies in `supabase/migrations/001_initial_schema.sql`
+- [X] T009 Create `payment_requests_view` with `effective_status` computed column for lazy expiration in `supabase/migrations/001_initial_schema.sql`
+- [X] T010 Create Postgres functions for atomic financial transactions (`process_payment`, `process_top_up`) invoked via `rpc()` in `supabase/migrations/002_rpc_functions.sql`
+- [X] T011 Create seed data script with two test users (Alice, Bob), wallets, bank accounts, and sample requests in `supabase/seed.sql`
 
 ### Supabase Client Configuration
 
-- [ ] T012 [P] Create Supabase server-side client factory using `@supabase/ssr` in `src/lib/supabase/server.ts`
-- [ ] T013 [P] Create Supabase browser-side client factory in `src/lib/supabase/client.ts`
-- [ ] T014 [P] Create Supabase middleware helper for cookie-based auth in `src/lib/supabase/middleware.ts`
-- [ ] T015 [P] Create Supabase admin client (service-role, bypasses RLS) in `src/lib/db/client.ts`
+- [X] T012 [P] Create Supabase server-side client factory using `@supabase/ssr` in `src/lib/supabase/server.ts`
+- [X] T013 [P] Create Supabase browser-side client factory in `src/lib/supabase/client.ts`
+- [X] T014 [P] Create Supabase middleware helper for cookie-based auth in `src/lib/supabase/middleware.ts`
+- [X] T015 [P] Create Supabase admin client (service-role, bypasses RLS) in `src/lib/db/client.ts`
 
 ### TypeScript Types & Constants
 
-- [ ] T016 [P] Define database row types for all six entities in `src/lib/types/database.ts`
-- [ ] T017 [P] Define domain types, enums (RequestStatus, TransactionType, FundingSourceType, ActorType, AuditAction) in `src/lib/types/domain.ts`
-- [ ] T018 [P] Define ActionResult envelope and all request/response types per contracts/api.md in `src/lib/types/api.ts`
-- [ ] T019 [P] Define app-wide constants (amount bounds, note max length, expiration days, pagination defaults, mocked bank balance) in `src/lib/constants.ts`
+- [X] T016 [P] Define database row types for all six entities in `src/lib/types/database.ts`
+- [X] T017 [P] Define domain types, enums (RequestStatus, TransactionType, FundingSourceType, ActorType, AuditAction) in `src/lib/types/domain.ts`
+- [X] T018 [P] Define ActionResult envelope and all request/response types per contracts/api.md in `src/lib/types/api.ts`
+- [X] T019 [P] Define app-wide constants (amount bounds, note max length, expiration days, pagination defaults, mocked bank balance) in `src/lib/constants.ts`
 
 ### Core Infrastructure
 
-- [ ] T020 Create transaction helper wrapping Supabase `rpc()` calls in `src/lib/db/transactions.ts`
-- [ ] T021 Implement audit service (createAuditLog) supporting user, guest, and system actor types in `src/lib/services/audit-service.ts`
-- [ ] T022 [P] Create common validators (email format, E.164 phone format, amount bounds) using Zod in `src/lib/validators/common-validators.ts`
-- [ ] T022a [P] Create `formatCents` money formatting utility (integer cents → `$X.XX` via `Intl.NumberFormat`) in `src/lib/utils.ts`
-- [ ] T023 Create Next.js middleware for auth redirect and public route detection in `src/middleware.ts`
+- [X] T020 Create transaction helper wrapping Supabase `rpc()` calls in `src/lib/db/transactions.ts`
+- [X] T021 Implement audit service (createAuditLog) supporting user, guest, and system actor types in `src/lib/services/audit-service.ts`
+- [X] T022 [P] Create common validators (email format, E.164 phone format, amount bounds) using Zod in `src/lib/validators/common-validators.ts`
+- [X] T022a [P] Create `formatCents` money formatting utility (integer cents → `$X.XX` via `Intl.NumberFormat`) in `src/lib/utils.ts`
+- [X] T023 Create Next.js middleware for auth redirect and public route detection in `src/middleware.ts`
 
 ### Shared UI Components
 
-- [ ] T024 [P] Build Button component with primary, secondary, danger, disabled, and loading variants in `src/components/ui/button.tsx`
-- [ ] T025 [P] Build Card component with optional header and footer in `src/components/ui/card.tsx`
-- [ ] T026 [P] Build Input component with label, error state, and help text in `src/components/ui/input.tsx`
-- [ ] T027 [P] Build Select component with label and error state in `src/components/ui/select.tsx`
-- [ ] T028 [P] Build Modal component for confirmation dialogs in `src/components/ui/modal.tsx`
-- [ ] T029 [P] Build Badge component with color-coded status variants in `src/components/ui/badge.tsx`
-- [ ] T030 [P] Build Spinner loading indicator component in `src/components/ui/spinner.tsx`
-- [ ] T031 [P] Build EmptyState component with illustration, message, and optional CTA in `src/components/ui/empty-state.tsx`
-- [ ] T032 [P] Build ErrorMessage component for inline and toast error display in `src/components/ui/error-message.tsx`
+- [X] T024 [P] Build Button component with primary, secondary, danger, disabled, and loading variants in `src/components/ui/button.tsx`
+- [X] T025 [P] Build Card component with optional header and footer in `src/components/ui/card.tsx`
+- [X] T026 [P] Build Input component with label, error state, and help text in `src/components/ui/input.tsx`
+- [X] T027 [P] Build Select component with label and error state in `src/components/ui/select.tsx`
+- [X] T028 [P] Build Modal component for confirmation dialogs in `src/components/ui/modal.tsx`
+- [X] T029 [P] Build Badge component with color-coded status variants in `src/components/ui/badge.tsx`
+- [X] T030 [P] Build Spinner loading indicator component in `src/components/ui/spinner.tsx`
+- [X] T031 [P] Build EmptyState component with illustration, message, and optional CTA in `src/components/ui/empty-state.tsx`
+- [X] T032 [P] Build ErrorMessage component for inline and toast error display in `src/components/ui/error-message.tsx`
 
 ### App Shell
 
-- [ ] T033 Create root layout with global styles and Supabase provider in `src/app/layout.tsx`
-- [ ] T034 Create `(auth)` route group layout with auth check and navigation sidebar in `src/app/(auth)/layout.tsx`
-- [ ] T035 Create landing page with auth-based redirect to dashboard in `src/app/page.tsx`
+- [X] T033 Create root layout with global styles and Supabase provider in `src/app/layout.tsx`
+- [X] T034 Create `(auth)` route group layout with auth check and navigation sidebar in `src/app/(auth)/layout.tsx`
+- [X] T035 Create landing page with auth-based redirect to dashboard in `src/app/page.tsx`
 
 **Checkpoint**: Foundation ready — database schema applied, Supabase configured, shared UI components available, auth middleware active. User story implementation can now begin.
 

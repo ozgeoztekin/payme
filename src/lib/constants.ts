@@ -1,0 +1,10 @@
+export const AMOUNT_MIN_CENTS = 1;
+export const AMOUNT_MAX_CENTS = 1_000_000;
+export const NOTE_MAX_LENGTH = 250;
+export const EXPIRATION_DAYS = 7;
+export const PAGINATION_DEFAULT_PAGE = 1;
+export const PAGINATION_DEFAULT_LIMIT = 20;
+export const PAGINATION_MAX_LIMIT = 50;
+export const MOCKED_BANK_BALANCE_CENTS = 1_000_000;
+export const RATE_LIMIT_MAX_REQUESTS = 10;
+export const RATE_LIMIT_WINDOW_MS = 60_000;
