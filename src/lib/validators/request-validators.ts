@@ -64,9 +64,7 @@ export function validateCreateRequest(
     sender.email.toLowerCase().trim() === normalizedRecipient;
 
   const isSelfByPhone =
-    recipientType === 'phone' &&
-    sender.phone &&
-    sender.phone === normalizedRecipient;
+    recipientType === 'phone' && sender.phone && sender.phone === normalizedRecipient;
 
   if (isSelfByEmail || isSelfByPhone) {
     return {

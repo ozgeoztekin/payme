@@ -39,8 +39,19 @@ function WalletIcon({ className }: { className?: string }) {
 function BankIcon({ className }: { className?: string }) {
   return (
     <svg className={className} viewBox="0 0 24 24" fill="none" aria-hidden>
-      <path d="M3 21h18M3 10h18M12 3l9 7H3l9-7z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-      <path d="M5 10v11M9 10v11M15 10v11M19 10v11" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+      <path
+        d="M3 21h18M3 10h18M12 3l9 7H3l9-7z"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M5 10v11M9 10v11M15 10v11M19 10v11"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinecap="round"
+      />
     </svg>
   );
 }
@@ -59,8 +70,7 @@ export function FundingSourceSelector({
       detail: `Balance: ${formatCents(walletBalanceCents)}`,
       balanceCents: walletBalanceCents,
       disabled: walletBalanceCents < amountCents,
-      disabledReason:
-        walletBalanceCents < amountCents ? 'Insufficient wallet balance' : undefined,
+      disabledReason: walletBalanceCents < amountCents ? 'Insufficient wallet balance' : undefined,
     },
   ];
 
@@ -72,9 +82,7 @@ export function FundingSourceSelector({
       balanceCents: bankAccount.balanceCents,
       disabled: bankAccount.balanceCents < amountCents,
       disabledReason:
-        bankAccount.balanceCents < amountCents
-          ? 'Insufficient bank balance'
-          : undefined,
+        bankAccount.balanceCents < amountCents ? 'Insufficient bank balance' : undefined,
     });
   }
 
@@ -126,7 +134,13 @@ export function FundingSourceSelector({
             >
               {isSelected && (
                 <svg className="h-3 w-3 text-white" viewBox="0 0 12 12" fill="none" aria-hidden>
-                  <path d="M2 6l3 3 5-5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                  <path
+                    d="M2 6l3 3 5-5"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
                 </svg>
               )}
             </span>

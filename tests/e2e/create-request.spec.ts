@@ -65,9 +65,9 @@ test.describe('Create Payment Request (US1)', () => {
     await page.getByLabel(/recipient/i).fill(TEST_EMAIL);
     await page.getByRole('button', { name: /request funds/i }).click();
 
-    await expect(
-      page.getByText(/cannot request money from yourself/i),
-    ).toBeVisible({ timeout: 5000 });
+    await expect(page.getByText(/cannot request money from yourself/i)).toBeVisible({
+      timeout: 5000,
+    });
   });
 
   test('generates a shareable link that can be copied', async ({ page }) => {

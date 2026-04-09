@@ -1,31 +1,232 @@
+'use client';
+
 import Link from 'next/link';
+import { useEffect, useState } from 'react';
+import { useRequests, type RequestStatusFilterChoice } from '@/hooks/use-requests';
+import type { RequestListTab } from '@/lib/types/api';
+import { RequestList } from '@/components/requests/request-list';
+import { ErrorMessage } from '@/components/ui/error-message';
+import { cn } from '@/lib/utils';
+
+const STATUS_FILTERS: { value: RequestStatusFilterChoice; label: string }[] = [
+  { value: 'all', label: 'All' },
+  { value: 'pending', label: 'Pending' },
+  { value: 'paid', label: 'Paid' },
+  { value: 'declined', label: 'Declined' },
+  { value: 'canceled', label: 'Canceled' },
+  { value: 'expired', label: 'Expired' },
+];
+
+function ListSkeleton() {
+  return (
+    <div className="overflow-hidden rounded-2xl border border-outline-variant/20 bg-white shadow-sm">
+      <div className="flex flex-col divide-y divide-outline-variant/10">
+        {[1, 2, 3].map((i) => (
+          <div
+            key={i}
+            className="flex animate-pulse flex-col gap-4 p-6 md:flex-row md:items-center md:justify-between"
+          >
+            <div className="flex items-center gap-4">
+              <div className="h-12 w-12 rounded-full bg-surface-container-high" />
+              <div className="space-y-2">
+                <div className="h-4 w-40 rounded bg-surface-container-high" />
+                <div className="h-3 w-56 rounded bg-surface-container" />
+              </div>
+            </div>
+            <div className="flex flex-col gap-2 md:items-end">
+              <div className="h-5 w-24 rounded bg-surface-container-high" />
+              <div className="h-5 w-20 rounded-full bg-surface-container" />
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
 
 export default function DashboardPage() {
+  const [tab, setTab] = useState<RequestListTab>('incoming');
+  const [status, setStatus] = useState<RequestStatusFilterChoice>('all');
+  const [search, setSearch] = useState('');
+  const [page, setPage] = useState(1);
+
+  const { requests, total, limit, loading, error, pending_action_count, debouncedSearch } =
+    useRequests({ tab, status, search, page });
+
+  useEffect(() => {
+    setPage(1);
+  }, [tab, status, debouncedSearch]);
+
+  const totalPages = limit > 0 ? Math.max(1, Math.ceil(total / limit)) : 1;
+
+  const emptyCopy =
+    tab === 'incoming'
+      ? {
+          title: 'No incoming requests',
+          description:
+            'When someone sends you a payment request, it will show up here. You can also create your own request to get paid.',
+        }
+      : {
+          title: 'No outgoing requests',
+          description:
+            'Requests you create appear here. Start by sending your first payment request.',
+        };
+
   return (
-    <div className="mx-auto max-w-3xl space-y-8">
-      <div>
-        <h1 className="font-[family-name:var(--font-manrope)] text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl">
-          Dashboard
-        </h1>
-        <p className="mt-2 text-slate-500">
-          Your incoming and outgoing payment requests will appear here. For now,
-          create a request to get started.
-        </p>
+    <div className="mx-auto max-w-5xl space-y-10">
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+        <div>
+          <h1 className="font-[family-name:var(--font-manrope)] text-2xl font-bold tracking-tight text-foreground sm:text-3xl">
+            Dashboard
+          </h1>
+          <p className="mt-2 text-slate-500">
+            Incoming and outgoing payment requests, with search and filters.
+          </p>
+        </div>
+        <Link
+          href="/requests/new"
+          className="inline-flex min-h-11 shrink-0 items-center justify-center rounded-full bg-indigo-600 px-5 text-sm font-semibold text-white transition-colors hover:bg-indigo-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-600 focus-visible:ring-offset-2"
+        >
+          New payment request
+        </Link>
       </div>
 
-      <div className="rounded-2xl border border-slate-200/80 bg-white p-8 shadow-sm">
-        <p className="text-center text-sm text-slate-500">
-          Request lists, search, and filters are coming in a later milestone.
-        </p>
-        <div className="mt-6 flex justify-center">
-          <Link
-            href="/requests/new"
-            className="inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-indigo-600 px-6 text-base font-medium text-white transition-colors hover:bg-indigo-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-600 focus-visible:ring-offset-2"
-          >
-            New payment request
-          </Link>
+      <div className="rounded-2xl bg-surface-container-low p-6 shadow-sm ring-1 ring-outline-variant/15">
+        <div className="flex flex-col gap-6">
+          <div className="relative w-full md:max-w-md">
+            <svg
+              className="pointer-events-none absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-slate-400"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              aria-hidden
+            >
+              <circle cx="11" cy="11" r="8" />
+              <path d="m21 21-4.3-4.3" strokeLinecap="round" />
+            </svg>
+            <input
+              type="search"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              placeholder="Search by sender, recipient, or note"
+              className="w-full rounded-full border-0 bg-white py-3 pl-12 pr-4 text-sm text-foreground shadow-sm ring-1 ring-outline-variant/20 transition-[box-shadow] placeholder:text-slate-400 focus:bg-white focus:outline-none focus:ring-2 focus:ring-indigo-600/25"
+              aria-label="Search requests"
+            />
+          </div>
+
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+            <div
+              className="flex gap-2 overflow-x-auto pb-1 [-ms-overflow-style:none] [scrollbar-width:none] sm:pb-0 [&::-webkit-scrollbar]:hidden"
+              role="tablist"
+              aria-label="Request direction"
+            >
+              {(
+                [
+                  { id: 'incoming' as const, label: 'Incoming' },
+                  { id: 'outgoing' as const, label: 'Outgoing' },
+                ] as const
+              ).map((t) => (
+                <button
+                  key={t.id}
+                  type="button"
+                  role="tab"
+                  aria-selected={tab === t.id}
+                  onClick={() => setTab(t.id)}
+                  className={cn(
+                    'shrink-0 rounded-full px-4 py-2 text-sm font-semibold transition-colors',
+                    tab === t.id
+                      ? 'bg-indigo-600 text-white'
+                      : 'bg-surface-container-high text-slate-600 hover:bg-indigo-100/80 hover:text-slate-900',
+                  )}
+                >
+                  {t.label}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <div>
+            <p className="mb-2 text-xs font-medium uppercase tracking-wide text-slate-500">
+              Filter by status
+            </p>
+            <div className="flex flex-wrap gap-2">
+              {STATUS_FILTERS.map((f) => (
+                <button
+                  key={f.value}
+                  type="button"
+                  onClick={() => setStatus(f.value)}
+                  className={cn(
+                    'rounded-full px-3 py-1.5 text-xs font-semibold transition-colors',
+                    status === f.value
+                      ? 'bg-indigo-600 text-white'
+                      : 'bg-surface-container-high text-slate-600 hover:bg-surface-container',
+                  )}
+                >
+                  {f.label}
+                </button>
+              ))}
+            </div>
+          </div>
         </div>
       </div>
+
+      {error ? (
+        <ErrorMessage
+          message={error}
+          className="rounded-xl bg-rose-50 px-4 py-3 ring-1 ring-rose-100"
+        />
+      ) : null}
+
+      <section className="space-y-4" aria-live="polite">
+        <div className="flex flex-wrap items-center justify-between gap-3 px-1">
+          <h2 className="font-[family-name:var(--font-manrope)] text-xl font-bold text-foreground">
+            {tab === 'incoming' ? 'Incoming requests' : 'Outgoing requests'}
+          </h2>
+          {tab === 'incoming' && pending_action_count != null && pending_action_count > 0 ? (
+            <span className="rounded-full bg-indigo-100 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wide text-indigo-800">
+              {pending_action_count} action required
+            </span>
+          ) : null}
+        </div>
+
+        {loading ? (
+          <ListSkeleton />
+        ) : (
+          <RequestList
+            requests={requests}
+            tab={tab}
+            emptyTitle={emptyCopy.title}
+            emptyDescription={emptyCopy.description}
+          />
+        )}
+
+        {!loading && totalPages > 1 ? (
+          <div className="flex flex-wrap items-center justify-between gap-3 px-1 pt-2 text-sm text-slate-600">
+            <p>
+              Page {page} of {totalPages} ({total} total)
+            </p>
+            <div className="flex gap-2">
+              <button
+                type="button"
+                disabled={page <= 1}
+                onClick={() => setPage((p) => Math.max(1, p - 1))}
+                className="rounded-full border border-outline-variant/40 bg-white px-4 py-2 text-xs font-semibold text-slate-700 transition-colors hover:bg-surface-container-low disabled:cursor-not-allowed disabled:opacity-40"
+              >
+                Previous
+              </button>
+              <button
+                type="button"
+                disabled={page >= totalPages}
+                onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
+                className="rounded-full border border-outline-variant/40 bg-white px-4 py-2 text-xs font-semibold text-slate-700 transition-colors hover:bg-surface-container-low disabled:cursor-not-allowed disabled:opacity-40"
+              >
+                Next
+              </button>
+            </div>
+          </div>
+        ) : null}
+      </section>
     </div>
   );
 }

@@ -13,9 +13,7 @@ interface PayRequestData {
   requestId: string;
 }
 
-export async function payRequest(
-  input: PayRequestInput,
-): Promise<ActionResult<PayRequestData>> {
+export async function payRequest(input: PayRequestInput): Promise<ActionResult<PayRequestData>> {
   const supabase = await createClient();
   const {
     data: { user },

@@ -28,9 +28,7 @@ describe('payment-service', () => {
       const txId = 'tx-123';
       mockRpc.mockResolvedValueOnce({ data: txId, error: null });
 
-      const { processPayment } = await import(
-        '@/lib/services/payment-service'
-      );
+      const { processPayment } = await import('@/lib/services/payment-service');
 
       const result = await processPayment({
         requestId: 'req-123',
@@ -56,9 +54,7 @@ describe('payment-service', () => {
       const txId = 'tx-456';
       mockRpc.mockResolvedValueOnce({ data: txId, error: null });
 
-      const { processPayment } = await import(
-        '@/lib/services/payment-service'
-      );
+      const { processPayment } = await import('@/lib/services/payment-service');
 
       const result = await processPayment({
         requestId: 'req-456',
@@ -86,9 +82,7 @@ describe('payment-service', () => {
         error: { message: 'insufficient wallet balance' },
       });
 
-      const { processPayment } = await import(
-        '@/lib/services/payment-service'
-      );
+      const { processPayment } = await import('@/lib/services/payment-service');
 
       const result = await processPayment({
         requestId: 'req-123',
@@ -109,9 +103,7 @@ describe('payment-service', () => {
         error: { message: 'insufficient bank balance' },
       });
 
-      const { processPayment } = await import(
-        '@/lib/services/payment-service'
-      );
+      const { processPayment } = await import('@/lib/services/payment-service');
 
       const result = await processPayment({
         requestId: 'req-123',
@@ -132,9 +124,7 @@ describe('payment-service', () => {
         error: { message: 'payment request is not pending' },
       });
 
-      const { processPayment } = await import(
-        '@/lib/services/payment-service'
-      );
+      const { processPayment } = await import('@/lib/services/payment-service');
 
       const result = await processPayment({
         requestId: 'req-123',
@@ -155,9 +145,7 @@ describe('payment-service', () => {
         error: { message: 'payment request has expired' },
       });
 
-      const { processPayment } = await import(
-        '@/lib/services/payment-service'
-      );
+      const { processPayment } = await import('@/lib/services/payment-service');
 
       const result = await processPayment({
         requestId: 'req-123',
@@ -178,9 +166,7 @@ describe('payment-service', () => {
         error: { message: 'payment request not found' },
       });
 
-      const { processPayment } = await import(
-        '@/lib/services/payment-service'
-      );
+      const { processPayment } = await import('@/lib/services/payment-service');
 
       const result = await processPayment({
         requestId: 'req-123',
@@ -201,9 +187,7 @@ describe('payment-service', () => {
         error: { message: 'something unexpected' },
       });
 
-      const { processPayment } = await import(
-        '@/lib/services/payment-service'
-      );
+      const { processPayment } = await import('@/lib/services/payment-service');
 
       const result = await processPayment({
         requestId: 'req-123',

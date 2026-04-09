@@ -1,8 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import {
-  createRequestSchema,
-  validateCreateRequest,
-} from '@/lib/validators/request-validators';
+import { createRequestSchema, validateCreateRequest } from '@/lib/validators/request-validators';
 
 describe('createRequestSchema', () => {
   const validEmailInput = {

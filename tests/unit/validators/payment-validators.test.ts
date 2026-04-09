@@ -1,8 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import {
-  payRequestSchema,
-  validatePayRequest,
-} from '@/lib/validators/payment-validators';
+import { payRequestSchema, validatePayRequest } from '@/lib/validators/payment-validators';
 
 describe('payRequestSchema', () => {
   const validWalletInput = {

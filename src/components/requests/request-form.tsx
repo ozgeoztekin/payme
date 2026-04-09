@@ -64,9 +64,7 @@ export function RequestForm({ onSubmit, onSuccess }: RequestFormProps) {
     if (!recipientValue.trim()) {
       setFieldErrors({
         recipientValue:
-          recipientType === 'email'
-            ? 'Email is required'
-            : 'Phone number is required',
+          recipientType === 'email' ? 'Email is required' : 'Phone number is required',
       });
       return;
     }
@@ -94,10 +92,7 @@ export function RequestForm({ onSubmit, onSuccess }: RequestFormProps) {
   return (
     <div className="w-full max-w-xl mx-auto flex flex-col gap-8">
       {generalError && (
-        <ErrorMessage
-          message={generalError}
-          onDismiss={() => setGeneralError('')}
-        />
+        <ErrorMessage message={generalError} onDismiss={() => setGeneralError('')} />
       )}
 
       {/* Amount Input — editorial style inspired by Stitch design */}
@@ -186,11 +181,7 @@ export function RequestForm({ onSubmit, onSuccess }: RequestFormProps) {
           label="Recipient details"
           name="recipientValue"
           type={recipientType === 'email' ? 'email' : 'tel'}
-          placeholder={
-            recipientType === 'email'
-              ? 'recipient@example.com'
-              : '+15551234567'
-          }
+          placeholder={recipientType === 'email' ? 'recipient@example.com' : '+15551234567'}
           value={recipientValue}
           onChange={(e) => {
             setRecipientValue(e.target.value);

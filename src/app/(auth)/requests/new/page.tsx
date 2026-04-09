@@ -55,14 +55,8 @@ export default function NewRequestPage() {
             </h1>
             <p className="text-slate-500 max-w-sm">
               We&apos;ve created your request for{' '}
-              <strong className="text-slate-900">
-                {formatCents(successData.amountCents)}
-              </strong>{' '}
-              to{' '}
-              <strong className="text-slate-900">
-                {successData.recipientValue}
-              </strong>
-              .
+              <strong className="text-slate-900">{formatCents(successData.amountCents)}</strong> to{' '}
+              <strong className="text-slate-900">{successData.recipientValue}</strong>.
             </p>
           </div>
         </div>

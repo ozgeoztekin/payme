@@ -9,9 +9,7 @@ export const payRequestSchema = z.object({
 
 export type PayRequestFormData = z.infer<typeof payRequestSchema>;
 
-export function validatePayRequest(
-  input: unknown,
-): ActionResult<PayRequestFormData> {
+export function validatePayRequest(input: unknown): ActionResult<PayRequestFormData> {
   const parsed = payRequestSchema.safeParse(input);
   if (!parsed.success) {
     const firstIssue = parsed.error.issues[0];

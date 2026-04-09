@@ -14,7 +14,8 @@ const manrope = Manrope({
 
 export const metadata: Metadata = {
   title: 'PayMe - Peer-to-Peer Payments',
-  description: 'Send and receive money with ease. Create payment requests, share links, and get paid instantly.',
+  description:
+    'Send and receive money with ease. Create payment requests, share links, and get paid instantly.',
 };
 
 export default function RootLayout({
@@ -24,7 +25,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${inter.variable} ${manrope.variable} font-sans antialiased bg-background text-foreground`}>
+      <body
+        className={`${inter.variable} ${manrope.variable} font-sans antialiased bg-background text-foreground`}
+      >
         {children}
       </body>
     </html>

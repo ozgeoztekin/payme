@@ -33,12 +33,15 @@ async function createRequestAndGetId(
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
   const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
 
-  const res = await page.request.get(`${supabaseUrl}/rest/v1/payment_requests?share_token=eq.${shareToken}&select=id`, {
-    headers: {
-      apikey: serviceKey,
-      Authorization: `Bearer ${serviceKey}`,
+  const res = await page.request.get(
+    `${supabaseUrl}/rest/v1/payment_requests?share_token=eq.${shareToken}&select=id`,
+    {
+      headers: {
+        apikey: serviceKey,
+        Authorization: `Bearer ${serviceKey}`,
+      },
     },
-  });
+  );
   const requests = await res.json();
   return requests[0].id;
 }
@@ -60,7 +63,10 @@ test.describe('Pay with Wallet (US2)', () => {
     await expect(page.getByRole('dialog')).toBeVisible({ timeout: 5000 });
     await expect(page.getByText('Confirm Payment')).toBeVisible();
 
-    await page.getByRole('dialog').getByRole('button', { name: /pay \$10\.00/i }).click();
+    await page
+      .getByRole('dialog')
+      .getByRole('button', { name: /pay \$10\.00/i })
+      .click();
 
     await expect(page.getByText(/payment successful/i)).toBeVisible({ timeout: 15000 });
   });

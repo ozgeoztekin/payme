@@ -4,10 +4,7 @@ import { VALID_TRANSITIONS, RequestStatus, AuditAction, ActorType } from '@/lib/
 import type { ActionResult } from '@/lib/types/api';
 import type { PaymentRequestRow } from '@/lib/types/database';
 
-export function validateTransition(
-  from: RequestStatus,
-  to: RequestStatus,
-): boolean {
+export function validateTransition(from: RequestStatus, to: RequestStatus): boolean {
   return VALID_TRANSITIONS[from]?.includes(to) ?? false;
 }
 

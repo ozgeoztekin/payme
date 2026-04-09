@@ -158,13 +158,13 @@
 
 ### Implementation for User Story 3
 
-- [ ] T054 [P] [US3] Build RequestStatusBadge component (color-coded status labels with effective_status support) in `src/components/requests/request-status-badge.tsx`
-- [ ] T055 [P] [US3] Build ExpirationCountdown component (relative time display for pending requests nearing expiry) in `src/components/requests/expiration-countdown.tsx`
-- [ ] T056 [P] [US3] Build RequestCard component (amount, counterparty, note preview, date, status badge, expiration) in `src/components/requests/request-card.tsx`
-- [ ] T057 [US3] Build RequestList component (renders RequestCard list, handles empty state) in `src/components/requests/request-list.tsx`
-- [ ] T058 [US3] Implement GET `/api/requests` route handler with tab switching (incoming/outgoing), status filter, search by counterparty, pagination — query `payment_requests_view` for `effective_status` in `src/app/api/requests/route.ts`
-- [ ] T059 [US3] Create `useRequests` hook for dashboard data fetching and search/filter state management in `src/hooks/use-requests.ts`
-- [ ] T060 [US3] Create Dashboard page with incoming/outgoing tabs, search bar, status filter, RequestList, loading skeleton, and empty states in `src/app/(auth)/dashboard/page.tsx`
+- [X] T054 [P] [US3] Build RequestStatusBadge component (color-coded status labels with effective_status support) in `src/components/requests/request-status-badge.tsx`
+- [X] T055 [P] [US3] Build ExpirationCountdown component (relative time display for pending requests nearing expiry) in `src/components/requests/expiration-countdown.tsx`
+- [X] T056 [P] [US3] Build RequestCard component (amount, counterparty, note preview, date, status badge, expiration) in `src/components/requests/request-card.tsx`
+- [X] T057 [US3] Build RequestList component (renders RequestCard list, handles empty state) in `src/components/requests/request-list.tsx`
+- [X] T058 [US3] Implement GET `/api/requests` route handler with tab switching (incoming/outgoing), status filter, search by counterparty, pagination — query `payment_requests_view` for `effective_status` in `src/app/api/requests/route.ts`
+- [X] T059 [US3] Create `useRequests` hook for dashboard data fetching and search/filter state management in `src/hooks/use-requests.ts`
+- [X] T060 [US3] Create Dashboard page with incoming/outgoing tabs, search bar, status filter, RequestList, loading skeleton, and empty states in `src/app/(auth)/dashboard/page.tsx`
 
 **Checkpoint**: User Story 3 fully functional — users can browse, search, and filter all their payment requests.
 

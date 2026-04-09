@@ -16,8 +16,7 @@ export async function ensureProfile(user: User) {
   if (existing) return;
 
   const displayName =
-    user.user_metadata?.display_name ??
-    (user.email ? user.email.split('@')[0] : 'User');
+    user.user_metadata?.display_name ?? (user.email ? user.email.split('@')[0] : 'User');
 
   await supabaseAdmin.from('users').upsert(
     {

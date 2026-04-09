@@ -15,7 +15,9 @@ export async function signIn(formData: FormData) {
     return { error: error.message };
   }
 
-  const { data: { user } } = await supabase.auth.getUser();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
   if (user) {
     await ensureProfile(user);
   }

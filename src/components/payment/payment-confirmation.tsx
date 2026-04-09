@@ -33,20 +33,10 @@ export function PaymentConfirmation({
       title="Confirm Payment"
       footer={
         <div className="flex gap-3">
-          <Button
-            variant="secondary"
-            onClick={onClose}
-            disabled={loading}
-            className="flex-1"
-          >
+          <Button variant="secondary" onClick={onClose} disabled={loading} className="flex-1">
             Cancel
           </Button>
-          <Button
-            variant="primary"
-            onClick={onConfirm}
-            loading={loading}
-            className="flex-1"
-          >
+          <Button variant="primary" onClick={onConfirm} loading={loading} className="flex-1">
             Pay {formatCents(amountCents)}
           </Button>
         </div>

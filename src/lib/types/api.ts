@@ -47,3 +47,30 @@ export interface PaginatedResponse<T> {
   page: number;
   limit: number;
 }
+
+export type RequestListTab = 'incoming' | 'outgoing';
+
+export type RequestListEffectiveStatus = 'pending' | 'paid' | 'declined' | 'canceled' | 'expired';
+
+export interface PaymentRequestListItem {
+  id: string;
+  requester_id: string;
+  requester_display_name: string;
+  recipient_type: 'email' | 'phone';
+  recipient_value: string;
+  amount_cents: number;
+  note: string | null;
+  effective_status: RequestListEffectiveStatus;
+  share_token: string;
+  created_at: string;
+  expires_at: string;
+  resolved_at: string | null;
+}
+
+export interface PaymentRequestListResponse {
+  requests: PaymentRequestListItem[];
+  total: number;
+  page: number;
+  limit: number;
+  pending_action_count?: number;
+}

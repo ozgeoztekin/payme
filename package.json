@@ -10,6 +10,8 @@
     "test:coverage": "vitest run --coverage",
     "test:watch": "vitest",
     "test:e2e": "playwright test",
+    "reset:e2e-data": "node scripts/reset-e2e-data.mjs",
+    "reset:e2e-data:linked": "node scripts/reset-e2e-data.mjs --linked-seed",
     "lint": "eslint . && prettier --check .",
     "format": "prettier --write ."
   },

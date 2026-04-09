@@ -13,7 +13,10 @@ import { formatCents } from '@/lib/utils';
 import type { PaymentRequestViewRow, WalletRow, BankAccountRow } from '@/lib/types/database';
 import type { FundingSourceType } from '@/lib/types/domain';
 
-const STATUS_BADGE_MAP: Record<string, { label: string; variant: 'pending' | 'paid' | 'declined' | 'canceled' | 'expired' }> = {
+const STATUS_BADGE_MAP: Record<
+  string,
+  { label: string; variant: 'pending' | 'paid' | 'declined' | 'canceled' | 'expired' }
+> = {
   pending: { label: 'Pending', variant: 'pending' },
   paid: { label: 'Paid', variant: 'paid' },
   declined: { label: 'Declined', variant: 'declined' },
@@ -76,7 +79,16 @@ export function RequestPaymentFlow({
     return (
       <div className="flex flex-col items-center gap-8 pt-8">
         <div className="flex h-20 w-20 items-center justify-center rounded-full bg-emerald-100 text-emerald-600">
-          <svg className="h-10 w-10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+          <svg
+            className="h-10 w-10"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2.5"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            aria-hidden
+          >
             <polyline points="20 6 9 17 4 12" />
           </svg>
         </div>

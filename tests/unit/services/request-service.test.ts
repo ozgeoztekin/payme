@@ -58,30 +58,22 @@ describe('request-service', () => {
 
   describe('validateTransition', () => {
     it('accepts valid transition from pending to paid', async () => {
-      const { validateTransition } = await import(
-        '@/lib/services/request-service'
-      );
+      const { validateTransition } = await import('@/lib/services/request-service');
       expect(validateTransition('pending', 'paid')).toBe(true);
     });
 
     it('rejects transition from paid to pending', async () => {
-      const { validateTransition } = await import(
-        '@/lib/services/request-service'
-      );
+      const { validateTransition } = await import('@/lib/services/request-service');
       expect(validateTransition('paid', 'pending')).toBe(false);
     });
 
     it('rejects transition from declined to paid', async () => {
-      const { validateTransition } = await import(
-        '@/lib/services/request-service'
-      );
+      const { validateTransition } = await import('@/lib/services/request-service');
       expect(validateTransition('declined', 'paid')).toBe(false);
     });
 
     it('rejects same-state transition for terminal states', async () => {
-      const { validateTransition } = await import(
-        '@/lib/services/request-service'
-      );
+      const { validateTransition } = await import('@/lib/services/request-service');
       expect(validateTransition('paid', 'paid')).toBe(false);
       expect(validateTransition('expired', 'expired')).toBe(false);
     });
