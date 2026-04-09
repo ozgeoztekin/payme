@@ -131,18 +131,18 @@
 
 ### Tests for User Story 2
 
-- [ ] T045 [P] [US2] Unit tests for payment validators in `tests/unit/validators/payment-validators.test.ts`
-- [ ] T046 [P] [US2] Unit tests for payment service (wallet payment, bank payment, insufficient balance, duplicate prevention, atomic rollback) in `tests/unit/services/payment-service.test.ts`
+- [X] T045 [P] [US2] Unit tests for payment validators in `tests/unit/validators/payment-validators.test.ts`
+- [X] T046 [P] [US2] Unit tests for payment service (wallet payment, bank payment, insufficient balance, duplicate prevention, atomic rollback) in `tests/unit/services/payment-service.test.ts`
 
 ### Implementation for User Story 2
 
-- [ ] T047 [P] [US2] Create payment validators (requestId, fundingSource) using Zod in `src/lib/validators/payment-validators.ts`
-- [ ] T048 [US2] Implement payment service with `processPayment` (wallet path + bank path, row locking, balance transfer, audit log) in `src/lib/services/payment-service.ts`
-- [ ] T049 [US2] Implement `payRequest` server action with validation, recipient check, expiration check, and duplicate prevention in `src/lib/actions/payment-actions.ts`
-- [ ] T050 [P] [US2] Build FundingSourceSelector component (wallet balance display, bank account option, disabled states with guidance) in `src/components/payment/funding-source-selector.tsx`
-- [ ] T051 [P] [US2] Build PaymentConfirmation modal (amount, funding source summary, confirm/cancel buttons, loading state) in `src/components/payment/payment-confirmation.tsx`
-- [ ] T052 [US2] E2E test: pay with wallet (sufficient balance), pay with bank, insufficient balance rejection, double-click prevention in `tests/e2e/pay-with-wallet.spec.ts`
-- [ ] T053 [US2] E2E test: pay with bank account, insufficient bank balance rejection in `tests/e2e/pay-with-bank.spec.ts`
+- [X] T047 [P] [US2] Create payment validators (requestId, fundingSource) using Zod in `src/lib/validators/payment-validators.ts`
+- [X] T048 [US2] Implement payment service with `processPayment` (wallet path + bank path, row locking, balance transfer, audit log) in `src/lib/services/payment-service.ts`
+- [X] T049 [US2] Implement `payRequest` server action with validation, recipient check, expiration check, and duplicate prevention in `src/lib/actions/payment-actions.ts`
+- [X] T050 [P] [US2] Build FundingSourceSelector component (wallet balance display, bank account option, disabled states with guidance) in `src/components/payment/funding-source-selector.tsx`
+- [X] T051 [P] [US2] Build PaymentConfirmation modal (amount, funding source summary, confirm/cancel buttons, loading state) in `src/components/payment/payment-confirmation.tsx`
+- [X] T052 [US2] E2E test: pay with wallet (sufficient balance), pay with bank, insufficient balance rejection, double-click prevention in `tests/e2e/pay-with-wallet.spec.ts`
+- [X] T053 [US2] E2E test: pay with bank account, insufficient bank balance rejection in `tests/e2e/pay-with-bank.spec.ts`
 
 **Checkpoint**: User Story 2 fully functional — recipients can pay requests via wallet or bank with full atomicity guarantees.
 
