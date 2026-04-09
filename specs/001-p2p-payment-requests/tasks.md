@@ -104,18 +104,18 @@
 
 > Write these tests FIRST — ensure they FAIL before implementation.
 
-- [ ] T036 [P] [US1] Unit tests for request validators (email/phone format, amount bounds, note length, self-request rejection) in `tests/unit/validators/request-validators.test.ts`
-- [ ] T037 [P] [US1] Unit tests for request service (createRequest, state machine transitions, expiration check) in `tests/unit/services/request-service.test.ts`
+- [X] T036 [P] [US1] Unit tests for request validators (email/phone format, amount bounds, note length, self-request rejection) in `tests/unit/validators/request-validators.test.ts`
+- [X] T037 [P] [US1] Unit tests for request service (createRequest, state machine transitions, expiration check) in `tests/unit/services/request-service.test.ts`
 
 ### Implementation for User Story 1
 
-- [ ] T038 [P] [US1] Create request validators (recipientType, recipientValue, amountCents, note, self-request check) using Zod in `src/lib/validators/request-validators.ts`
-- [ ] T039 [US1] Implement request service with `createRequest`, `declineRequest`, `cancelRequest`, `validateTransition`, and `VALID_TRANSITIONS` state machine in `src/lib/services/request-service.ts`
-- [ ] T040 [US1] Implement `createRequest` server action with validation, auth, active-user check, and audit logging in `src/lib/actions/request-actions.ts`
-- [ ] T041 [P] [US1] Build RequestForm component (recipient type selector, contact input, amount input, note textarea, submit with loading state) in `src/components/requests/request-form.tsx`
-- [ ] T042 [P] [US1] Build ShareableLink component (display URL, copy-to-clipboard button) in `src/components/requests/shareable-link.tsx`
-- [ ] T043 [US1] Create "New Request" page wiring RequestForm to createRequest action, showing success with ShareableLink in `src/app/(auth)/requests/new/page.tsx`
-- [ ] T044 [US1] E2E test: create request with email, create with phone, validation errors, self-request rejection, shareable link generation in `tests/e2e/create-request.spec.ts`
+- [X] T038 [P] [US1] Create request validators (recipientType, recipientValue, amountCents, note, self-request check) using Zod in `src/lib/validators/request-validators.ts`
+- [X] T039 [US1] Implement request service with `createRequest`, `declineRequest`, `cancelRequest`, `validateTransition`, and `VALID_TRANSITIONS` state machine in `src/lib/services/request-service.ts`
+- [X] T040 [US1] Implement `createRequest` server action with validation, auth, active-user check, and audit logging in `src/lib/actions/request-actions.ts`
+- [X] T041 [P] [US1] Build RequestForm component (recipient type selector, contact input, amount input, note textarea, submit with loading state) in `src/components/requests/request-form.tsx`
+- [X] T042 [P] [US1] Build ShareableLink component (display URL, copy-to-clipboard button) in `src/components/requests/shareable-link.tsx`
+- [X] T043 [US1] Create "New Request" page wiring RequestForm to createRequest action, showing success with ShareableLink in `src/app/(auth)/requests/new/page.tsx`
+- [X] T044 [US1] E2E test: create request with email, create with phone, validation errors, self-request rejection, shareable link generation in `tests/e2e/create-request.spec.ts`
 
 **Checkpoint**: User Story 1 fully functional — a user can create payment requests and receive shareable links.
 

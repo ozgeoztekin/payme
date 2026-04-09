@@ -1,6 +1,7 @@
 'use server';
 
 import { createClient } from '@/lib/supabase/server';
+import { ensureProfile } from '@/lib/services/profile-service';
 import { redirect } from 'next/navigation';
 
 export async function signIn(formData: FormData) {
@@ -12,6 +13,11 @@ export async function signIn(formData: FormData) {
 
   if (error) {
     return { error: error.message };
+  }
+
+  const { data: { user } } = await supabase.auth.getUser();
+  if (user) {
+    await ensureProfile(user);
   }
 
   redirect('/dashboard');

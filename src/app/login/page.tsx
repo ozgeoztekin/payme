@@ -54,10 +54,11 @@ export default function LoginPage() {
               )}
 
               <div>
-                <label className="block text-[0.75rem] font-medium text-on-surface-variant mb-2 ml-1 uppercase tracking-wide">
+                <label htmlFor="login-email" className="block text-[0.75rem] font-medium text-on-surface-variant mb-2 ml-1 uppercase tracking-wide">
                   Email or Phone
                 </label>
                 <input
+                  id="login-email"
                   name="email"
                   type="text"
                   required
@@ -67,11 +68,12 @@ export default function LoginPage() {
               </div>
 
               <div>
-                <label className="block text-[0.75rem] font-medium text-on-surface-variant mb-2 ml-1 uppercase tracking-wide">
+                <label htmlFor="login-password" className="block text-[0.75rem] font-medium text-on-surface-variant mb-2 ml-1 uppercase tracking-wide">
                   Password
                 </label>
                 <div className="relative">
                   <input
+                    id="login-password"
                     name="password"
                     type={showPassword ? 'text' : 'password'}
                     required
