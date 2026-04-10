@@ -54,7 +54,9 @@ test.describe('Pay with Wallet (US2)', () => {
     await signIn(page, BOB_EMAIL);
     await page.goto(`/requests/${requestId}`);
 
-    await expect(page.getByText('$10.00')).toBeVisible({ timeout: 10000 });
+    await expect(
+      page.getByRole('heading', { level: 1, name: '$10.00' }),
+    ).toBeVisible({ timeout: 10000 });
     await expect(page.getByText('Pending')).toBeVisible();
 
     await page.getByRole('button', { name: /wallet/i }).click();
@@ -78,7 +80,9 @@ test.describe('Pay with Wallet (US2)', () => {
     await signIn(page, BOB_EMAIL);
     await page.goto(`/requests/${requestId}`);
 
-    await expect(page.getByText('$9,999.00')).toBeVisible({ timeout: 10000 });
+    await expect(
+      page.getByRole('heading', { level: 1, name: '$9,999.00' }),
+    ).toBeVisible({ timeout: 10000 });
 
     const walletOption = page.getByRole('button', { name: /wallet/i });
     await expect(walletOption).toBeDisabled();
@@ -92,7 +96,9 @@ test.describe('Pay with Wallet (US2)', () => {
     await signIn(page, BOB_EMAIL);
     await page.goto(`/requests/${requestId}`);
 
-    await expect(page.getByText('$5.00')).toBeVisible({ timeout: 10000 });
+    await expect(
+      page.getByRole('heading', { level: 1, name: '$5.00' }),
+    ).toBeVisible({ timeout: 10000 });
 
     await page.getByRole('button', { name: /wallet/i }).click();
     await page.getByRole('button', { name: /pay \$5\.00/i }).click();

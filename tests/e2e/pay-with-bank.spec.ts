@@ -54,7 +54,9 @@ test.describe('Pay with Bank Account (US2)', () => {
     await signIn(page, BOB_EMAIL);
     await page.goto(`/requests/${requestId}`);
 
-    await expect(page.getByText('$15.00')).toBeVisible({ timeout: 10000 });
+    await expect(
+      page.getByRole('heading', { level: 1, name: '$15.00' }),
+    ).toBeVisible({ timeout: 10000 });
 
     await page.getByRole('button', { name: /test bank/i }).click();
     await page.getByRole('button', { name: /pay \$15\.00/i }).click();
@@ -75,7 +77,9 @@ test.describe('Pay with Bank Account (US2)', () => {
     await signIn(page, BOB_EMAIL);
     await page.goto(`/requests/${requestId}`);
 
-    await expect(page.getByText('$99.00')).toBeVisible({ timeout: 10000 });
+    await expect(
+      page.getByRole('heading', { level: 1, name: '$99.00' }),
+    ).toBeVisible({ timeout: 10000 });
 
     const walletOption = page.getByRole('button', { name: /wallet/i });
     await expect(walletOption).toBeDisabled();

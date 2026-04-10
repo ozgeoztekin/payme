@@ -1,3 +1,4 @@
+-- Idempotent: safe to re-run after partial applies or reset:e2e-data (upserts by primary key).
 INSERT INTO auth.users (
   instance_id,
   id,
@@ -53,7 +54,23 @@ INSERT INTO auth.users (
   '',
   '',
   ''
-);
+)
+ON CONFLICT (id) DO UPDATE SET
+  instance_id = EXCLUDED.instance_id,
+  aud = EXCLUDED.aud,
+  role = EXCLUDED.role,
+  email = EXCLUDED.email,
+  encrypted_password = EXCLUDED.encrypted_password,
+  email_confirmed_at = EXCLUDED.email_confirmed_at,
+  phone = EXCLUDED.phone,
+  phone_confirmed_at = EXCLUDED.phone_confirmed_at,
+  raw_app_meta_data = EXCLUDED.raw_app_meta_data,
+  raw_user_meta_data = EXCLUDED.raw_user_meta_data,
+  updated_at = EXCLUDED.updated_at,
+  confirmation_token = EXCLUDED.confirmation_token,
+  recovery_token = EXCLUDED.recovery_token,
+  email_change_token_new = EXCLUDED.email_change_token_new,
+  email_change = EXCLUDED.email_change;
 
 INSERT INTO auth.identities (
   id,
@@ -91,7 +108,15 @@ INSERT INTO auth.identities (
   now(),
   now(),
   now()
-);
+)
+ON CONFLICT (id) DO UPDATE SET
+  provider_id = EXCLUDED.provider_id,
+  user_id = EXCLUDED.user_id,
+  identity_data = EXCLUDED.identity_data,
+  provider = EXCLUDED.provider,
+  last_sign_in_at = EXCLUDED.last_sign_in_at,
+  created_at = EXCLUDED.created_at,
+  updated_at = EXCLUDED.updated_at;
 
 INSERT INTO public.users (
   id,
@@ -118,11 +143,23 @@ INSERT INTO public.users (
   'active',
   now(),
   now()
-);
+)
+ON CONFLICT (id) DO UPDATE SET
+  display_name = EXCLUDED.display_name,
+  email = EXCLUDED.email,
+  phone = EXCLUDED.phone,
+  status = EXCLUDED.status,
+  updated_at = EXCLUDED.updated_at;
 
+-- Upsert on user_id: profiles may already have created a wallet (different id) via trigger.
 INSERT INTO public.wallets (id, user_id, balance_cents, created_at, updated_at) VALUES
   ('c1111111-1111-1111-1111-111111111111', '11111111-1111-1111-1111-111111111111', 10000, now(), now()),
-  ('c2222222-2222-2222-2222-222222222222', '22222222-2222-2222-2222-222222222222', 5000, now(), now());
+  ('c2222222-2222-2222-2222-222222222222', '22222222-2222-2222-2222-222222222222', 5000, now(), now())
+ON CONFLICT (user_id) DO UPDATE SET
+  id = EXCLUDED.id,
+  balance_cents = EXCLUDED.balance_cents,
+  created_at = EXCLUDED.created_at,
+  updated_at = EXCLUDED.updated_at;
 
 INSERT INTO public.bank_accounts (
   id,
@@ -152,7 +189,14 @@ INSERT INTO public.bank_accounts (
   false,
   now(),
   now()
-);
+)
+ON CONFLICT (id) DO UPDATE SET
+  user_id = EXCLUDED.user_id,
+  bank_name = EXCLUDED.bank_name,
+  account_number_masked = EXCLUDED.account_number_masked,
+  balance_cents = EXCLUDED.balance_cents,
+  is_guest = EXCLUDED.is_guest,
+  updated_at = EXCLUDED.updated_at;
 
 INSERT INTO public.payment_requests (
   id,
@@ -243,7 +287,17 @@ INSERT INTO public.payment_requests (
   now() - interval '8 days',
   (now() - interval '8 days') + interval '7 days',
   NULL
-);
+)
+ON CONFLICT (id) DO UPDATE SET
+  requester_id = EXCLUDED.requester_id,
+  recipient_type = EXCLUDED.recipient_type,
+  recipient_value = EXCLUDED.recipient_value,
+  amount_cents = EXCLUDED.amount_cents,
+  note = EXCLUDED.note,
+  status = EXCLUDED.status,
+  share_token = EXCLUDED.share_token,
+  expires_at = EXCLUDED.expires_at,
+  resolved_at = EXCLUDED.resolved_at;
 
 INSERT INTO public.payment_transactions (
   id,
@@ -279,7 +333,17 @@ INSERT INTO public.payment_transactions (
   'c1111111-1111-1111-1111-111111111111',
   'completed',
   now() - interval '2 days'
-);
+)
+ON CONFLICT (id) DO UPDATE SET
+  type = EXCLUDED.type,
+  request_id = EXCLUDED.request_id,
+  payer_id = EXCLUDED.payer_id,
+  recipient_id = EXCLUDED.recipient_id,
+  amount_cents = EXCLUDED.amount_cents,
+  funding_source_type = EXCLUDED.funding_source_type,
+  funding_source_id = EXCLUDED.funding_source_id,
+  status = EXCLUDED.status,
+  created_at = EXCLUDED.created_at;
 
 INSERT INTO public.audit_logs (
   id,
@@ -423,4 +487,13 @@ INSERT INTO public.audit_logs (
   '{"balance_cents":5000}',
   'success',
   now()
-);
+)
+ON CONFLICT (id) DO UPDATE SET
+  actor_id = EXCLUDED.actor_id,
+  actor_type = EXCLUDED.actor_type,
+  action = EXCLUDED.action,
+  target_type = EXCLUDED.target_type,
+  target_id = EXCLUDED.target_id,
+  metadata = EXCLUDED.metadata,
+  outcome = EXCLUDED.outcome,
+  created_at = EXCLUDED.created_at;
