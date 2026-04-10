@@ -268,10 +268,10 @@
 
 ### Implementation for User Story 8
 
-- [ ] T086 [US8] Implement `declineRequest` server action (recipient auth, pending check, expiration check, state transition, audit log) in `src/lib/actions/request-actions.ts`
-- [ ] T087 [US8] Implement `cancelRequest` server action (requester auth, pending check, expiration check, state transition, audit log) in `src/lib/actions/request-actions.ts`
-- [ ] T088 [US8] Add decline and cancel action buttons with confirmation modals to the request detail page in `src/app/(auth)/requests/[id]/page.tsx`
-- [ ] T089 [US8] E2E test: decline as recipient, cancel as requester, invalid role rejection, already-terminal rejection in `tests/e2e/decline-cancel.spec.ts`
+- [X] T086 [US8] Implement `declineRequest` server action (recipient auth, pending check, expiration check, state transition, audit log) in `src/lib/actions/request-actions.ts`
+- [X] T087 [US8] Implement `cancelRequest` server action (requester auth, pending check, expiration check, state transition, audit log) in `src/lib/actions/request-actions.ts`
+- [X] T088 [US8] Add decline and cancel action buttons with confirmation modals to the request detail page in `src/app/(auth)/requests/[id]/page.tsx`
+- [X] T089 [US8] E2E test: decline as recipient, cancel as requester, invalid role rejection, already-terminal rejection in `tests/e2e/decline-cancel.spec.ts`
 
 **Checkpoint**: User Story 8 fully functional — all lifecycle exit paths work.
 

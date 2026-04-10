@@ -1,10 +1,16 @@
 import { createClient } from '@supabase/supabase-js';
 
-const TEST_EMAIL = 'alice@test.com';
+const ALICE_EMAIL = 'alice@test.com';
+const BOB_EMAIL = 'bob@test.com';
 const TEST_PASSWORD = 'testpassword123';
 
 const ALICE_ID = '11111111-1111-1111-1111-111111111111';
 const BOB_ID = '22222222-2222-2222-2222-222222222222';
+
+const TEST_USERS = [
+  { email: ALICE_EMAIL, id: ALICE_ID },
+  { email: BOB_EMAIL, id: BOB_ID },
+];
 
 export default async function globalSetup() {
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
@@ -19,18 +25,20 @@ export default async function globalSetup() {
   });
 
   const { data: existingUsers } = await supabase.auth.admin.listUsers();
-  const exists = existingUsers?.users?.some((u) => u.email === TEST_EMAIL);
 
-  if (!exists) {
-    const { error } = await supabase.auth.admin.createUser({
-      email: TEST_EMAIL,
-      password: TEST_PASSWORD,
-      email_confirm: true,
-    });
-    if (error) {
-      throw new Error(`Failed to create test user: ${error.message}`);
+  for (const testUser of TEST_USERS) {
+    const exists = existingUsers?.users?.some((u) => u.email === testUser.email);
+    if (!exists) {
+      const { error } = await supabase.auth.admin.createUser({
+        email: testUser.email,
+        password: TEST_PASSWORD,
+        email_confirm: true,
+      });
+      if (error) {
+        throw new Error(`Failed to create test user ${testUser.email}: ${error.message}`);
+      }
+      console.log(`Created test user: ${testUser.email}`);
     }
-    console.log(`Created test user: ${TEST_EMAIL}`);
   }
 
   await resetSeedData(supabase);
