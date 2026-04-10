@@ -34,9 +34,7 @@ function mapRpcError(message: string): { code: string; message: string } {
   return { code: 'TOP_UP_FAILED', message: message || 'Top-up processing failed' };
 }
 
-export async function topUpFromBank(
-  params: TopUpParams,
-): Promise<ActionResult<TopUpResult>> {
+export async function topUpFromBank(params: TopUpParams): Promise<ActionResult<TopUpResult>> {
   const { data, error } = await supabaseAdmin.rpc('process_top_up', {
     p_user_id: params.userId,
     p_bank_account_id: params.bankAccountId,
@@ -55,11 +53,7 @@ export async function topUpFromBank(
 }
 
 export async function getWalletBalance(userId: string): Promise<WalletRow | null> {
-  const { data } = await supabaseAdmin
-    .from('wallets')
-    .select('*')
-    .eq('user_id', userId)
-    .single();
+  const { data } = await supabaseAdmin.from('wallets').select('*').eq('user_id', userId).single();
 
   return data;
 }

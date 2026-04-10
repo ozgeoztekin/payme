@@ -44,40 +44,34 @@ export default async function globalSetup() {
   await resetSeedData(supabase);
 }
 
-async function resetSeedData(supabase: ReturnType<typeof createClient>) {
-  await supabase
-    .from('wallets')
-    .upsert(
-      [
-        { id: 'c1111111-1111-1111-1111-111111111111', user_id: ALICE_ID, balance_cents: 10000 },
-        { id: 'c2222222-2222-2222-2222-222222222222', user_id: BOB_ID, balance_cents: 5000 },
-      ],
-      { onConflict: 'user_id' },
-    );
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+async function resetSeedData(supabase: any) {
+  await supabase.from('wallets').upsert(
+    [
+      { id: 'c1111111-1111-1111-1111-111111111111', user_id: ALICE_ID, balance_cents: 10000 },
+      { id: 'c2222222-2222-2222-2222-222222222222', user_id: BOB_ID, balance_cents: 5000 },
+    ],
+    { onConflict: 'user_id' },
+  );
 
-  await supabase
-    .from('bank_accounts')
-    .delete()
-    .in('user_id', [ALICE_ID, BOB_ID]);
+  await supabase.from('bank_accounts').delete().in('user_id', [ALICE_ID, BOB_ID]);
 
-  await supabase
-    .from('bank_accounts')
-    .upsert([
-      {
-        id: 'd1111111-1111-1111-1111-111111111111',
-        user_id: ALICE_ID,
-        bank_name: 'Test Bank',
-        account_number_masked: '••••1001',
-        balance_cents: 1000000,
-        is_guest: false,
-      },
-      {
-        id: 'd2222222-2222-2222-2222-222222222222',
-        user_id: BOB_ID,
-        bank_name: 'Test Bank',
-        account_number_masked: '••••2002',
-        balance_cents: 1000000,
-        is_guest: false,
-      },
-    ]);
+  await supabase.from('bank_accounts').upsert([
+    {
+      id: 'd1111111-1111-1111-1111-111111111111',
+      user_id: ALICE_ID,
+      bank_name: 'Test Bank',
+      account_number_masked: '••••1001',
+      balance_cents: 1000000,
+      is_guest: false,
+    },
+    {
+      id: 'd2222222-2222-2222-2222-222222222222',
+      user_id: BOB_ID,
+      bank_name: 'Test Bank',
+      account_number_masked: '••••2002',
+      balance_cents: 1000000,
+      is_guest: false,
+    },
+  ]);
 }

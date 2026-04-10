@@ -17,7 +17,10 @@ export async function POST(request: Request) {
 
   if (!rateCheck.allowed) {
     return NextResponse.json(
-      { success: false, error: { code: 'RATE_LIMITED', message: 'Too many requests. Please try again later.' } },
+      {
+        success: false,
+        error: { code: 'RATE_LIMITED', message: 'Too many requests. Please try again later.' },
+      },
       { status: 429, headers: { 'Retry-After': String(Math.ceil(rateCheck.retryAfterMs / 1000)) } },
     );
   }
@@ -58,7 +61,10 @@ export async function POST(request: Request) {
 
   if (reqError || !requestData) {
     return NextResponse.json(
-      { success: false, error: { code: 'REQUEST_NOT_FOUND', message: 'Payment request not found' } },
+      {
+        success: false,
+        error: { code: 'REQUEST_NOT_FOUND', message: 'Payment request not found' },
+      },
       { status: 404 },
     );
   }
@@ -72,7 +78,10 @@ export async function POST(request: Request) {
 
   if (requestData.effective_status !== 'pending') {
     return NextResponse.json(
-      { success: false, error: { code: 'REQUEST_NOT_PENDING', message: 'This request is no longer pending' } },
+      {
+        success: false,
+        error: { code: 'REQUEST_NOT_PENDING', message: 'This request is no longer pending' },
+      },
       { status: 400 },
     );
   }
@@ -86,14 +95,23 @@ export async function POST(request: Request) {
 
   if (bankError || !guestBank) {
     return NextResponse.json(
-      { success: false, error: { code: 'INVALID_BANK_ACCOUNT', message: 'Guest bank account not found' } },
+      {
+        success: false,
+        error: { code: 'INVALID_BANK_ACCOUNT', message: 'Guest bank account not found' },
+      },
       { status: 400 },
     );
   }
 
   if (guestBank.balance_cents < requestData.amount_cents) {
     return NextResponse.json(
-      { success: false, error: { code: 'INSUFFICIENT_BALANCE', message: 'Bank account balance is insufficient for this payment' } },
+      {
+        success: false,
+        error: {
+          code: 'INSUFFICIENT_BALANCE',
+          message: 'Bank account balance is insufficient for this payment',
+        },
+      },
       { status: 400 },
     );
   }
@@ -123,10 +141,7 @@ export async function POST(request: Request) {
       outcome: 'failure',
     });
 
-    return NextResponse.json(
-      { success: false, error: result.error },
-      { status: 400 },
-    );
+    return NextResponse.json({ success: false, error: result.error }, { status: 400 });
   }
 
   return NextResponse.json({

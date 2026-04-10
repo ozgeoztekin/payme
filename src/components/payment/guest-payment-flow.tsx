@@ -6,17 +6,7 @@ import { Input } from '@/components/ui/input';
 import { Select } from '@/components/ui/select';
 import { Card } from '@/components/ui/card';
 import { ErrorMessage } from '@/components/ui/error-message';
-import { formatCents } from '@/lib/utils';
-
-const BANK_OPTIONS = [
-  { value: '', label: 'Select a bank' },
-  { value: 'Chase', label: 'Chase' },
-  { value: 'Bank of America', label: 'Bank of America' },
-  { value: 'Wells Fargo', label: 'Wells Fargo' },
-  { value: 'Citi', label: 'Citi' },
-  { value: 'Capital One', label: 'Capital One' },
-  { value: 'US Bank', label: 'US Bank' },
-];
+import { formatCents, BANK_OPTIONS } from '@/lib/utils';
 
 type Step = 'actions' | 'bank-select' | 'bank-confirm' | 'pay-confirm' | 'success' | 'declined';
 
@@ -33,7 +23,11 @@ interface GuestPaymentFlowProps {
   requesterName: string;
 }
 
-export function GuestPaymentFlow({ shareToken, amountCents, requesterName }: GuestPaymentFlowProps) {
+export function GuestPaymentFlow({
+  shareToken,
+  amountCents,
+  requesterName,
+}: GuestPaymentFlowProps) {
   const [step, setStep] = useState<Step>('actions');
   const [bankName, setBankName] = useState('');
   const [last4, setLast4] = useState('');
@@ -344,12 +338,7 @@ export function GuestPaymentFlow({ shareToken, amountCents, requesterName }: Gue
       </p>
       {error && <ErrorMessage message={error} className="mt-4" />}
       <div className="mt-6 flex gap-3">
-        <Button
-          variant="danger"
-          className="flex-1"
-          onClick={handleDecline}
-          loading={loading}
-        >
+        <Button variant="danger" className="flex-1" onClick={handleDecline} loading={loading}>
           Decline
         </Button>
         <Button

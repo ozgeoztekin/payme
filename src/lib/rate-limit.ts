@@ -19,7 +19,9 @@ function refillBucket(bucket: TokenBucket, now: number): void {
  * Returns { allowed: true } if the request should proceed,
  * or { allowed: false, retryAfterMs } if the caller is rate-limited.
  */
-export function checkRateLimit(ip: string): { allowed: true } | { allowed: false; retryAfterMs: number } {
+export function checkRateLimit(
+  ip: string,
+): { allowed: true } | { allowed: false; retryAfterMs: number } {
   const now = Date.now();
   let bucket = buckets.get(ip);
 

@@ -35,7 +35,7 @@ describe('payRequestSchema', () => {
     });
 
     it('rejects missing requestId', () => {
-      const { requestId: _, ...noId } = validWalletInput;
+      const { requestId: _requestId, ...noId } = validWalletInput;
       const result = payRequestSchema.safeParse(noId);
       expect(result.success).toBe(false);
     });
@@ -61,7 +61,7 @@ describe('payRequestSchema', () => {
     });
 
     it('rejects missing fundingSource', () => {
-      const { fundingSource: _, ...noSource } = validWalletInput;
+      const { fundingSource: _fundingSource, ...noSource } = validWalletInput;
       const result = payRequestSchema.safeParse(noSource);
       expect(result.success).toBe(false);
     });

@@ -44,7 +44,9 @@ export function RequestDetail({ request, requesterName, readOnly = false }: Requ
           </div>
           <div>
             <dt className="text-slate-500">To</dt>
-            <dd className="mt-0.5 font-medium text-slate-900 truncate">{request.recipient_value}</dd>
+            <dd className="mt-0.5 font-medium text-slate-900 truncate">
+              {request.recipient_value}
+            </dd>
           </div>
 
           {request.note && (

@@ -15,7 +15,10 @@ export async function POST(request: Request) {
 
   if (!rateCheck.allowed) {
     return NextResponse.json(
-      { success: false, error: { code: 'RATE_LIMITED', message: 'Too many requests. Please try again later.' } },
+      {
+        success: false,
+        error: { code: 'RATE_LIMITED', message: 'Too many requests. Please try again later.' },
+      },
       { status: 429, headers: { 'Retry-After': String(Math.ceil(rateCheck.retryAfterMs / 1000)) } },
     );
   }
@@ -56,7 +59,10 @@ export async function POST(request: Request) {
 
   if (reqError || !requestData) {
     return NextResponse.json(
-      { success: false, error: { code: 'REQUEST_NOT_FOUND', message: 'Payment request not found' } },
+      {
+        success: false,
+        error: { code: 'REQUEST_NOT_FOUND', message: 'Payment request not found' },
+      },
       { status: 404 },
     );
   }
@@ -70,7 +76,10 @@ export async function POST(request: Request) {
 
   if (requestData.effective_status !== 'pending') {
     return NextResponse.json(
-      { success: false, error: { code: 'REQUEST_NOT_PENDING', message: 'This request is no longer pending' } },
+      {
+        success: false,
+        error: { code: 'REQUEST_NOT_PENDING', message: 'This request is no longer pending' },
+      },
       { status: 400 },
     );
   }

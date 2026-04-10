@@ -138,7 +138,7 @@ describe('createRequestSchema', () => {
     });
 
     it('accepts undefined note', () => {
-      const { note: _, ...noNote } = validEmailInput;
+      const { note: _note, ...noNote } = validEmailInput;
       const result = createRequestSchema.safeParse(noNote);
       expect(result.success).toBe(true);
     });

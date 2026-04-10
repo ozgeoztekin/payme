@@ -5,9 +5,7 @@ import { ActorType, AuditAction } from '@/lib/types/domain';
 import type { ActionResult } from '@/lib/types/api';
 import type { BankAccountRow } from '@/lib/types/database';
 
-export async function getBankAccount(
-  userId: string,
-): Promise<BankAccountRow | null> {
+export async function getBankAccount(userId: string): Promise<BankAccountRow | null> {
   const { data } = await supabaseAdmin
     .from('bank_accounts')
     .select('*')

@@ -42,11 +42,7 @@ export default async function PublicPaymentPage({ params }: Props) {
       </div>
 
       <div className="space-y-6">
-        <RequestDetail
-          request={typedRequest}
-          requesterName={requesterName}
-          readOnly={!isPending}
-        />
+        <RequestDetail request={typedRequest} requesterName={requesterName} readOnly={!isPending} />
 
         {isPending && (
           <GuestPaymentFlow

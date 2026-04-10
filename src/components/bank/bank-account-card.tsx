@@ -72,11 +72,7 @@ export function BankAccountCard({
           </p>
         </div>
         <div className="mt-4">
-          <Button
-            variant="danger"
-            size="sm"
-            onClick={() => setShowConfirm(true)}
-          >
+          <Button variant="danger" size="sm" onClick={() => setShowConfirm(true)}>
             Disconnect
           </Button>
         </div>
@@ -108,9 +104,8 @@ export function BankAccountCard({
         }
       >
         <p>
-          Are you sure you want to disconnect{' '}
-          <strong>{bankAccount.bank_name}</strong> ({bankAccount.account_number_masked})?
-          You can always reconnect later.
+          Are you sure you want to disconnect <strong>{bankAccount.bank_name}</strong> (
+          {bankAccount.account_number_masked})? You can always reconnect later.
         </p>
       </Modal>
     </>

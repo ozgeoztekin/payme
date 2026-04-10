@@ -7,25 +7,12 @@ import { Select } from '@/components/ui/select';
 import { Card } from '@/components/ui/card';
 import { ErrorMessage } from '@/components/ui/error-message';
 import { connectBankAccount } from '@/lib/actions/bank-actions';
+import { BANK_OPTIONS } from '@/lib/utils';
 import type { BankAccountRow } from '@/lib/types/database';
-
-const BANK_OPTIONS = [
-  { value: '', label: 'Select a bank' },
-  { value: 'Chase', label: 'Chase' },
-  { value: 'Bank of America', label: 'Bank of America' },
-  { value: 'Wells Fargo', label: 'Wells Fargo' },
-  { value: 'Citi', label: 'Citi' },
-  { value: 'Capital One', label: 'Capital One' },
-  { value: 'US Bank', label: 'US Bank' },
-];
 
 type Step = 'select' | 'confirm' | 'success';
 
-export function BankConnectFlow({
-  onConnected,
-}: {
-  onConnected?: (bank: BankAccountRow) => void;
-}) {
+export function BankConnectFlow({ onConnected }: { onConnected?: (bank: BankAccountRow) => void }) {
   const [step, setStep] = useState<Step>('select');
   const [bankName, setBankName] = useState('');
   const [last4, setLast4] = useState('');
@@ -131,11 +118,7 @@ export function BankConnectFlow({
           >
             Back
           </Button>
-          <Button
-            className="flex-1"
-            onClick={handleConfirm}
-            loading={isPending}
-          >
+          <Button className="flex-1" onClick={handleConfirm} loading={isPending}>
             Connect Bank
           </Button>
         </div>

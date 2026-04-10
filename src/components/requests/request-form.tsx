@@ -4,7 +4,7 @@ import { useState, useTransition } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { ErrorMessage } from '@/components/ui/error-message';
-import { cn } from '@/lib/utils';
+import { cn, parseAmountToCents, sanitizeAmountInput } from '@/lib/utils';
 import { NOTE_MAX_LENGTH, AMOUNT_MIN_CENTS, AMOUNT_MAX_CENTS } from '@/lib/constants';
 import type { CreateRequestInput } from '@/lib/types/api';
 
@@ -15,10 +15,9 @@ interface RequestFormProps {
     success: boolean;
     error?: { code: string; message: string; field?: string };
   }>;
-  onSuccess?: (data: { shareUrl: string }) => void;
 }
 
-export function RequestForm({ onSubmit, onSuccess }: RequestFormProps) {
+export function RequestForm({ onSubmit }: RequestFormProps) {
   const [recipientType, setRecipientType] = useState<RecipientType>('email');
   const [recipientValue, setRecipientValue] = useState('');
   const [amountDisplay, setAmountDisplay] = useState('');
@@ -27,19 +26,10 @@ export function RequestForm({ onSubmit, onSuccess }: RequestFormProps) {
   const [generalError, setGeneralError] = useState('');
   const [isPending, startTransition] = useTransition();
 
-  function parseAmountToCents(value: string): number {
-    const cleaned = value.replace(/[^0-9.]/g, '');
-    const dollars = parseFloat(cleaned);
-    if (isNaN(dollars)) return 0;
-    return Math.round(dollars * 100);
-  }
-
   function handleAmountChange(value: string) {
-    const cleaned = value.replace(/[^0-9.]/g, '');
-    const parts = cleaned.split('.');
-    if (parts.length > 2) return;
-    if (parts[1] && parts[1].length > 2) return;
-    setAmountDisplay(cleaned);
+    const sanitized = sanitizeAmountInput(value);
+    if (sanitized === null) return;
+    setAmountDisplay(sanitized);
     setFieldErrors((prev) => {
       const next = { ...prev };
       delete next.amountCents;

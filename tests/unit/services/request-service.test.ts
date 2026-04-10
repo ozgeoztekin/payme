@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { VALID_TRANSITIONS, RequestStatus } from '@/lib/types/domain';
+import { VALID_TRANSITIONS } from '@/lib/types/domain';
 
 vi.mock('@/lib/db/client', () => ({
   supabaseAdmin: {

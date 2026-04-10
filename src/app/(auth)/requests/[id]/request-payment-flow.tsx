@@ -207,15 +207,9 @@ export function RequestPaymentFlow({
 
   return (
     <>
-      <RequestDetail
-        request={request}
-        requesterName={requesterName}
-        readOnly={isTerminal}
-      />
+      <RequestDetail request={request} requesterName={requesterName} readOnly={isTerminal} />
 
-      {error && (
-        <ErrorMessage message={error} onDismiss={() => setError(null)} />
-      )}
+      {error && <ErrorMessage message={error} onDismiss={() => setError(null)} />}
 
       {isRequester && isPendingRequest && (
         <Card>

@@ -52,7 +52,9 @@ test.describe('Public Payment (US7)', () => {
 
     await page.getByRole('button', { name: /pay \$15\.00/i }).click();
 
-    await expect(page.getByRole('heading', { name: /connect a bank account/i })).toBeVisible({ timeout: 5000 });
+    await expect(page.getByRole('heading', { name: /connect a bank account/i })).toBeVisible({
+      timeout: 5000,
+    });
 
     await page.getByLabel(/bank$/i).selectOption('Chase');
     await page.getByLabel(/last 4 digits/i).fill('9876');

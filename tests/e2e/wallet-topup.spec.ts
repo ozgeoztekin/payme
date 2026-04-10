@@ -51,9 +51,9 @@ test.describe('Wallet Top-Up (US6)', () => {
 
     await page.getByRole('button', { name: 'Top Up Wallet' }).click();
 
-    await expect(
-      page.getByText(/exceeds your bank account balance|insufficient/i),
-    ).toBeVisible({ timeout: 5000 });
+    await expect(page.getByText(/exceeds your bank account balance|insufficient/i)).toBeVisible({
+      timeout: 5000,
+    });
   });
 
   test('shows guidance when no bank account is connected', async ({ page }) => {

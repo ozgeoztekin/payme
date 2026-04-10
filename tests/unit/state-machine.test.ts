@@ -26,14 +26,12 @@ describe('State Machine: VALID_TRANSITIONS', () => {
       expect(VALID_TRANSITIONS.pending).toHaveLength(4);
     });
 
-    it.each([
-      ['paid'],
-      ['declined'],
-      ['canceled'],
-      ['expired'],
-    ] as const)('allows pending → %s', (target) => {
-      expect(VALID_TRANSITIONS.pending).toContain(target);
-    });
+    it.each([['paid'], ['declined'], ['canceled'], ['expired']] as const)(
+      'allows pending → %s',
+      (target) => {
+        expect(VALID_TRANSITIONS.pending).toContain(target);
+      },
+    );
 
     it('does not allow pending → pending (self-transition)', () => {
       expect(VALID_TRANSITIONS.pending).not.toContain('pending');

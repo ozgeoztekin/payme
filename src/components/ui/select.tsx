@@ -9,7 +9,7 @@ export type SelectOption = { value: string; label: string };
 export type SelectProps = Omit<SelectHTMLAttributes<HTMLSelectElement>, 'children'> & {
   label: string;
   error?: string;
-  options: SelectOption[];
+  options: readonly SelectOption[];
 };
 
 export const Select = forwardRef<HTMLSelectElement, SelectProps>(function Select(

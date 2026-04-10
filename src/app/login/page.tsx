@@ -1,11 +1,19 @@
 'use client';
 
-import { useState, useTransition } from 'react';
+import { Suspense, useState, useTransition } from 'react';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import { signIn } from '@/lib/actions/auth-actions';
 
 export default function LoginPage() {
+  return (
+    <Suspense>
+      <LoginContent />
+    </Suspense>
+  );
+}
+
+function LoginContent() {
   const searchParams = useSearchParams();
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState<string | null>(searchParams.get('error'));
@@ -188,7 +196,7 @@ export default function LoginPage() {
 
       <footer className="py-8 px-6 text-center">
         <p className="text-[0.75rem] text-outline font-medium tracking-wide uppercase">
-          &copy; {new Date().getFullYear()} PayMe Financial. All rights reserved.
+          &copy; 2026 PayMe Financial. All rights reserved.
         </p>
       </footer>
     </div>

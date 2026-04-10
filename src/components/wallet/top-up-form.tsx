@@ -6,7 +6,7 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { ErrorMessage } from '@/components/ui/error-message';
 import { topUpWallet } from '@/lib/actions/wallet-actions';
-import { formatCents } from '@/lib/utils';
+import { formatCents, parseAmountToCents, sanitizeAmountInput } from '@/lib/utils';
 import type { BankAccountRow } from '@/lib/types/database';
 
 const QUICK_AMOUNTS = [1000, 2500, 5000, 10000];
@@ -24,12 +24,9 @@ export function TopUpForm({
   const [isPending, startTransition] = useTransition();
 
   function handleAmountChange(value: string) {
-    const cleaned = value.replace(/[^0-9.]/g, '');
-    const parts = cleaned.split('.');
-    const formatted = parts.length > 2
-      ? parts[0] + '.' + parts.slice(1).join('')
-      : cleaned;
-    setAmountStr(formatted);
+    const sanitized = sanitizeAmountInput(value);
+    if (sanitized === null) return;
+    setAmountStr(sanitized);
     setError(null);
     setSuccessMsg(null);
   }
@@ -44,16 +41,10 @@ export function TopUpForm({
     setError(null);
     setSuccessMsg(null);
 
-    const dollars = parseFloat(amountStr);
-    if (isNaN(dollars) || dollars <= 0) {
-      setError('Please enter a valid amount');
-      return;
-    }
-
-    const amountCents = Math.round(dollars * 100);
+    const amountCents = parseAmountToCents(amountStr);
 
     if (amountCents < 1) {
-      setError('Minimum top-up is $0.01');
+      setError('Please enter a valid amount (minimum $0.01)');
       return;
     }
 
@@ -83,8 +74,8 @@ export function TopUpForm({
     <Card>
       <h3 className="text-lg font-semibold text-slate-900">Top Up Wallet</h3>
       <p className="mt-1 text-sm text-slate-500">
-        Transfer funds from <strong>{bankAccount.bank_name}</strong>{' '}
-        ({bankAccount.account_number_masked}) to your wallet.
+        Transfer funds from <strong>{bankAccount.bank_name}</strong> (
+        {bankAccount.account_number_masked}) to your wallet.
       </p>
 
       <div className="mt-5 flex flex-wrap gap-2">

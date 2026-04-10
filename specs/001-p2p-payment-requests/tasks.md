@@ -303,12 +303,12 @@
 
 **Purpose**: Quality improvements that affect multiple user stories.
 
-- [ ] T094 [P] Update `README.md` with project overview, architecture summary, setup instructions, and development commands
-- [ ] T095 [P] Add `loading.tsx` files with skeleton UI for all page routes (`dashboard`, `requests/new`, `requests/[id]`, `wallet`, `settings`, `pay/[token]`)
-- [ ] T096 Audit all pages for complete UX state coverage: intentional loading, success, error, empty, and disabled states per plan section 12
-- [ ] T097 Security review: verify all server actions validate auth, ownership, active status, and expiration before mutation
-- [ ] T098 [P] Extract shared form patterns and common layout utilities into `src/lib/utils.ts`
-- [ ] T099 Run full quickstart.md validation: fresh setup, migrations, seed, dev server, both test suites pass
+- [X] T094 [P] Update `README.md` with project overview, architecture summary, setup instructions, and development commands
+- [X] T095 [P] Add `loading.tsx` files with skeleton UI for all page routes (`dashboard`, `requests/new`, `requests/[id]`, `wallet`, `settings`, `pay/[token]`)
+- [X] T096 Audit all pages for complete UX state coverage: intentional loading, success, error, empty, and disabled states per plan section 12
+- [X] T097 Security review: verify all server actions validate auth, ownership, active status, and expiration before mutation
+- [X] T098 [P] Extract shared form patterns and common layout utilities into `src/lib/utils.ts`
+- [X] T099 Run full quickstart.md validation: fresh setup, migrations, seed, dev server, both test suites pass
 
 ---
 

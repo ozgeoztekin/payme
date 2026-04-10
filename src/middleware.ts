@@ -2,7 +2,14 @@ import { type NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
 import { updateSession } from '@/lib/supabase/middleware';
 
-const PUBLIC_ROUTES = ['/', '/pay', '/auth', '/api/bank-guest', '/api/decline-guest', '/api/pay-guest'];
+const PUBLIC_ROUTES = [
+  '/',
+  '/pay',
+  '/auth',
+  '/api/bank-guest',
+  '/api/decline-guest',
+  '/api/pay-guest',
+];
 const AUTH_ROUTES = ['/login', '/signup'];
 
 const PAY_TOKEN_RE = /^\/pay\/([0-9a-f-]{36})$/;

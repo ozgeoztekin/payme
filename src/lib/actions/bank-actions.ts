@@ -9,9 +9,7 @@ import type { BankAccountRow } from '@/lib/types/database';
 
 const connectBankSchema = z.object({
   bankName: z.string().min(1, 'Bank name is required').max(100, 'Bank name too long'),
-  accountNumberLast4: z
-    .string()
-    .regex(/^\d{4}$/, 'Must be exactly 4 digits'),
+  accountNumberLast4: z.string().regex(/^\d{4}$/, 'Must be exactly 4 digits'),
 });
 
 export async function connectBankAccount(input: {
@@ -83,6 +81,29 @@ export async function disconnectBankAccount(): Promise<ActionResult<{ disconnect
     return {
       success: false,
       error: { code: 'UNAUTHORIZED', message: 'You must be signed in' },
+    };
+  }
+
+  const { data: profile } = await supabaseAdmin
+    .from('users')
+    .select('id, status')
+    .eq('id', user.id)
+    .single();
+
+  if (!profile) {
+    return {
+      success: false,
+      error: { code: 'USER_NOT_FOUND', message: 'User profile not found' },
+    };
+  }
+
+  if (profile.status !== 'active') {
+    return {
+      success: false,
+      error: {
+        code: 'USER_INACTIVE',
+        message: 'Your account is not active. Please contact support.',
+      },
     };
   }
 

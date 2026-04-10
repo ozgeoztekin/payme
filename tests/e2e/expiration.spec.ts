@@ -32,17 +32,17 @@ async function createRequestAndGetInfo(
 
   const linkElement = page.getByText(/\/pay\//);
   const linkText = await linkElement.textContent();
-  const shareToken = linkText!.split('/pay/')[1]?.trim()!;
+  const shareToken = linkText!.split('/pay/')[1]?.trim() ?? '';
 
-  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
-  const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
+  const sbUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
+  const sbKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
 
   const res = await page.request.get(
-    `${supabaseUrl}/rest/v1/payment_requests?share_token=eq.${shareToken}&select=id`,
+    `${sbUrl}/rest/v1/payment_requests?share_token=eq.${shareToken}&select=id`,
     {
       headers: {
-        apikey: serviceKey,
-        Authorization: `Bearer ${serviceKey}`,
+        apikey: sbKey,
+        Authorization: `Bearer ${sbKey}`,
       },
     },
   );
@@ -115,9 +115,9 @@ test.describe('Request Expiration (US9)', () => {
     await signIn(page, BOB_EMAIL);
     await page.goto(`/requests/${requestId}`);
 
-    await expect(
-      page.getByRole('heading', { level: 1, name: '$25.00' }),
-    ).toBeVisible({ timeout: 10000 });
+    await expect(page.getByRole('heading', { level: 1, name: '$25.00' })).toBeVisible({
+      timeout: 10000,
+    });
 
     await expect(page.locator('span').filter({ hasText: /^Expired$/ })).toBeVisible();
 
@@ -153,9 +153,9 @@ test.describe('Request Expiration (US9)', () => {
     await signIn(page, ALICE_EMAIL);
     await page.goto(`/requests/${requestId}`);
 
-    await expect(
-      page.getByRole('heading', { level: 1, name: '$33.00' }),
-    ).toBeVisible({ timeout: 10000 });
+    await expect(page.getByRole('heading', { level: 1, name: '$33.00' })).toBeVisible({
+      timeout: 10000,
+    });
 
     await expect(page.locator('span').filter({ hasText: /^Expired$/ })).toBeVisible();
     await expect(page.getByText(/no further actions/i)).toBeVisible();
@@ -222,9 +222,6 @@ test.describe('Request Expiration (US9)', () => {
     );
 
     await expireRequest(page, requestId);
-
-    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
-    const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
 
     const bankRes = await page.request.post('http://localhost:3000/api/bank-guest', {
       data: {

@@ -17,7 +17,10 @@ export async function POST(request: Request) {
 
   if (!rateCheck.allowed) {
     return NextResponse.json(
-      { success: false, error: { code: 'RATE_LIMITED', message: 'Too many requests. Please try again later.' } },
+      {
+        success: false,
+        error: { code: 'RATE_LIMITED', message: 'Too many requests. Please try again later.' },
+      },
       { status: 429, headers: { 'Retry-After': String(Math.ceil(rateCheck.retryAfterMs / 1000)) } },
     );
   }
@@ -65,7 +68,10 @@ export async function POST(request: Request) {
 
   if (insertError || !bankAccount) {
     return NextResponse.json(
-      { success: false, error: { code: 'INTERNAL_ERROR', message: 'Failed to create guest bank account' } },
+      {
+        success: false,
+        error: { code: 'INTERNAL_ERROR', message: 'Failed to create guest bank account' },
+      },
       { status: 500 },
     );
   }
