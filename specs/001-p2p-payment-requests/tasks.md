@@ -180,10 +180,10 @@
 
 ### Implementation for User Story 4
 
-- [ ] T061 [US4] Build RequestDetail component (full details: amount, note, sender, recipient, timestamps, status, expiration countdown, read-only variant) in `src/components/requests/request-detail.tsx`
-- [ ] T062 [US4] Create authenticated request detail page with server-side data fetch (query `payment_requests_view` for `effective_status`), role detection, 404 not-found state for invalid/inaccessible IDs, and conditional action rendering (pay/decline for recipient, cancel for requester, read-only for terminal) in `src/app/(auth)/requests/[id]/page.tsx`
-- [ ] T063 [US4] Wire FundingSourceSelector and PaymentConfirmation (from US2) into the request detail page for recipient payment flow
-- [ ] T064 [US4] Add shareable link display to the request detail page for outgoing requests (requester view)
+- [X] T061 [US4] Build RequestDetail component (full details: amount, note, sender, recipient, timestamps, status, expiration countdown, read-only variant) in `src/components/requests/request-detail.tsx`
+- [X] T062 [US4] Create authenticated request detail page with server-side data fetch (query `payment_requests_view` for `effective_status`), role detection, 404 not-found state for invalid/inaccessible IDs, and conditional action rendering (pay/decline for recipient, cancel for requester, read-only for terminal) in `src/app/(auth)/requests/[id]/page.tsx`
+- [X] T063 [US4] Wire FundingSourceSelector and PaymentConfirmation (from US2) into the request detail page for recipient payment flow
+- [X] T064 [US4] Add shareable link display to the request detail page for outgoing requests (requester view)
 
 **Checkpoint**: User Story 4 fully functional — detail view is the action hub for all request lifecycle operations.
 

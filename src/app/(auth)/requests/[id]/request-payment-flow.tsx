@@ -4,25 +4,17 @@ import { useState, useTransition } from 'react';
 import { useRouter } from 'next/navigation';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
+import { Modal } from '@/components/ui/modal';
 import { ErrorMessage } from '@/components/ui/error-message';
 import { FundingSourceSelector } from '@/components/payment/funding-source-selector';
 import { PaymentConfirmation } from '@/components/payment/payment-confirmation';
+import { RequestDetail } from '@/components/requests/request-detail';
+import { ShareableLink } from '@/components/requests/shareable-link';
 import { payRequest } from '@/lib/actions/payment-actions';
+import { declineRequest, cancelRequest } from '@/lib/actions/request-actions';
 import { formatCents } from '@/lib/utils';
 import type { PaymentRequestViewRow, WalletRow, BankAccountRow } from '@/lib/types/database';
 import type { FundingSourceType } from '@/lib/types/domain';
-
-const STATUS_BADGE_MAP: Record<
-  string,
-  { label: string; variant: 'pending' | 'paid' | 'declined' | 'canceled' | 'expired' }
-> = {
-  pending: { label: 'Pending', variant: 'pending' },
-  paid: { label: 'Paid', variant: 'paid' },
-  declined: { label: 'Declined', variant: 'declined' },
-  canceled: { label: 'Canceled', variant: 'canceled' },
-  expired: { label: 'Expired', variant: 'expired' },
-};
 
 interface RequestPaymentFlowProps {
   request: PaymentRequestViewRow;
@@ -31,6 +23,7 @@ interface RequestPaymentFlowProps {
   isRecipient: boolean;
   wallet: WalletRow | null;
   bankAccount: BankAccountRow | null;
+  shareUrl: string;
 }
 
 export function RequestPaymentFlow({
@@ -40,26 +33,32 @@ export function RequestPaymentFlow({
   isRecipient,
   wallet,
   bankAccount,
+  shareUrl,
 }: RequestPaymentFlowProps) {
   const router = useRouter();
+
   const [selectedSource, setSelectedSource] = useState<FundingSourceType | null>(null);
-  const [showConfirm, setShowConfirm] = useState(false);
-  const [isPending, startTransition] = useTransition();
+  const [showPayConfirm, setShowPayConfirm] = useState(false);
+  const [showDeclineConfirm, setShowDeclineConfirm] = useState(false);
+  const [showCancelConfirm, setShowCancelConfirm] = useState(false);
+
+  const [isPayPending, startPayTransition] = useTransition();
+  const [isDeclinePending, startDeclineTransition] = useTransition();
+  const [isCancelPending, startCancelTransition] = useTransition();
+
   const [error, setError] = useState<string | null>(null);
   const [paid, setPaid] = useState(false);
-
-  const statusInfo = STATUS_BADGE_MAP[request.effective_status] ?? {
-    label: request.effective_status,
-    variant: 'default' as const,
-  };
+  const [declined, setDeclined] = useState(false);
+  const [canceled, setCanceled] = useState(false);
 
   const isPendingRequest = request.effective_status === 'pending';
+  const isTerminal = !isPendingRequest;
 
   function handlePay() {
     if (!selectedSource) return;
     setError(null);
 
-    startTransition(async () => {
+    startPayTransition(async () => {
       const result = await payRequest({
         requestId: request.id,
         fundingSource: selectedSource,
@@ -67,9 +66,37 @@ export function RequestPaymentFlow({
 
       if (result.success) {
         setPaid(true);
-        setShowConfirm(false);
+        setShowPayConfirm(false);
       } else {
-        setShowConfirm(false);
+        setShowPayConfirm(false);
+        setError(result.error.message);
+      }
+    });
+  }
+
+  function handleDecline() {
+    setError(null);
+    startDeclineTransition(async () => {
+      const result = await declineRequest(request.id);
+      if (result.success) {
+        setDeclined(true);
+        setShowDeclineConfirm(false);
+      } else {
+        setShowDeclineConfirm(false);
+        setError(result.error.message);
+      }
+    });
+  }
+
+  function handleCancel() {
+    setError(null);
+    startCancelTransition(async () => {
+      const result = await cancelRequest(request.id);
+      if (result.success) {
+        setCanceled(true);
+        setShowCancelConfirm(false);
+      } else {
+        setShowCancelConfirm(false);
         setError(result.error.message);
       }
     });
@@ -107,6 +134,70 @@ export function RequestPaymentFlow({
     );
   }
 
+  if (declined) {
+    return (
+      <div className="flex flex-col items-center gap-8 pt-8">
+        <div className="flex h-20 w-20 items-center justify-center rounded-full bg-slate-100 text-slate-500">
+          <svg
+            className="h-10 w-10"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2.5"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            aria-hidden
+          >
+            <path d="M18 6L6 18M6 6l12 12" />
+          </svg>
+        </div>
+        <div className="text-center space-y-2">
+          <h1 className="font-[family-name:var(--font-manrope)] text-2xl font-bold text-slate-900">
+            Request Declined
+          </h1>
+          <p className="text-slate-500">
+            You declined the {formatCents(request.amount_cents)} request from {requesterName}.
+          </p>
+        </div>
+        <Button variant="secondary" onClick={() => router.push('/dashboard')}>
+          Back to Dashboard
+        </Button>
+      </div>
+    );
+  }
+
+  if (canceled) {
+    return (
+      <div className="flex flex-col items-center gap-8 pt-8">
+        <div className="flex h-20 w-20 items-center justify-center rounded-full bg-slate-100 text-slate-500">
+          <svg
+            className="h-10 w-10"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2.5"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            aria-hidden
+          >
+            <path d="M18 6L6 18M6 6l12 12" />
+          </svg>
+        </div>
+        <div className="text-center space-y-2">
+          <h1 className="font-[family-name:var(--font-manrope)] text-2xl font-bold text-slate-900">
+            Request Canceled
+          </h1>
+          <p className="text-slate-500">
+            Your {formatCents(request.amount_cents)} request has been canceled.
+          </p>
+        </div>
+        <Button variant="secondary" onClick={() => router.push('/dashboard')}>
+          Back to Dashboard
+        </Button>
+      </div>
+    );
+  }
+
   const fundingSourceLabel =
     selectedSource === 'wallet'
       ? 'Wallet'
@@ -116,50 +207,36 @@ export function RequestPaymentFlow({
 
   return (
     <>
-      <Card>
-        <div className="space-y-6">
-          <div className="flex items-start justify-between">
-            <div>
-              <p className="text-sm text-slate-500">Payment Request</p>
-              <h1 className="mt-1 font-[family-name:var(--font-manrope)] text-3xl font-bold text-slate-900">
-                {formatCents(request.amount_cents)}
-              </h1>
-            </div>
-            <Badge variant={statusInfo.variant}>{statusInfo.label}</Badge>
-          </div>
+      <RequestDetail
+        request={request}
+        requesterName={requesterName}
+        readOnly={isTerminal}
+      />
 
-          <dl className="grid grid-cols-2 gap-4 text-sm">
-            <div>
-              <dt className="text-slate-500">From</dt>
-              <dd className="mt-0.5 font-medium text-slate-900">{requesterName}</dd>
+      {error && (
+        <ErrorMessage message={error} onDismiss={() => setError(null)} />
+      )}
+
+      {isRequester && isPendingRequest && (
+        <Card>
+          <div className="space-y-4">
+            <p className="text-sm text-slate-500">
+              Share this link with the recipient so they can pay your request.
+            </p>
+            <ShareableLink url={shareUrl} />
+            <div className="pt-2 border-t border-slate-100">
+              <Button
+                variant="danger"
+                size="sm"
+                onClick={() => setShowCancelConfirm(true)}
+                disabled={isCancelPending}
+              >
+                Cancel Request
+              </Button>
             </div>
-            <div>
-              <dt className="text-slate-500">To</dt>
-              <dd className="mt-0.5 font-medium text-slate-900">{request.recipient_value}</dd>
-            </div>
-            {request.note && (
-              <div className="col-span-2">
-                <dt className="text-slate-500">Note</dt>
-                <dd className="mt-0.5 text-slate-900">{request.note}</dd>
-              </div>
-            )}
-            <div>
-              <dt className="text-slate-500">Created</dt>
-              <dd className="mt-0.5 text-slate-900">
-                {new Date(request.created_at).toLocaleDateString()}
-              </dd>
-            </div>
-            {isPendingRequest && (
-              <div>
-                <dt className="text-slate-500">Expires</dt>
-                <dd className="mt-0.5 text-slate-900">
-                  {new Date(request.expires_at).toLocaleDateString()}
-                </dd>
-              </div>
-            )}
-          </dl>
-        </div>
-      </Card>
+          </div>
+        </Card>
+      )}
 
       {isRecipient && isPendingRequest && wallet && (
         <Card>
@@ -181,47 +258,122 @@ export function RequestPaymentFlow({
               onSelect={setSelectedSource}
             />
 
-            {error && <ErrorMessage message={error} onDismiss={() => setError(null)} />}
-
-            <Button
-              variant="primary"
-              size="lg"
-              className="w-full"
-              disabled={!selectedSource}
-              onClick={() => setShowConfirm(true)}
-            >
-              Pay {formatCents(request.amount_cents)}
-            </Button>
+            <div className="flex gap-3">
+              <Button
+                variant="primary"
+                size="lg"
+                className="flex-1"
+                disabled={!selectedSource}
+                onClick={() => setShowPayConfirm(true)}
+              >
+                Pay {formatCents(request.amount_cents)}
+              </Button>
+              <Button
+                variant="danger"
+                size="lg"
+                onClick={() => setShowDeclineConfirm(true)}
+                disabled={isDeclinePending}
+              >
+                Decline
+              </Button>
+            </div>
           </div>
         </Card>
       )}
 
-      {isRequester && isPendingRequest && (
+      {isRecipient && isPendingRequest && !wallet && (
         <Card>
-          <p className="text-center text-sm text-slate-500">
-            Waiting for the recipient to respond to your request.
-          </p>
-        </Card>
-      )}
-
-      {!isPendingRequest && (
-        <Card>
-          <p className="text-center text-sm text-slate-500">
-            This request has been {request.effective_status}. No further actions are available.
-          </p>
+          <div className="space-y-4">
+            <p className="text-center text-sm text-slate-500">
+              Your wallet is not set up yet. Please contact support.
+            </p>
+            <div className="flex justify-center">
+              <Button
+                variant="danger"
+                size="sm"
+                onClick={() => setShowDeclineConfirm(true)}
+                disabled={isDeclinePending}
+              >
+                Decline Request
+              </Button>
+            </div>
+          </div>
         </Card>
       )}
 
       <PaymentConfirmation
-        open={showConfirm}
-        onClose={() => setShowConfirm(false)}
+        open={showPayConfirm}
+        onClose={() => setShowPayConfirm(false)}
         onConfirm={handlePay}
-        loading={isPending}
+        loading={isPayPending}
         amountCents={request.amount_cents}
         fundingSource={selectedSource ?? 'wallet'}
         fundingSourceLabel={fundingSourceLabel}
         recipientName={requesterName}
       />
+
+      <Modal
+        open={showDeclineConfirm}
+        onClose={() => setShowDeclineConfirm(false)}
+        title="Decline Request"
+        footer={
+          <div className="flex gap-3">
+            <Button
+              variant="secondary"
+              className="flex-1"
+              onClick={() => setShowDeclineConfirm(false)}
+              disabled={isDeclinePending}
+            >
+              Keep
+            </Button>
+            <Button
+              variant="danger"
+              className="flex-1"
+              onClick={handleDecline}
+              loading={isDeclinePending}
+            >
+              Decline
+            </Button>
+          </div>
+        }
+      >
+        <p>
+          Are you sure you want to decline this {formatCents(request.amount_cents)} request from{' '}
+          <span className="font-medium text-slate-900">{requesterName}</span>? This cannot be
+          undone.
+        </p>
+      </Modal>
+
+      <Modal
+        open={showCancelConfirm}
+        onClose={() => setShowCancelConfirm(false)}
+        title="Cancel Request"
+        footer={
+          <div className="flex gap-3">
+            <Button
+              variant="secondary"
+              className="flex-1"
+              onClick={() => setShowCancelConfirm(false)}
+              disabled={isCancelPending}
+            >
+              Keep
+            </Button>
+            <Button
+              variant="danger"
+              className="flex-1"
+              onClick={handleCancel}
+              loading={isCancelPending}
+            >
+              Cancel Request
+            </Button>
+          </div>
+        }
+      >
+        <p>
+          Are you sure you want to cancel your {formatCents(request.amount_cents)} request? This
+          cannot be undone.
+        </p>
+      </Modal>
     </>
   );
 }

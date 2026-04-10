@@ -86,6 +86,9 @@ export default async function RequestDetailPage({ params }: Props) {
     bankAccount = b as BankAccountRow | null;
   }
 
+  const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? 'http://localhost:3000';
+  const shareUrl = `${appUrl}/pay/${typedRequest.share_token}`;
+
   return (
     <div className="mx-auto max-w-2xl space-y-8 pt-4">
       <RequestPaymentFlow
@@ -95,6 +98,7 @@ export default async function RequestDetailPage({ params }: Props) {
         isRecipient={!!isRecipient}
         wallet={wallet}
         bankAccount={bankAccount}
+        shareUrl={shareUrl}
       />
     </div>
   );
