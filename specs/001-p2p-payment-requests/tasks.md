@@ -199,12 +199,12 @@
 
 ### Implementation for User Story 5
 
-- [ ] T065 [US5] Implement bank service (connectBankAccount — create with mocked $10,000 balance, replace existing, soft-delete old) in `src/lib/services/bank-service.ts`
-- [ ] T066 [US5] Implement `connectBankAccount` server action with validation, active-user check, and audit logging in `src/lib/actions/bank-actions.ts`
-- [ ] T067 [P] [US5] Build BankConnectFlow component (simulated bank selection, account number input, confirmation step, loading state) in `src/components/bank/bank-connect-flow.tsx`
-- [ ] T068 [P] [US5] Build BankAccountCard component (bank name, masked account number, balance display, disconnect option) in `src/components/bank/bank-account-card.tsx`
-- [ ] T069 [US5] Create `useBank` hook for bank account data fetching in `src/hooks/use-bank.ts`
-- [ ] T070 [US5] Create Settings page with BankConnectFlow and BankAccountCard in `src/app/(auth)/settings/page.tsx`
+- [X] T065 [US5] Implement bank service (connectBankAccount — create with mocked $10,000 balance, replace existing, soft-delete old) in `src/lib/services/bank-service.ts`
+- [X] T066 [US5] Implement `connectBankAccount` server action with validation, active-user check, and audit logging in `src/lib/actions/bank-actions.ts`
+- [X] T067 [P] [US5] Build BankConnectFlow component (simulated bank selection, account number input, confirmation step, loading state) in `src/components/bank/bank-connect-flow.tsx`
+- [X] T068 [P] [US5] Build BankAccountCard component (bank name, masked account number, balance display, disconnect option) in `src/components/bank/bank-account-card.tsx`
+- [X] T069 [US5] Create `useBank` hook for bank account data fetching in `src/hooks/use-bank.ts`
+- [X] T070 [US5] Create Settings page with BankConnectFlow and BankAccountCard in `src/app/(auth)/settings/page.tsx`
 
 **Checkpoint**: User Story 5 fully functional — users can connect and manage a mocked bank account.
 
