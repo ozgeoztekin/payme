@@ -287,13 +287,13 @@
 
 ### Tests for User Story 9
 
-- [ ] T090 [P] [US9] Unit tests for state machine covering all valid/invalid transitions and expiration enforcement in `tests/unit/state-machine.test.ts`
+- [X] T090 [P] [US9] Unit tests for state machine covering all valid/invalid transitions and expiration enforcement in `tests/unit/state-machine.test.ts`
 
 ### Implementation for User Story 9
 
-- [ ] T091 [US9] Verify and harden expiration enforcement in all action paths (payRequest, declineRequest, cancelRequest, pay-guest) across service and action layers
-- [ ] T092 [US9] Ensure ExpirationCountdown (from US3) and expired state display are rendered correctly on dashboard cards and request detail page
-- [ ] T093 [US9] E2E test: expired request blocks payment, expired status displays on dashboard and detail, countdown display for near-expiry, public link shows expired read-only in `tests/e2e/expiration.spec.ts`
+- [X] T091 [US9] Verify and harden expiration enforcement in all action paths (payRequest, declineRequest, cancelRequest, pay-guest) across service and action layers
+- [X] T092 [US9] Ensure ExpirationCountdown (from US3) and expired state display are rendered correctly on dashboard cards and request detail page
+- [X] T093 [US9] E2E test: expired request blocks payment, expired status displays on dashboard and detail, countdown display for near-expiry, public link shows expired read-only in `tests/e2e/expiration.spec.ts`
 
 **Checkpoint**: User Story 9 fully functional — expiration is enforced everywhere and clearly communicated.
 

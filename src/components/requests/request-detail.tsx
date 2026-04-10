@@ -78,7 +78,20 @@ export function RequestDetail({ request, requesterName, readOnly = false }: Requ
             </div>
           )}
 
-          {!isPending && request.resolved_at && (
+          {effectiveStatus === 'expired' && (
+            <div>
+              <dt className="text-slate-500">Expired</dt>
+              <dd className="mt-0.5 text-red-700 font-medium">
+                {new Date(request.expires_at).toLocaleDateString('en-US', {
+                  year: 'numeric',
+                  month: 'short',
+                  day: 'numeric',
+                })}
+              </dd>
+            </div>
+          )}
+
+          {!isPending && effectiveStatus !== 'expired' && request.resolved_at && (
             <div>
               <dt className="text-slate-500">Resolved</dt>
               <dd className="mt-0.5 text-slate-900">

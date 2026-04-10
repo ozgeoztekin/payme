@@ -108,11 +108,13 @@ export async function declineRequest(
     };
   }
 
+  const now = new Date().toISOString();
   const { data: updated, error: updateError } = await supabaseAdmin
     .from('payment_requests')
-    .update({ status: 'declined', resolved_at: new Date().toISOString() })
+    .update({ status: 'declined', resolved_at: now })
     .eq('id', requestId)
     .eq('status', 'pending')
+    .gt('expires_at', now)
     .select('id, status, resolved_at')
     .single();
 
@@ -172,11 +174,13 @@ export async function cancelRequest(
     };
   }
 
+  const now = new Date().toISOString();
   const { data: updated, error: updateError } = await supabaseAdmin
     .from('payment_requests')
-    .update({ status: 'canceled', resolved_at: new Date().toISOString() })
+    .update({ status: 'canceled', resolved_at: now })
     .eq('id', requestId)
     .eq('status', 'pending')
+    .gt('expires_at', now)
     .select('id, status, resolved_at')
     .single();
 
