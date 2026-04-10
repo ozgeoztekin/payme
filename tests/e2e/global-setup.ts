@@ -3,6 +3,9 @@ import { createClient } from '@supabase/supabase-js';
 const TEST_EMAIL = 'alice@test.com';
 const TEST_PASSWORD = 'testpassword123';
 
+const ALICE_ID = '11111111-1111-1111-1111-111111111111';
+const BOB_ID = '22222222-2222-2222-2222-222222222222';
+
 export default async function globalSetup() {
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
   const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
@@ -29,4 +32,44 @@ export default async function globalSetup() {
     }
     console.log(`Created test user: ${TEST_EMAIL}`);
   }
+
+  await resetSeedData(supabase);
+}
+
+async function resetSeedData(supabase: ReturnType<typeof createClient>) {
+  await supabase
+    .from('wallets')
+    .upsert(
+      [
+        { id: 'c1111111-1111-1111-1111-111111111111', user_id: ALICE_ID, balance_cents: 10000 },
+        { id: 'c2222222-2222-2222-2222-222222222222', user_id: BOB_ID, balance_cents: 5000 },
+      ],
+      { onConflict: 'user_id' },
+    );
+
+  await supabase
+    .from('bank_accounts')
+    .delete()
+    .in('user_id', [ALICE_ID, BOB_ID]);
+
+  await supabase
+    .from('bank_accounts')
+    .upsert([
+      {
+        id: 'd1111111-1111-1111-1111-111111111111',
+        user_id: ALICE_ID,
+        bank_name: 'Test Bank',
+        account_number_masked: '••••1001',
+        balance_cents: 1000000,
+        is_guest: false,
+      },
+      {
+        id: 'd2222222-2222-2222-2222-222222222222',
+        user_id: BOB_ID,
+        bank_name: 'Test Bank',
+        account_number_masked: '••••2002',
+        balance_cents: 1000000,
+        is_guest: false,
+      },
+    ]);
 }

@@ -220,17 +220,17 @@
 
 ### Tests for User Story 6
 
-- [ ] T071 [P] [US6] Unit tests for wallet service (topUp validation, balance calculation, insufficient bank balance) in `tests/unit/services/wallet-service.test.ts`
+- [X] T071 [P] [US6] Unit tests for wallet service (topUp validation, balance calculation, insufficient bank balance) in `tests/unit/services/wallet-service.test.ts`
 
 ### Implementation for User Story 6
 
-- [ ] T072 [US6] Implement wallet service (getBalance, topUpFromBank — atomic bank debit + wallet credit, audit logging) in `src/lib/services/wallet-service.ts`
-- [ ] T073 [US6] Implement `topUpWallet` server action with validation, bank check, balance check, and atomic transfer in `src/lib/actions/wallet-actions.ts`
-- [ ] T074 [P] [US6] Build WalletBalance component (formatted balance display, last updated) in `src/components/wallet/wallet-balance.tsx`
-- [ ] T075 [P] [US6] Build TopUpForm component (amount input, bank account selector, confirm button, loading/error states) in `src/components/wallet/top-up-form.tsx`
-- [ ] T076 [US6] Create `useWallet` hook for wallet data fetching in `src/hooks/use-wallet.ts`
-- [ ] T077 [US6] Create Wallet page with WalletBalance, TopUpForm, and BankAccountCard in `src/app/(auth)/wallet/page.tsx`
-- [ ] T078 [US6] E2E test: successful top-up, insufficient bank balance rejection, no bank connected guidance in `tests/e2e/wallet-topup.spec.ts`
+- [X] T072 [US6] Implement wallet service (getBalance, topUpFromBank — atomic bank debit + wallet credit, audit logging) in `src/lib/services/wallet-service.ts`
+- [X] T073 [US6] Implement `topUpWallet` server action with validation, bank check, balance check, and atomic transfer in `src/lib/actions/wallet-actions.ts`
+- [X] T074 [P] [US6] Build WalletBalance component (formatted balance display, last updated) in `src/components/wallet/wallet-balance.tsx`
+- [X] T075 [P] [US6] Build TopUpForm component (amount input, bank account selector, confirm button, loading/error states) in `src/components/wallet/top-up-form.tsx`
+- [X] T076 [US6] Create `useWallet` hook for wallet data fetching in `src/hooks/use-wallet.ts`
+- [X] T077 [US6] Create Wallet page with WalletBalance, TopUpForm, and BankAccountCard in `src/app/(auth)/wallet/page.tsx`
+- [X] T078 [US6] E2E test: successful top-up, insufficient bank balance rejection, no bank connected guidance in `tests/e2e/wallet-topup.spec.ts`
 
 **Checkpoint**: User Story 6 fully functional — users can fund their wallets from their connected bank.
 
