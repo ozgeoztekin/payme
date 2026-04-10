@@ -246,13 +246,13 @@
 
 ### Implementation for User Story 7
 
-- [ ] T079 [US7] Create in-memory IP-based rate limiter utility (token bucket, 10 req/IP/min) in `src/lib/rate-limit.ts`
-- [ ] T080 [US7] Implement POST `/api/bank-guest` route handler with validation, rate limiting, guest bank account creation in `src/app/api/bank-guest/route.ts`
-- [ ] T081 [US7] Implement POST `/api/pay-guest` route handler with validation, rate limiting, atomic guest payment, and audit logging in `src/app/api/pay-guest/route.ts`
-- [ ] T082 [US7] Build GuestPaymentFlow component (inline BankConnectFlow for guests + PaymentConfirmation, no wallet option) in `src/components/payment/guest-payment-flow.tsx`
-- [ ] T083 [US7] Create public payment page (`/pay/[token]`) with server-side request fetch by share_token from `payment_requests_view`, conditional rendering (pending: guest payment flow, terminal: read-only status, not found: 404) in `src/app/pay/[token]/page.tsx`
-- [ ] T084 [US7] Add signed-in recipient redirect logic to middleware for `/pay/[token]` routes (redirect to `/requests/[id]`) in `src/middleware.ts`
-- [ ] T085 [US7] E2E test: guest views pending request, guest pays via bank, guest views terminal request, invalid link 404 in `tests/e2e/public-payment.spec.ts`
+- [X] T079 [US7] Create in-memory IP-based rate limiter utility (token bucket, 10 req/IP/min) in `src/lib/rate-limit.ts`
+- [X] T080 [US7] Implement POST `/api/bank-guest` route handler with validation, rate limiting, guest bank account creation in `src/app/api/bank-guest/route.ts`
+- [X] T081 [US7] Implement POST `/api/pay-guest` route handler with validation, rate limiting, atomic guest payment, and audit logging in `src/app/api/pay-guest/route.ts`
+- [X] T082 [US7] Build GuestPaymentFlow component (inline BankConnectFlow for guests + PaymentConfirmation, no wallet option) in `src/components/payment/guest-payment-flow.tsx`
+- [X] T083 [US7] Create public payment page (`/pay/[token]`) with server-side request fetch by share_token from `payment_requests_view`, conditional rendering (pending: guest payment flow, terminal: read-only status, not found: 404) in `src/app/pay/[token]/page.tsx`
+- [X] T084 [US7] Add signed-in recipient redirect logic to middleware for `/pay/[token]` routes (redirect to `/requests/[id]`) in `src/middleware.ts`
+- [X] T085 [US7] E2E test: guest views pending request, guest pays via bank, guest views terminal request, invalid link 404 in `tests/e2e/public-payment.spec.ts`
 
 **Checkpoint**: User Story 7 fully functional — guests can pay requests via shareable links without an account.
 
