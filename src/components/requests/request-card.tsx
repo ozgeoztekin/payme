@@ -39,17 +39,17 @@ export function RequestCard({ item, tab }: { item: PaymentRequestListItem; tab: 
   return (
     <Link
       href={`/requests/${item.id}`}
-      className="flex flex-col gap-4 bg-white p-6 transition-colors hover:bg-surface-container-low md:flex-row md:items-center md:justify-between"
+      className="flex items-center justify-between gap-4 bg-white p-4 transition-colors hover:bg-surface-container-low md:p-6"
     >
-      <div className="flex min-w-0 flex-1 items-center gap-4">
+      <div className="flex min-w-0 flex-1 items-center gap-3 md:gap-4">
         <div
-          className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-indigo-100 text-sm font-bold text-indigo-700"
+          className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-indigo-100 text-xs font-bold text-indigo-700 md:h-12 md:w-12 md:text-sm"
           aria-hidden
         >
           {initials(title)}
         </div>
         <div className="min-w-0">
-          <p className="truncate font-[family-name:var(--font-manrope)] font-bold text-foreground">
+          <p className="truncate font-[family-name:var(--font-manrope)] text-sm font-bold text-foreground md:text-base">
             {title}
           </p>
           {subtitle ? <p className="mt-0.5 truncate text-xs text-slate-500">{subtitle}</p> : null}
@@ -62,9 +62,9 @@ export function RequestCard({ item, tab }: { item: PaymentRequestListItem; tab: 
         </div>
       </div>
 
-      <div className="flex flex-col gap-3 md:flex-row md:items-center md:gap-8">
-        <div className="flex flex-col gap-1 md:items-end md:text-right">
-          <p className="font-[family-name:var(--font-manrope)] text-lg font-bold text-foreground">
+      <div className="flex shrink-0 items-center gap-3 md:gap-8">
+        <div className="flex flex-col items-end gap-1 text-right">
+          <p className="font-[family-name:var(--font-manrope)] text-sm font-bold text-foreground md:text-lg">
             {formatCents(item.amount_cents)}
           </p>
           <div className="flex flex-wrap items-center gap-2">
@@ -77,9 +77,9 @@ export function RequestCard({ item, tab }: { item: PaymentRequestListItem; tab: 
             </span>
           </div>
         </div>
-        <span className="inline-flex h-10 w-10 shrink-0 items-center justify-center self-end rounded-full text-slate-400 transition-colors hover:bg-surface-container-high hover:text-slate-600 md:self-center">
+        <span className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-slate-400 transition-colors hover:bg-surface-container-high hover:text-slate-600 md:h-10 md:w-10">
           <svg
-            className="h-5 w-5"
+            className="h-4 w-4 md:h-5 md:w-5"
             viewBox="0 0 24 24"
             fill="none"
             stroke="currentColor"

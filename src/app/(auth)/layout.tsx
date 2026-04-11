@@ -1,6 +1,6 @@
 import { redirect } from 'next/navigation';
 import { createClient } from '@/lib/supabase/server';
-import { AppSidebar } from '@/components/layout/app-sidebar';
+import { AppSidebar, MobileHeader, MobileBottomNav } from '@/components/layout/app-sidebar';
 
 export default async function AuthLayout({ children }: { children: React.ReactNode }) {
   const supabase = await createClient();
@@ -13,9 +13,11 @@ export default async function AuthLayout({ children }: { children: React.ReactNo
   }
 
   return (
-    <div className="flex min-h-screen">
+    <div className="flex min-h-screen flex-col md:flex-row">
       <AppSidebar user={user} />
-      <main className="flex-1 p-6 md:p-10">{children}</main>
+      <MobileHeader />
+      <main className="flex-1 p-4 pb-20 md:p-10 md:pb-10">{children}</main>
+      <MobileBottomNav />
     </div>
   );
 }

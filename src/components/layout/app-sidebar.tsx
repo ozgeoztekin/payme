@@ -12,8 +12,8 @@ const NAV_ITEMS = [
   { href: '/settings', label: 'Settings', icon: 'settings' },
 ] as const;
 
-function NavIcon({ icon }: { icon: string }) {
-  const cls = 'w-5 h-5';
+function NavIcon({ icon, className }: { icon: string; className?: string }) {
+  const cls = className ?? 'w-5 h-5';
   switch (icon) {
     case 'grid':
       return (
@@ -84,21 +84,63 @@ function NavIcon({ icon }: { icon: string }) {
   }
 }
 
+function AppLogo() {
+  return (
+    <Link href="/dashboard" className="flex items-center gap-3">
+      <svg className="w-8 h-8 text-indigo-600" viewBox="0 0 24 24" fill="currentColor">
+        <rect x="3" y="3" width="18" height="18" rx="4" opacity="0.15" />
+        <path d="M12 7a2 2 0 0 0-2 2v2H8a1 1 0 0 0 0 2h2v2a1 1 0 0 0 2 0v-2h2a1 1 0 0 0 0-2h-2V9a2 2 0 0 0-2-2z" />
+      </svg>
+      <span className="font-bold text-xl tracking-tight font-[family-name:var(--font-manrope)]">
+        PayMe
+      </span>
+    </Link>
+  );
+}
+
+export function MobileHeader() {
+  return (
+    <header className="md:hidden sticky top-0 z-30 flex items-center justify-between bg-white/95 backdrop-blur-sm px-4 py-3 border-b border-slate-100">
+      <AppLogo />
+    </header>
+  );
+}
+
+export function MobileBottomNav() {
+  const pathname = usePathname();
+
+  return (
+    <nav className="md:hidden fixed bottom-0 inset-x-0 z-30 bg-white/95 backdrop-blur-sm border-t border-slate-100">
+      <div className="flex items-stretch justify-around">
+        {NAV_ITEMS.map((item) => {
+          const isActive = pathname === item.href || pathname.startsWith(`${item.href}/`);
+          return (
+            <Link
+              key={item.href}
+              href={item.href}
+              className={cn(
+                'flex flex-1 flex-col items-center gap-1 py-2.5 text-[11px] font-medium transition-colors',
+                isActive ? 'text-indigo-600' : 'text-slate-400 active:text-slate-600',
+              )}
+            >
+              <NavIcon icon={item.icon} className="w-5 h-5" />
+              {item.label}
+            </Link>
+          );
+        })}
+      </div>
+      <div className="h-[env(safe-area-inset-bottom)]" />
+    </nav>
+  );
+}
+
 export function AppSidebar({ user }: { user: User }) {
   const pathname = usePathname();
 
   return (
     <aside className="hidden md:flex md:w-64 flex-col bg-white">
       <div className="p-6">
-        <Link href="/dashboard" className="flex items-center gap-3">
-          <svg className="w-8 h-8 text-indigo-600" viewBox="0 0 24 24" fill="currentColor">
-            <rect x="3" y="3" width="18" height="18" rx="4" opacity="0.15" />
-            <path d="M12 7a2 2 0 0 0-2 2v2H8a1 1 0 0 0 0 2h2v2a1 1 0 0 0 2 0v-2h2a1 1 0 0 0 0-2h-2V9a2 2 0 0 0-2-2z" />
-          </svg>
-          <span className="font-bold text-xl tracking-tight font-[family-name:var(--font-manrope)]">
-            PayMe
-          </span>
-        </Link>
+        <AppLogo />
       </div>
       <nav className="flex-1 px-4 space-y-1">
         {NAV_ITEMS.map((item) => {
