@@ -77,8 +77,10 @@ test.describe('Wallet Top-Up (US6)', () => {
     try {
       await page.goto('/wallet');
 
-      await expect(page.getByText(/no bank account connected/i)).toBeVisible({ timeout: 10000 });
-      await expect(page.getByRole('button', { name: /go to settings/i })).toBeVisible();
+      await expect(page.getByRole('heading', { name: /connect a bank account/i })).toBeVisible({
+        timeout: 10000,
+      });
+      await expect(page.getByRole('button', { name: /continue/i })).toBeVisible();
     } finally {
       await page.request.post(`${supabaseUrl}/rest/v1/bank_accounts`, {
         headers: {

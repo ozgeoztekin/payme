@@ -150,8 +150,8 @@ export function FundingSourceSelector({
       {!bankAccount && (
         <p className="text-center text-sm text-slate-500">
           Connect a bank account in{' '}
-          <a href="/settings" className="font-medium text-indigo-600 hover:underline">
-            Settings
+          <a href="/wallet" className="font-medium text-indigo-600 hover:underline">
+            your Wallet
           </a>{' '}
           for more options.
         </p>

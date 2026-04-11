@@ -20,10 +20,10 @@
 
 **Plan references**: spec.md Acceptance Criteria 1–4
 
-- [ ] T100 Update `src/app/(auth)/wallet/page.tsx`: import `BankConnectFlow` and, when no bank is connected, replace the `EmptyState` "Go to Settings" CTA with an inline `BankConnectFlow` component that calls `refetch` on connect. Use `useWallet`'s `refetch()` for all state updates (no need for `useBank` or `setBankAccount`).
-- [ ] T101 Update `src/app/(auth)/wallet/page.tsx`: when a bank is connected, expand the "Connected Bank" section to include `BankConnectFlow` with "Replace with a different bank" label (matching the Settings page pattern) alongside the existing `BankAccountCard`. Use `refetch` on connect to refresh state.
-- [ ] T102 Verify the existing `BankAccountCard.onDisconnected → refetch` wiring in the Wallet page works correctly with the new layout: when the user disconnects, `bankAccount` becomes `null`, the top-up form hides, and the inline `BankConnectFlow` from T100 appears (no code change expected — confirm behavior after T100/T101)
-- [ ] T104 Update the Wallet page heading/subheading to reflect the expanded scope (e.g. "Manage your balance, bank account, and top-ups")
+- [X] T100 Update `src/app/(auth)/wallet/page.tsx`: import `BankConnectFlow` and, when no bank is connected, replace the `EmptyState` "Go to Settings" CTA with an inline `BankConnectFlow` component that calls `refetch` on connect. Use `useWallet`'s `refetch()` for all state updates (no need for `useBank` or `setBankAccount`).
+- [X] T101 Update `src/app/(auth)/wallet/page.tsx`: when a bank is connected, expand the "Connected Bank" section to include `BankConnectFlow` with "Replace with a different bank" label (matching the Settings page pattern) alongside the existing `BankAccountCard`. Use `refetch` on connect to refresh state.
+- [X] T102 Verify the existing `BankAccountCard.onDisconnected → refetch` wiring in the Wallet page works correctly with the new layout: when the user disconnects, `bankAccount` becomes `null`, the top-up form hides, and the inline `BankConnectFlow` from T100 appears (no code change expected — confirm behavior after T100/T101)
+- [X] T104 Update the Wallet page heading/subheading to reflect the expanded scope (e.g. "Manage your balance, bank account, and top-ups")
 
 **Checkpoint**: Wallet page is self-contained for bank management — no link to Settings needed.
 
@@ -35,9 +35,9 @@
 
 **Plan references**: spec.md Acceptance Criteria 5
 
-- [ ] T105 Delete `src/app/(auth)/settings/page.tsx`
-- [ ] T106 Delete `src/app/(auth)/settings/loading.tsx`
-- [ ] T107 Add a permanent redirect from `/settings` to `/wallet` in `next.config.ts` using the `redirects()` configuration (301 Moved Permanently — appropriate since only GET requests are expected for a page route)
+- [X] T105 Delete `src/app/(auth)/settings/page.tsx`
+- [X] T106 Delete `src/app/(auth)/settings/loading.tsx`
+- [X] T107 Add a permanent redirect from `/settings` to `/wallet` in `next.config.ts` using the `redirects()` configuration (301 Moved Permanently — appropriate since only GET requests are expected for a page route)
 
 **Checkpoint**: `/settings` no longer renders a page; it redirects to `/wallet`.
 
@@ -49,8 +49,8 @@
 
 **Plan references**: spec.md Acceptance Criteria 6
 
-- [ ] T108 Remove the `{ href: '/settings', label: 'Settings', icon: 'settings' }` entry from `NAV_ITEMS` in `src/components/layout/app-sidebar.tsx`
-- [ ] T109 Remove the `case 'settings'` SVG from the `NavIcon` component in `src/components/layout/app-sidebar.tsx`
+- [X] T108 Remove the `{ href: '/settings', label: 'Settings', icon: 'settings' }` entry from `NAV_ITEMS` in `src/components/layout/app-sidebar.tsx`
+- [X] T109 Remove the `case 'settings'` SVG from the `NavIcon` component in `src/components/layout/app-sidebar.tsx`
 
 **Checkpoint**: Sidebar (desktop) and bottom nav (mobile) show 3 items: Dashboard, New Request, Wallet.
 
@@ -62,7 +62,7 @@
 
 **Plan references**: spec.md Acceptance Criteria 7
 
-- [ ] T110 Update `src/components/payment/funding-source-selector.tsx` lines 150–158: change the `<a href="/settings">` link to `/wallet` and update the copy from "Connect a bank account in Settings" to "Connect a bank account in your Wallet"
+- [X] T110 Update `src/components/payment/funding-source-selector.tsx` lines 150–158: change the `<a href="/settings">` link to `/wallet` and update the copy from "Connect a bank account in Settings" to "Connect a bank account in your Wallet"
 
 **Checkpoint**: No references to `/settings` remain in application source code (excluding the redirect in `next.config.ts`).
 
@@ -74,8 +74,8 @@
 
 **Plan references**: spec.md Acceptance Criteria 8
 
-- [ ] T111 Update `tests/e2e/wallet-topup.spec.ts` "shows guidance when no bank account is connected" test: replace the assertion for `getByRole('button', { name: /go to settings/i })` with an assertion that the inline `BankConnectFlow` UI is visible (e.g. assert a bank selection element or the connect form heading is present)
-- [ ] T112 Run `npm run test:e2e` and verify all E2E test suites pass with the changes
+- [X] T111 Update `tests/e2e/wallet-topup.spec.ts` "shows guidance when no bank account is connected" test: replace the assertion for `getByRole('button', { name: /go to settings/i })` with an assertion that the inline `BankConnectFlow` UI is visible (e.g. assert a bank selection element or the connect form heading is present)
+- [X] T112 Run `npm run test:e2e` and verify all E2E test suites pass with the changes
 
 **Checkpoint**: Full E2E suite green.
 
@@ -85,10 +85,10 @@
 
 **Purpose**: Remove orphaned code that was only used by the deleted Settings page.
 
-- [ ] T113 Delete `src/hooks/use-bank.ts` (only imported by the deleted Settings page)
-- [ ] T114 Delete `src/app/api/bank/route.ts` (only called by the deleted `use-bank.ts` hook)
-- [ ] T115 [P] Update `src/app/(auth)/wallet/loading.tsx` skeleton to reflect the new bank management section layout
-- [ ] T116 Run `npm test && npm run lint` and verify no errors from removed imports or dead references
+- [X] T113 Delete `src/hooks/use-bank.ts` (only imported by the deleted Settings page)
+- [X] T114 Delete `src/app/api/bank/route.ts` (only called by the deleted `use-bank.ts` hook)
+- [X] T115 [P] Update `src/app/(auth)/wallet/loading.tsx` skeleton to reflect the new bank management section layout
+- [X] T116 Run `npm test && npm run lint` and verify no errors from removed imports or dead references
 
 **Checkpoint**: No orphaned code, all checks pass.
 
