@@ -19,9 +19,9 @@
 
 **Purpose**: Add shared types, validators, and service foundations that multiple user stories depend on
 
-- [ ] T001 [P] Add `PHONE_ADDED` and `USER_LOGOUT` to `AuditAction` in `src/lib/types/domain.ts`
-- [ ] T002 [P] Add `AddPhoneInput` interface to `src/lib/types/api.ts`
-- [ ] T003 [P] Create `addPhoneSchema` Zod validator in `src/lib/validators/profile-validators.ts` (imports `phoneSchema` from `common-validators.ts`, applies `.trim()` then E.164 validation)
+- [x] T001 [P] Add `PHONE_ADDED` and `USER_LOGOUT` to `AuditAction` in `src/lib/types/domain.ts`
+- [x] T002 [P] Add `AddPhoneInput` interface to `src/lib/types/api.ts`
+- [x] T003 [P] Create `addPhoneSchema` Zod validator in `src/lib/validators/profile-validators.ts` (imports `phoneSchema` from `common-validators.ts`, applies `.trim()` then E.164 validation)
 
 ---
 
@@ -31,8 +31,8 @@
 
 **CRITICAL**: No user story work can begin until this phase is complete
 
-- [ ] T004 Add `getProfile(userId)` function to `src/lib/services/profile-service.ts` — query `public.users` by ID via `supabaseAdmin`, return `ActionResult<UserRow>` with `{ id, email, phone, status, display_name }`
-- [ ] T005 Add `addPhoneNumber(userId, phone)` function to `src/lib/services/profile-service.ts` — validate active status, phone IS NULL, execute atomic UPDATE with `WHERE id = $userId AND phone IS NULL AND status = 'active'`, catch unique constraint violation, write `profile.phone_added` audit log on success, return `ActionResult<{ phone: string }>`
+- [x] T004 Add `getProfile(userId)` function to `src/lib/services/profile-service.ts` — query `public.users` by ID via `supabaseAdmin`, return `ActionResult<UserRow>` with `{ id, email, phone, status, display_name }`
+- [x] T005 Add `addPhoneNumber(userId, phone)` function to `src/lib/services/profile-service.ts` — validate active status, phone IS NULL, execute atomic UPDATE with `WHERE id = $userId AND phone IS NULL AND status = 'active'`, catch unique constraint violation, write `profile.phone_added` audit log on success, return `ActionResult<{ phone: string }>`
 
 **Checkpoint**: Profile service ready — user story implementation can now begin
 
@@ -46,14 +46,14 @@
 
 ### Tests for User Story 1
 
-- [ ] T006 [P] [US1] Create unit tests for `getProfile` in `tests/unit/services/profile-service.test.ts` — test user found (with phone, without phone), user not found
+- [x] T006 [P] [US1] Create unit tests for `getProfile` in `tests/unit/services/profile-service.test.ts` — test user found (with phone, without phone), user not found
 
 ### Implementation for User Story 1
 
-- [ ] T007 [P] [US1] Add Profile nav item to `NAV_ITEMS` in `src/components/layout/app-sidebar.tsx` — href `/profile`, label "Profile", icon "user", positioned last; add `user` case to `NavIcon` switch with a person SVG icon
-- [ ] T008 [US1] Create Profile page Server Component at `src/app/(auth)/profile/page.tsx` — call `createClient()`, get authenticated user, call `getProfile(user.id)`, pass profile data to child components; render `ProfileInfo` and conditionally `AddPhoneForm` (active + no phone) or inactive explanation or `LogoutButton`
-- [ ] T009 [P] [US1] Create loading skeleton at `src/app/(auth)/profile/loading.tsx` — Tailwind-styled skeleton placeholders for profile info and action areas
-- [ ] T010 [US1] Create `ProfileInfo` component at `src/components/profile/profile-info.tsx` — display email read-only, display phone read-only if present, show "No phone number added" indicator if absent; handle active vs inactive messaging per FR-006
+- [x] T007 [P] [US1] Add Profile nav item to `NAV_ITEMS` in `src/components/layout/app-sidebar.tsx` — href `/profile`, label "Profile", icon "user", positioned last; add `user` case to `NavIcon` switch with a person SVG icon
+- [x] T008 [US1] Create Profile page Server Component at `src/app/(auth)/profile/page.tsx` — call `createClient()`, get authenticated user, call `getProfile(user.id)`, pass profile data to child components; render `ProfileInfo` and conditionally `AddPhoneForm` (active + no phone) or inactive explanation or `LogoutButton`
+- [x] T009 [P] [US1] Create loading skeleton at `src/app/(auth)/profile/loading.tsx` — Tailwind-styled skeleton placeholders for profile info and action areas
+- [x] T010 [US1] Create `ProfileInfo` component at `src/components/profile/profile-info.tsx` — display email read-only, display phone read-only if present, show "No phone number added" indicator if absent; handle active vs inactive messaging per FR-006
 
 **Checkpoint**: User Story 1 complete — Profile tab visible in nav, profile page shows identity info read-only with correct active/inactive behavior
 

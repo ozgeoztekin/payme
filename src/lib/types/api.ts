@@ -36,6 +36,10 @@ export interface GuestPaymentInput {
   guestBankId: string;
 }
 
+export interface AddPhoneInput {
+  phone: string;
+}
+
 export interface GuestBankInput {
   bankName: string;
   accountNumberLast4: string;

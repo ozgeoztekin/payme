@@ -40,6 +40,8 @@ export const AuditAction = {
   BANK_CONNECTED: 'bank.connected',
   BANK_REPLACED: 'bank.replaced',
   PAYMENT_FAILED: 'payment.failed',
+  PHONE_ADDED: 'profile.phone_added',
+  USER_LOGOUT: 'user.logout',
 } as const;
 
 export type AuditAction = (typeof AuditAction)[keyof typeof AuditAction];

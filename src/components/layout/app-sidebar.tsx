@@ -9,6 +9,7 @@ const NAV_ITEMS = [
   { href: '/dashboard', label: 'Dashboard', icon: 'grid' },
   { href: '/requests/new', label: 'New Request', icon: 'plus' },
   { href: '/wallet', label: 'Wallet', icon: 'wallet' },
+  { href: '/profile', label: 'Profile', icon: 'user' },
 ] as const;
 
 function NavIcon({ icon, className }: { icon: string; className?: string }) {
@@ -61,6 +62,21 @@ function NavIcon({ icon, className }: { icon: string; className?: string }) {
           <path d="M21 12V7H5a2 2 0 0 1 0-4h14v4" />
           <path d="M3 5v14a2 2 0 0 0 2 2h16v-5" />
           <path d="M18 12a2 2 0 0 0 0 4h4v-4Z" />
+        </svg>
+      );
+    case 'user':
+      return (
+        <svg
+          className={cls}
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        >
+          <circle cx="12" cy="8" r="4" />
+          <path d="M20 21a8 8 0 0 0-16 0" />
         </svg>
       );
     default:
