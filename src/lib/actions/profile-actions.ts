@@ -1,6 +1,7 @@
 'use server';
 
 import { revalidatePath } from 'next/cache';
+import { redirect } from 'next/navigation';
 import { createClient } from '@/lib/supabase/server';
 import { addPhoneSchema } from '@/lib/validators/profile-validators';
 import { addPhoneNumber as addPhoneNumberService } from '@/lib/services/profile-service';
@@ -39,6 +40,7 @@ export async function addPhoneNumber(input: {
 
   if (result.success) {
     revalidatePath('/profile');
+    redirect('/profile?phone_added=true');
   }
 
   return result;

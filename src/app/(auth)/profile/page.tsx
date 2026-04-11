@@ -4,8 +4,16 @@ import { getProfile } from '@/lib/services/profile-service';
 import { ProfileInfo } from '@/components/profile/profile-info';
 import { AddPhoneForm } from '@/components/profile/add-phone-form';
 import { LogoutButton } from '@/components/profile/logout-button';
+import { SuccessBanner } from '@/components/profile/success-banner';
 
-export default async function ProfilePage() {
+export default async function ProfilePage({
+  searchParams,
+}: {
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+}) {
+  const params = await searchParams;
+  const phoneAdded = params.phone_added === 'true';
+
   const supabase = await createClient();
   const {
     data: { user },
@@ -38,6 +46,7 @@ export default async function ProfilePage() {
         <h1 className="text-2xl font-bold text-slate-900">Profile</h1>
         <LogoutButton />
       </div>
+      {phoneAdded && <SuccessBanner message="Phone number added successfully." />}
       <ProfileInfo profile={profile} />
       {showAddPhone && <AddPhoneForm />}
     </div>

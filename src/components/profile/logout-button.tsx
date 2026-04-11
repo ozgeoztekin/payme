@@ -81,7 +81,9 @@ export function LogoutButton() {
           </div>
         }
       >
-        <p className="text-sm">Are you sure you want to log out? You will need to sign in again to access your account.</p>
+        <p className="text-sm">
+          Are you sure you want to log out? You will need to sign in again to access your account.
+        </p>
       </Modal>
     </>
   );

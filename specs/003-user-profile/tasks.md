@@ -102,7 +102,7 @@
 
 ### Implementation for User Story 4
 
-- [ ] T017 [US4] Verify existing `(auth)` layout redirect covers `/profile` — confirm the `src/app/(auth)/layout.tsx` authentication guard redirects unauthenticated users to `/login` before any profile data renders; add test scenario in E2E (T018)
+- [x] T017 [US4] Verify existing `(auth)` layout redirect covers `/profile` — confirm the `src/app/(auth)/layout.tsx` authentication guard redirects unauthenticated users to `/login` before any profile data renders; add test scenario in E2E (T018)
 
 **Checkpoint**: User Story 4 complete — unauthenticated access is blocked by existing auth layout
 
@@ -112,7 +112,7 @@
 
 **Purpose**: End-to-end tests covering all user stories as integrated flows
 
-- [ ] T018 Create E2E test suite at `tests/e2e/profile.spec.ts` — scenarios: (1) view profile with email displayed read-only, (2) view profile with existing phone shown read-only, (3) active user adds phone successfully with success message, (4) phone validation error for invalid format, (5) logout redirects to login, (6) unauthenticated user redirected to login from `/profile`
+- [x] T018 Create E2E test suite at `tests/e2e/profile.spec.ts` — scenarios: (1) view profile with email displayed read-only, (2) view profile with existing phone shown read-only, (3) active user adds phone successfully with success message, (4) phone validation error for invalid format, (5) logout redirects to login, (6) unauthenticated user redirected to login from `/profile`
 
 ---
 
@@ -120,9 +120,9 @@
 
 **Purpose**: Responsive design verification, cleanup, and final validation
 
-- [ ] T019 Verify responsive layout of Profile page across 320px–1440px viewports per FR-027/SC-005 — ensure all components (ProfileInfo, AddPhoneForm, LogoutButton) are fully usable on mobile and desktop
-- [ ] T020 Run full test suite (`npm test && npm run lint`) and fix any issues
-- [ ] T021 Run quickstart.md verification checklist — confirm all items pass
+- [x] T019 Verify responsive layout of Profile page across 320px–1440px viewports per FR-027/SC-005 — ensure all components (ProfileInfo, AddPhoneForm, LogoutButton) are fully usable on mobile and desktop
+- [x] T020 Run full test suite (`npm test && npm run lint`) and fix any issues
+- [x] T021 Run quickstart.md verification checklist — confirm all items pass
 
 ---
 
