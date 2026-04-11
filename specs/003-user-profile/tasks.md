@@ -67,13 +67,13 @@
 
 ### Tests for User Story 2
 
-- [ ] T011 [P] [US2] Create unit tests for `addPhoneSchema` in `tests/unit/validators/profile-validators.test.ts` — valid E.164, invalid format, empty string, whitespace trimming, missing plus sign, too short, too long
-- [ ] T012 [P] [US2] Add unit tests for `addPhoneNumber` service to `tests/unit/services/profile-service.test.ts` — successful add, duplicate phone (unique constraint), inactive user rejection, user already has phone (overwrite prevention)
+- [x] T011 [P] [US2] Create unit tests for `addPhoneSchema` in `tests/unit/validators/profile-validators.test.ts` — valid E.164, invalid format, empty string, whitespace trimming, missing plus sign, too short, too long
+- [x] T012 [P] [US2] Add unit tests for `addPhoneNumber` service to `tests/unit/services/profile-service.test.ts` — successful add, duplicate phone (unique constraint), inactive user rejection, user already has phone (overwrite prevention)
 
 ### Implementation for User Story 2
 
-- [ ] T013 [US2] Create `addPhoneNumber` server action in `src/lib/actions/profile-actions.ts` — `'use server'`, parse input with `addPhoneSchema`, get authenticated user, call `addPhoneNumber` service, revalidate `/profile` path on success, return `ActionResult`
-- [ ] T014 [US2] Create `AddPhoneForm` client component at `src/components/profile/add-phone-form.tsx` — phone input field, save button, client-side E.164 hint, loading/disabled state during submission (FR-024/FR-029), success confirmation (FR-012/FR-025), error display with specific messages (FR-026), call `addPhoneNumber` server action on submit
+- [x] T013 [US2] Create `addPhoneNumber` server action in `src/lib/actions/profile-actions.ts` — `'use server'`, parse input with `addPhoneSchema`, get authenticated user, call `addPhoneNumber` service, revalidate `/profile` path on success, return `ActionResult`
+- [x] T014 [US2] Create `AddPhoneForm` client component at `src/components/profile/add-phone-form.tsx` — phone input field, save button, client-side E.164 hint, loading/disabled state during submission (FR-024/FR-029), success confirmation (FR-012/FR-025), error display with specific messages (FR-026), call `addPhoneNumber` server action on submit
 
 **Checkpoint**: User Story 2 complete — active users can add phone with validation, uniqueness, audit log, and full UX states
 

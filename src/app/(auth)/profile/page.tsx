@@ -2,6 +2,7 @@ import { redirect } from 'next/navigation';
 import { createClient } from '@/lib/supabase/server';
 import { getProfile } from '@/lib/services/profile-service';
 import { ProfileInfo } from '@/components/profile/profile-info';
+import { AddPhoneForm } from '@/components/profile/add-phone-form';
 
 export default async function ProfilePage() {
   const supabase = await createClient();
@@ -28,10 +29,13 @@ export default async function ProfilePage() {
 
   const profile = profileResult.data;
 
+  const showAddPhone = profile.status === 'active' && profile.phone === null;
+
   return (
     <div className="max-w-lg mx-auto space-y-6">
       <h1 className="text-2xl font-bold text-slate-900">Profile</h1>
       <ProfileInfo profile={profile} />
+      {showAddPhone && <AddPhoneForm />}
     </div>
   );
 }
