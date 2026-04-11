@@ -2,6 +2,8 @@
 
 import { createClient } from '@/lib/supabase/server';
 import { ensureProfile } from '@/lib/services/profile-service';
+import { createAuditLog } from '@/lib/services/audit-service';
+import { ActorType, AuditAction } from '@/lib/types/domain';
 import { redirect } from 'next/navigation';
 
 export async function signIn(formData: FormData) {
@@ -47,6 +49,26 @@ export async function signUp(formData: FormData) {
 
 export async function signOut() {
   const supabase = await createClient();
+
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (user) {
+    try {
+      await createAuditLog({
+        actorId: user.id,
+        actorType: ActorType.USER,
+        action: AuditAction.USER_LOGOUT,
+        targetType: 'session',
+        targetId: user.id,
+        outcome: 'success',
+      });
+    } catch {
+      // Audit failure must not block logout
+    }
+  }
+
   await supabase.auth.signOut();
   redirect('/login');
 }

@@ -87,8 +87,8 @@
 
 ### Implementation for User Story 3
 
-- [ ] T015 [US3] Enhance `signOut` function in `src/lib/actions/auth-actions.ts` — before calling `supabase.auth.signOut()`, get current user via `supabase.auth.getUser()`, if user exists write `user.logout` audit log via `createAuditLog` using `supabaseAdmin` (do not block logout if audit fails), then sign out and redirect
-- [ ] T016 [US3] Create `LogoutButton` client component at `src/components/profile/logout-button.tsx` — button triggers `signOut` action, shows loading state during action, clear reliable UX per FR-030
+- [x] T015 [US3] Enhance `signOut` function in `src/lib/actions/auth-actions.ts` — before calling `supabase.auth.signOut()`, get current user via `supabase.auth.getUser()`, if user exists write `user.logout` audit log via `createAuditLog` using `supabaseAdmin` (do not block logout if audit fails), then sign out and redirect
+- [x] T016 [US3] Create `LogoutButton` client component at `src/components/profile/logout-button.tsx` — button triggers `signOut` action, shows loading state during action, clear reliable UX per FR-030
 
 **Checkpoint**: User Story 3 complete — logout works from Profile with audit logging and clean redirect
 

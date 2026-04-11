@@ -3,6 +3,7 @@ import { createClient } from '@/lib/supabase/server';
 import { getProfile } from '@/lib/services/profile-service';
 import { ProfileInfo } from '@/components/profile/profile-info';
 import { AddPhoneForm } from '@/components/profile/add-phone-form';
+import { LogoutButton } from '@/components/profile/logout-button';
 
 export default async function ProfilePage() {
   const supabase = await createClient();
@@ -33,7 +34,10 @@ export default async function ProfilePage() {
 
   return (
     <div className="max-w-lg mx-auto space-y-6">
-      <h1 className="text-2xl font-bold text-slate-900">Profile</h1>
+      <div className="flex items-center justify-between">
+        <h1 className="text-2xl font-bold text-slate-900">Profile</h1>
+        <LogoutButton />
+      </div>
       <ProfileInfo profile={profile} />
       {showAddPhone && <AddPhoneForm />}
     </div>
