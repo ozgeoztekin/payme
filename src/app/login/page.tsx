@@ -64,12 +64,12 @@ function LoginContent() {
                   htmlFor="login-email"
                   className="block text-[0.75rem] font-medium text-on-surface-variant mb-2 ml-1 uppercase tracking-wide"
                 >
-                  Email or Phone
+                  Email
                 </label>
                 <input
                   id="login-email"
                   name="email"
-                  type="text"
+                  type="email"
                   required
                   placeholder="name@example.com"
                   className="w-full h-14 px-4 bg-surface-container-low border-none rounded-xl text-foreground focus:ring-2 focus:ring-indigo-600 focus:bg-white transition-all duration-200 placeholder:text-outline"
