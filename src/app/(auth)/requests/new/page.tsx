@@ -7,12 +7,13 @@ import { ShareableLink } from '@/components/requests/shareable-link';
 import { Button } from '@/components/ui/button';
 import { PageContainer, PageHeader } from '@/components/layout/page-layout';
 import { createRequest } from '@/lib/actions/request-actions';
-import { formatCents } from '@/lib/utils';
+import { formatMinor } from '@/lib/utils';
 import type { CreateRequestInput } from '@/lib/types/api';
 
 interface SuccessData {
   shareUrl: string;
-  amountCents: number;
+  amountMinor: number;
+  currency: string;
   recipientValue: string;
 }
 
@@ -25,7 +26,8 @@ export default function NewRequestPage() {
     if (result.success) {
       setSuccessData({
         shareUrl: result.data.shareUrl,
-        amountCents: result.data.request.amount_cents,
+        amountMinor: result.data.request.amount_minor,
+        currency: result.data.request.currency,
         recipientValue: result.data.request.recipient_value,
       });
     }
@@ -55,7 +57,7 @@ export default function NewRequestPage() {
             </h1>
             <p className="text-on-surface-variant break-all">
               We&apos;ve created your request for{' '}
-              <strong className="text-foreground">{formatCents(successData.amountCents)}</strong> to{' '}
+              <strong className="text-foreground">{formatMinor(successData.amountMinor, successData.currency)}</strong> to{' '}
               <strong className="text-foreground">{successData.recipientValue}</strong>.
             </p>
           </div>

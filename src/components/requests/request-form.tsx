@@ -4,8 +4,8 @@ import { useState, useTransition } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { ErrorMessage } from '@/components/ui/error-message';
-import { cn, parseAmountToCents, sanitizeAmountInput } from '@/lib/utils';
-import { NOTE_MAX_LENGTH, AMOUNT_MIN_CENTS, AMOUNT_MAX_CENTS } from '@/lib/constants';
+import { cn, parseAmountToMinor, sanitizeAmountInput } from '@/lib/utils';
+import { NOTE_MAX_LENGTH, AMOUNT_MIN_MINOR, AMOUNT_MAX_MINOR, DEFAULT_CURRENCY } from '@/lib/constants';
 import type { CreateRequestInput } from '@/lib/types/api';
 
 type RecipientType = 'email' | 'phone';
@@ -32,7 +32,7 @@ export function RequestForm({ onSubmit }: RequestFormProps) {
     setAmountDisplay(sanitized);
     setFieldErrors((prev) => {
       const next = { ...prev };
-      delete next.amountCents;
+      delete next.amountMinor;
       return next;
     });
   }
@@ -41,14 +41,14 @@ export function RequestForm({ onSubmit }: RequestFormProps) {
     setFieldErrors({});
     setGeneralError('');
 
-    const amountCents = parseAmountToCents(amountDisplay);
+    const amountMinor = parseAmountToMinor(amountDisplay);
 
-    if (amountCents < AMOUNT_MIN_CENTS) {
-      setFieldErrors({ amountCents: 'Minimum amount is $0.01' });
+    if (amountMinor < AMOUNT_MIN_MINOR) {
+      setFieldErrors({ amountMinor: 'Minimum amount is $0.01' });
       return;
     }
-    if (amountCents > AMOUNT_MAX_CENTS) {
-      setFieldErrors({ amountCents: 'Maximum amount is $10,000.00' });
+    if (amountMinor > AMOUNT_MAX_MINOR) {
+      setFieldErrors({ amountMinor: 'Maximum amount is $10,000.00' });
       return;
     }
     if (!recipientValue.trim()) {
@@ -63,7 +63,8 @@ export function RequestForm({ onSubmit }: RequestFormProps) {
       const input: CreateRequestInput = {
         recipientType,
         recipientValue: recipientValue.trim(),
-        amountCents,
+        amountMinor,
+        currency: DEFAULT_CURRENCY,
         note: note.trim() || undefined,
       };
 
@@ -101,16 +102,16 @@ export function RequestForm({ onSubmit }: RequestFormProps) {
             value={amountDisplay}
             onChange={(e) => handleAmountChange(e.target.value)}
             aria-label="Amount in dollars"
-            aria-invalid={!!fieldErrors.amountCents}
+            aria-invalid={!!fieldErrors.amountMinor}
             className={cn(
               'w-full bg-transparent border-none p-0 font-[family-name:var(--font-manrope)] font-bold text-2xl sm:text-3xl leading-none text-foreground focus:ring-0 focus:outline-none placeholder:text-outline-variant',
-              fieldErrors.amountCents && 'text-rose-600',
+              fieldErrors.amountMinor && 'text-rose-600',
             )}
           />
         </div>
-        {fieldErrors.amountCents && (
+        {fieldErrors.amountMinor && (
           <p className="text-sm text-rose-600" role="alert">
-            {fieldErrors.amountCents}
+            {fieldErrors.amountMinor}
           </p>
         )}
       </div>

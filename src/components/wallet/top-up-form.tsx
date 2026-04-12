@@ -6,7 +6,7 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { ErrorMessage } from '@/components/ui/error-message';
 import { topUpWallet } from '@/lib/actions/wallet-actions';
-import { formatCents, parseAmountToCents, sanitizeAmountInput } from '@/lib/utils';
+import { formatMinor, parseAmountToMinor, sanitizeAmountInput } from '@/lib/utils';
 import type { BankAccountRow } from '@/lib/types/database';
 
 const QUICK_AMOUNTS = [1000, 2500, 5000, 10000];
@@ -41,27 +41,27 @@ export function TopUpForm({
     setError(null);
     setSuccessMsg(null);
 
-    const amountCents = parseAmountToCents(amountStr);
+    const amountMinor = parseAmountToMinor(amountStr);
 
-    if (amountCents < 1) {
+    if (amountMinor < 1) {
       setError('Please enter a valid amount (minimum $0.01)');
       return;
     }
 
-    if (amountCents > bankAccount.balance_cents) {
+    if (amountMinor > bankAccount.balance_minor) {
       setError('Amount exceeds your bank account balance');
       return;
     }
 
     startTransition(async () => {
-      const result = await topUpWallet({ amountCents });
+      const result = await topUpWallet({ amountMinor });
 
       if (!result.success) {
         setError(result.error.message);
         return;
       }
 
-      setSuccessMsg(`${formatCents(amountCents)} added to your wallet`);
+      setSuccessMsg(`${formatMinor(amountMinor)} added to your wallet`);
       setAmountStr('');
       onSuccess?.({
         walletBalance: result.data.walletBalance,
@@ -83,10 +83,10 @@ export function TopUpForm({
             key={cents}
             type="button"
             onClick={() => setQuickAmount(cents)}
-            disabled={isPending || cents > bankAccount.balance_cents}
+            disabled={isPending || cents > bankAccount.balance_minor}
             className="rounded-full border border-slate-200 px-4 py-2 text-sm font-medium text-slate-700 transition-colors hover:border-indigo-300 hover:bg-indigo-50 hover:text-indigo-700 disabled:cursor-not-allowed disabled:opacity-40"
           >
-            {formatCents(cents)}
+            {formatMinor(cents)}
           </button>
         ))}
       </div>
@@ -101,7 +101,7 @@ export function TopUpForm({
           value={amountStr}
           onChange={(e) => handleAmountChange(e.target.value)}
           disabled={isPending}
-          helpText={`Available: ${formatCents(bankAccount.balance_cents)}`}
+          helpText={`Available: ${formatMinor(bankAccount.balance_minor, bankAccount.currency)}`}
         />
       </div>
 

@@ -6,11 +6,12 @@ alwaysApply: true
 
 # payme Development Guidelines
 
-Auto-generated from all feature plans. Last updated: 2026-04-12
+Auto-generated from all feature plans. Last updated: 2026-04-13
 
 ## Active Technologies
 - TypeScript 5.x + Next.js 15 (App Router), React 19, Supabase (Auth + Postgres), Tailwind CSS 4, Zod (003-user-profile)
 - Supabase Postgres — existing `public.users` table with `phone text UNIQUE`, `email text UNIQUE`, `CHECK (email IS NOT NULL OR phone IS NOT NULL)`, and `status CHECK IN ('active', 'inactive')` (003-user-profile)
+- Supabase Postgres (hosted) — tables: `wallets`, `bank_accounts`, `payment_requests`, `payment_transactions`, `audit_logs` (004-currency-safe-money)
 
 - TypeScript 5.x + Next.js 15 (App Router), React 19, Supabase (Auth + Postgres), Tailwind CSS 4 (001-p2p-payment-requests)
 
@@ -30,10 +31,10 @@ npm test && npm run lint
 TypeScript 5.x: Follow standard conventions
 
 ## Recent Changes
+- 004-currency-safe-money: Added TypeScript 5.x + Next.js 15 (App Router), React 19, Supabase (Auth + Postgres), Tailwind CSS 4, Zod
 - 003-user-profile: Added TypeScript 5.x + Next.js 15 (App Router), React 19, Supabase (Auth + Postgres), Tailwind CSS 4, Zod
 
 - 002-remove-settings: Remove Settings page, consolidate bank management into Wallet page, update navigation and redirects
-- 001-p2p-payment-requests: Added TypeScript 5.x + Next.js 15 (App Router), React 19, Supabase (Auth + Postgres), Tailwind CSS 4
 
 <!-- MANUAL ADDITIONS START -->
 <!-- MANUAL ADDITIONS END -->

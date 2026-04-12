@@ -32,7 +32,7 @@ describe('wallet-service', () => {
       const result = await topUpFromBank({
         userId: 'user-1',
         bankAccountId: 'bank-1',
-        amountCents: 5000,
+        amountMinor: 5000,
       });
 
       expect(result.success).toBe(true);
@@ -42,7 +42,7 @@ describe('wallet-service', () => {
       expect(mockRpc).toHaveBeenCalledWith('process_top_up', {
         p_user_id: 'user-1',
         p_bank_account_id: 'bank-1',
-        p_amount_cents: 5000,
+        p_amount_minor: 5000,
       });
     });
 
@@ -57,7 +57,7 @@ describe('wallet-service', () => {
       const result = await topUpFromBank({
         userId: 'user-1',
         bankAccountId: 'bank-1',
-        amountCents: 999999999,
+        amountMinor: 999999999,
       });
 
       expect(result.success).toBe(false);
@@ -78,7 +78,7 @@ describe('wallet-service', () => {
       const result = await topUpFromBank({
         userId: 'user-1',
         bankAccountId: 'nonexistent-bank',
-        amountCents: 1000,
+        amountMinor: 1000,
       });
 
       expect(result.success).toBe(false);
@@ -98,7 +98,7 @@ describe('wallet-service', () => {
       const result = await topUpFromBank({
         userId: 'user-1',
         bankAccountId: 'bank-1',
-        amountCents: 1000,
+        amountMinor: 1000,
       });
 
       expect(result.success).toBe(false);
@@ -110,7 +110,7 @@ describe('wallet-service', () => {
     it('returns VALIDATION_ERROR for invalid amount (zero)', async () => {
       mockRpc.mockResolvedValueOnce({
         data: null,
-        error: { message: 'invalid amount_cents' },
+        error: { message: 'invalid amount_minor' },
       });
 
       const { topUpFromBank } = await import('@/lib/services/wallet-service');
@@ -118,7 +118,7 @@ describe('wallet-service', () => {
       const result = await topUpFromBank({
         userId: 'user-1',
         bankAccountId: 'bank-1',
-        amountCents: 0,
+        amountMinor: 0,
       });
 
       expect(result.success).toBe(false);
@@ -138,7 +138,7 @@ describe('wallet-service', () => {
       const result = await topUpFromBank({
         userId: 'user-1',
         bankAccountId: 'bank-1',
-        amountCents: 1000,
+        amountMinor: 1000,
       });
 
       expect(result.success).toBe(false);
@@ -153,7 +153,8 @@ describe('wallet-service', () => {
       const walletData = {
         id: 'wallet-1',
         user_id: 'user-1',
-        balance_cents: 5000,
+        balance_minor: 5000,
+        currency: 'USD',
         created_at: '2026-04-08T00:00:00Z',
         updated_at: '2026-04-08T00:00:00Z',
       };
@@ -163,7 +164,7 @@ describe('wallet-service', () => {
       const result = await getWalletBalance('user-1');
 
       expect(result).not.toBeNull();
-      expect(result?.balance_cents).toBe(5000);
+      expect(result?.balance_minor).toBe(5000);
       expect(mockFrom).toHaveBeenCalledWith('wallets');
     });
 

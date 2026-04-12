@@ -22,12 +22,12 @@ export async function processPaymentTransaction(params: {
 export async function processTopUpTransaction(params: {
   userId: string;
   bankAccountId: string;
-  amountCents: number;
+  amountMinor: number;
 }) {
   const { data, error } = await supabaseAdmin.rpc('process_top_up', {
     p_user_id: params.userId,
     p_bank_account_id: params.bankAccountId,
-    p_amount_cents: params.amountCents,
+    p_amount_minor: params.amountMinor,
   });
 
   if (error) throw new Error(error.message);

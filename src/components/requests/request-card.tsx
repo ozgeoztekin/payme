@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { formatCents } from '@/lib/utils';
+import { formatMinor } from '@/lib/utils';
 import type { PaymentRequestListItem, RequestListTab } from '@/lib/types/api';
 import { RequestStatusBadge } from './request-status-badge';
 import { ExpirationCountdown } from './expiration-countdown';
@@ -65,7 +65,7 @@ export function RequestCard({ item, tab }: { item: PaymentRequestListItem; tab: 
       <div className="flex shrink-0 items-center gap-3 md:gap-8">
         <div className="flex flex-col items-end gap-1 text-right">
           <p className="font-[family-name:var(--font-manrope)] text-sm font-bold text-foreground md:text-lg">
-            {formatCents(item.amount_cents)}
+            {formatMinor(item.amount_minor, item.currency)}
           </p>
           <div className="flex flex-wrap items-center gap-2">
             <RequestStatusBadge effectiveStatus={item.effective_status} />

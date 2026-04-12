@@ -94,7 +94,8 @@ test.describe('Wallet Top-Up (US6)', () => {
           user_id: aliceId,
           bank_name: 'Test Bank',
           account_number_masked: '••••1001',
-          balance_cents: 1000000,
+          balance_minor: 1000000,
+          currency: 'USD',
           is_guest: false,
         },
       });

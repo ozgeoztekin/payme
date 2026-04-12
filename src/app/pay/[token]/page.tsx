@@ -51,7 +51,8 @@ export default async function PublicPaymentPage({ params }: Props) {
         {isPending && (
           <GuestPaymentFlow
             shareToken={typedRequest.share_token}
-            amountCents={typedRequest.amount_cents}
+            amountMinor={typedRequest.amount_minor}
+            currency={typedRequest.currency}
             requesterName={requesterName}
           />
         )}

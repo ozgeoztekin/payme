@@ -67,7 +67,8 @@ export async function createRequest(
     requesterId: user.id,
     recipientType: validation.data.recipientType,
     recipientValue: validation.data.recipientValue,
-    amountCents: validation.data.amountCents,
+    amountMinor: validation.data.amountMinor,
+    currency: validation.data.currency,
     note: validation.data.note,
   });
 }

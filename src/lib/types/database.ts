@@ -11,7 +11,8 @@ export interface UserRow {
 export interface WalletRow {
   id: string;
   user_id: string;
-  balance_cents: number;
+  balance_minor: number;
+  currency: string;
   created_at: string;
   updated_at: string;
 }
@@ -21,7 +22,8 @@ export interface BankAccountRow {
   user_id: string | null;
   bank_name: string;
   account_number_masked: string;
-  balance_cents: number;
+  balance_minor: number;
+  currency: string;
   is_guest: boolean;
   created_at: string;
   updated_at: string;
@@ -32,7 +34,8 @@ export interface PaymentRequestRow {
   requester_id: string;
   recipient_type: 'email' | 'phone';
   recipient_value: string;
-  amount_cents: number;
+  amount_minor: number;
+  currency: string;
   note: string | null;
   status: 'pending' | 'paid' | 'declined' | 'canceled' | 'expired';
   share_token: string;
@@ -51,7 +54,8 @@ export interface PaymentTransactionRow {
   request_id: string | null;
   payer_id: string | null;
   recipient_id: string;
-  amount_cents: number;
+  amount_minor: number;
+  currency: string;
   funding_source_type: 'wallet' | 'bank_account';
   funding_source_id: string;
   status: 'completed' | 'failed';

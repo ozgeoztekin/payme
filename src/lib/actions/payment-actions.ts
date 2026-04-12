@@ -100,7 +100,7 @@ export async function payRequest(input: PayRequestInput): Promise<ActionResult<P
   if (fundingSource === 'wallet') {
     const { data: wallet, error: walletError } = await supabaseAdmin
       .from('wallets')
-      .select('id, balance_cents')
+      .select('id, balance_minor')
       .eq('user_id', user.id)
       .single();
 
@@ -111,7 +111,7 @@ export async function payRequest(input: PayRequestInput): Promise<ActionResult<P
       };
     }
 
-    if (wallet.balance_cents < request.amount_cents) {
+    if (wallet.balance_minor < request.amount_minor) {
       return {
         success: false,
         error: {
@@ -125,7 +125,7 @@ export async function payRequest(input: PayRequestInput): Promise<ActionResult<P
   } else {
     const { data: bank, error: bankError } = await supabaseAdmin
       .from('bank_accounts')
-      .select('id, balance_cents')
+      .select('id, balance_minor')
       .eq('user_id', user.id)
       .eq('is_guest', false)
       .single();
@@ -137,7 +137,7 @@ export async function payRequest(input: PayRequestInput): Promise<ActionResult<P
       };
     }
 
-    if (bank.balance_cents < request.amount_cents) {
+    if (bank.balance_minor < request.amount_minor) {
       return {
         success: false,
         error: {

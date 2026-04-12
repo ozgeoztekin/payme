@@ -8,7 +8,7 @@ import type { RequestListTab } from '@/lib/types/api';
 import { RequestList } from '@/components/requests/request-list';
 import { ErrorMessage } from '@/components/ui/error-message';
 import { PageContainer, SectionTitle } from '@/components/layout/page-layout';
-import { cn, formatCents, getEmptyStateTitle } from '@/lib/utils';
+import { cn, formatMinor, getEmptyStateTitle } from '@/lib/utils';
 
 const STATUS_FILTERS: { value: RequestStatusFilterChoice; label: string }[] = [
   { value: 'all', label: 'All' },
@@ -142,7 +142,7 @@ export default function DashboardPage() {
                   Total Available Balance
                 </p>
                 <p className="mt-1 font-[family-name:var(--font-manrope)] text-3xl font-extrabold tracking-tighter text-indigo-700 sm:text-4xl">
-                  {formatCents(wallet.balance_cents)}
+                  {formatMinor(wallet.balance_minor, wallet.currency)}
                 </p>
               </div>
               <Link

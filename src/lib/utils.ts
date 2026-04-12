@@ -1,12 +1,29 @@
-const currencyFormatter = new Intl.NumberFormat('en-US', {
-  style: 'currency',
-  currency: 'USD',
-  minimumFractionDigits: 2,
-  maximumFractionDigits: 2,
-});
+import { CURRENCY_EXPONENTS, DEFAULT_CURRENCY } from '@/lib/constants';
 
-export function formatCents(cents: number): string {
-  return currencyFormatter.format(cents / 100);
+const formatterCache = new Map<string, Intl.NumberFormat>();
+
+function getFormatter(currency: string): Intl.NumberFormat {
+  let fmt = formatterCache.get(currency);
+  if (!fmt) {
+    const exponent = CURRENCY_EXPONENTS[currency] ?? 2;
+    fmt = new Intl.NumberFormat('en-US', {
+      style: 'currency',
+      currency,
+      minimumFractionDigits: exponent,
+      maximumFractionDigits: exponent,
+    });
+    formatterCache.set(currency, fmt);
+  }
+  return fmt;
+}
+
+/**
+ * Format an integer minor-unit amount using the ISO 4217 exponent for the
+ * given currency. Falls back to exponent 2 for unknown currencies.
+ */
+export function formatMinor(minorUnits: number, currency: string = DEFAULT_CURRENCY): string {
+  const exponent = CURRENCY_EXPONENTS[currency] ?? 2;
+  return getFormatter(currency).format(minorUnits / 10 ** exponent);
 }
 
 export function cn(...classes: (string | boolean | undefined | null)[]): string {
@@ -14,14 +31,15 @@ export function cn(...classes: (string | boolean | undefined | null)[]): string 
 }
 
 /**
- * Parse a dollar-string (e.g. "12.50") to integer cents.
- * Returns 0 for unparseable input.
+ * Parse a display-string (e.g. "12.50") to integer minor units for the
+ * given currency. Returns 0 for unparseable input.
  */
-export function parseAmountToCents(value: string): number {
+export function parseAmountToMinor(value: string, currency: string = DEFAULT_CURRENCY): number {
   const cleaned = value.replace(/[^0-9.]/g, '');
-  const dollars = parseFloat(cleaned);
-  if (isNaN(dollars)) return 0;
-  return Math.round(dollars * 100);
+  const major = parseFloat(cleaned);
+  if (isNaN(major)) return 0;
+  const exponent = CURRENCY_EXPONENTS[currency] ?? 2;
+  return Math.round(major * 10 ** exponent);
 }
 
 /**

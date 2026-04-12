@@ -1,6 +1,6 @@
 import { supabaseAdmin } from '@/lib/db/client';
 import { createAuditLog } from '@/lib/services/audit-service';
-import { MOCKED_BANK_BALANCE_CENTS } from '@/lib/constants';
+import { MOCKED_BANK_BALANCE_MINOR } from '@/lib/constants';
 import { ActorType, AuditAction } from '@/lib/types/domain';
 import type { ActionResult } from '@/lib/types/api';
 import type { BankAccountRow } from '@/lib/types/database';
@@ -61,7 +61,7 @@ export async function connectBankAccount(params: {
       user_id: userId,
       bank_name: bankName,
       account_number_masked: maskedNumber,
-      balance_cents: MOCKED_BANK_BALANCE_CENTS,
+      balance_minor: MOCKED_BANK_BALANCE_MINOR,
       is_guest: false,
     })
     .select()
@@ -82,7 +82,7 @@ export async function connectBankAccount(params: {
     targetId: bankAccount.id,
     metadata: {
       bank_name: bankName,
-      balance_cents: MOCKED_BANK_BALANCE_CENTS,
+      balance_minor: MOCKED_BANK_BALANCE_MINOR,
     },
     outcome: 'success',
   });

@@ -5,7 +5,8 @@ export type ActionResult<T> =
 export interface CreateRequestInput {
   recipientType: 'email' | 'phone';
   recipientValue: string;
-  amountCents: number;
+  amountMinor: number;
+  currency: string;
   note?: string;
 }
 
@@ -28,7 +29,7 @@ export interface ConnectBankInput {
 }
 
 export interface TopUpWalletInput {
-  amountCents: number;
+  amountMinor: number;
 }
 
 export interface GuestPaymentInput {
@@ -62,7 +63,8 @@ export interface PaymentRequestListItem {
   requester_display_name: string;
   recipient_type: 'email' | 'phone';
   recipient_value: string;
-  amount_cents: number;
+  amount_minor: number;
+  currency: string;
   note: string | null;
   effective_status: RequestListEffectiveStatus;
   share_token: string;

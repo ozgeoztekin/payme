@@ -1,27 +1,28 @@
 'use client';
 
 import { cn } from '@/lib/utils';
-import { formatCents } from '@/lib/utils';
+import { formatMinor } from '@/lib/utils';
 import type { FundingSourceType } from '@/lib/types/domain';
 
 interface FundingSource {
   type: FundingSourceType;
   label: string;
   detail: string;
-  balanceCents: number;
+  balanceMinor: number;
   disabled: boolean;
   disabledReason?: string;
 }
 
 interface FundingSourceSelectorProps {
-  walletBalanceCents: number;
+  walletBalanceMinor: number;
   bankAccount: {
     id: string;
     bankName: string;
     accountNumberMasked: string;
-    balanceCents: number;
+    balanceMinor: number;
   } | null;
-  amountCents: number;
+  amountMinor: number;
+  currency: string;
   selected: FundingSourceType | null;
   onSelect: (source: FundingSourceType) => void;
 }
@@ -57,9 +58,10 @@ function BankIcon({ className }: { className?: string }) {
 }
 
 export function FundingSourceSelector({
-  walletBalanceCents,
+  walletBalanceMinor,
   bankAccount,
-  amountCents,
+  amountMinor,
+  currency,
   selected,
   onSelect,
 }: FundingSourceSelectorProps) {
@@ -67,10 +69,10 @@ export function FundingSourceSelector({
     {
       type: 'wallet',
       label: 'Wallet',
-      detail: `Balance: ${formatCents(walletBalanceCents)}`,
-      balanceCents: walletBalanceCents,
-      disabled: walletBalanceCents < amountCents,
-      disabledReason: walletBalanceCents < amountCents ? 'Insufficient wallet balance' : undefined,
+      detail: `Balance: ${formatMinor(walletBalanceMinor, currency)}`,
+      balanceMinor: walletBalanceMinor,
+      disabled: walletBalanceMinor < amountMinor,
+      disabledReason: walletBalanceMinor < amountMinor ? 'Insufficient wallet balance' : undefined,
     },
   ];
 
@@ -78,11 +80,11 @@ export function FundingSourceSelector({
     sources.push({
       type: 'bank_account',
       label: bankAccount.bankName,
-      detail: `${bankAccount.accountNumberMasked} \u2022 ${formatCents(bankAccount.balanceCents)}`,
-      balanceCents: bankAccount.balanceCents,
-      disabled: bankAccount.balanceCents < amountCents,
+      detail: `${bankAccount.accountNumberMasked} \u2022 ${formatMinor(bankAccount.balanceMinor, currency)}`,
+      balanceMinor: bankAccount.balanceMinor,
+      disabled: bankAccount.balanceMinor < amountMinor,
       disabledReason:
-        bankAccount.balanceCents < amountCents ? 'Insufficient bank balance' : undefined,
+        bankAccount.balanceMinor < amountMinor ? 'Insufficient bank balance' : undefined,
     });
   }
 

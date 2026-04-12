@@ -4,7 +4,7 @@ import { useState, useTransition } from 'react';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Modal } from '@/components/ui/modal';
-import { formatCents } from '@/lib/utils';
+import { formatMinor } from '@/lib/utils';
 import { disconnectBankAccount } from '@/lib/actions/bank-actions';
 import type { BankAccountRow } from '@/lib/types/database';
 
@@ -71,7 +71,7 @@ export function BankAccountCard({
             Available Balance
           </p>
           <p className="mt-1 text-2xl font-bold text-slate-900">
-            {formatCents(bankAccount.balance_cents)}
+            {formatMinor(bankAccount.balance_minor, bankAccount.currency)}
           </p>
         </div>
       </Card>

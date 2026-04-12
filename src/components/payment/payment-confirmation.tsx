@@ -2,7 +2,7 @@
 
 import { Modal } from '@/components/ui/modal';
 import { Button } from '@/components/ui/button';
-import { formatCents } from '@/lib/utils';
+import { formatMinor } from '@/lib/utils';
 import type { FundingSourceType } from '@/lib/types/domain';
 
 interface PaymentConfirmationProps {
@@ -10,7 +10,8 @@ interface PaymentConfirmationProps {
   onClose: () => void;
   onConfirm: () => void;
   loading: boolean;
-  amountCents: number;
+  amountMinor: number;
+  currency: string;
   fundingSource: FundingSourceType;
   fundingSourceLabel: string;
   recipientName: string;
@@ -21,7 +22,8 @@ export function PaymentConfirmation({
   onClose,
   onConfirm,
   loading,
-  amountCents,
+  amountMinor,
+  currency,
   fundingSource,
   fundingSourceLabel,
   recipientName,
@@ -37,7 +39,7 @@ export function PaymentConfirmation({
             Cancel
           </Button>
           <Button variant="primary" onClick={onConfirm} loading={loading} className="flex-1">
-            Pay {formatCents(amountCents)}
+            Pay {formatMinor(amountMinor, currency)}
           </Button>
         </div>
       }
@@ -47,7 +49,7 @@ export function PaymentConfirmation({
           <dl className="space-y-3 text-sm">
             <div className="flex justify-between">
               <dt className="text-slate-500">Amount</dt>
-              <dd className="font-semibold text-slate-900">{formatCents(amountCents)}</dd>
+              <dd className="font-semibold text-slate-900">{formatMinor(amountMinor, currency)}</dd>
             </div>
             <div className="flex justify-between">
               <dt className="text-slate-500">To</dt>

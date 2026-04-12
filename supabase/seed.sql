@@ -152,12 +152,13 @@ ON CONFLICT (id) DO UPDATE SET
   updated_at = EXCLUDED.updated_at;
 
 -- Upsert on user_id: profiles may already have created a wallet (different id) via trigger.
-INSERT INTO public.wallets (id, user_id, balance_cents, created_at, updated_at) VALUES
-  ('c1111111-1111-1111-1111-111111111111', '11111111-1111-1111-1111-111111111111', 10000, now(), now()),
-  ('c2222222-2222-2222-2222-222222222222', '22222222-2222-2222-2222-222222222222', 5000, now(), now())
+INSERT INTO public.wallets (id, user_id, balance_minor, currency, created_at, updated_at) VALUES
+  ('c1111111-1111-1111-1111-111111111111', '11111111-1111-1111-1111-111111111111', 10000, 'USD', now(), now()),
+  ('c2222222-2222-2222-2222-222222222222', '22222222-2222-2222-2222-222222222222', 5000, 'USD', now(), now())
 ON CONFLICT (user_id) DO UPDATE SET
   id = EXCLUDED.id,
-  balance_cents = EXCLUDED.balance_cents,
+  balance_minor = EXCLUDED.balance_minor,
+  currency = EXCLUDED.currency,
   created_at = EXCLUDED.created_at,
   updated_at = EXCLUDED.updated_at;
 
@@ -166,7 +167,8 @@ INSERT INTO public.bank_accounts (
   user_id,
   bank_name,
   account_number_masked,
-  balance_cents,
+  balance_minor,
+  currency,
   is_guest,
   created_at,
   updated_at
@@ -176,6 +178,7 @@ INSERT INTO public.bank_accounts (
   'Test Bank',
   '••••1001',
   1000000,
+  'USD',
   false,
   now(),
   now()
@@ -186,6 +189,7 @@ INSERT INTO public.bank_accounts (
   'Test Bank',
   '••••2002',
   1000000,
+  'USD',
   false,
   now(),
   now()
@@ -194,7 +198,8 @@ ON CONFLICT (id) DO UPDATE SET
   user_id = EXCLUDED.user_id,
   bank_name = EXCLUDED.bank_name,
   account_number_masked = EXCLUDED.account_number_masked,
-  balance_cents = EXCLUDED.balance_cents,
+  balance_minor = EXCLUDED.balance_minor,
+  currency = EXCLUDED.currency,
   is_guest = EXCLUDED.is_guest,
   updated_at = EXCLUDED.updated_at;
 
@@ -203,7 +208,8 @@ INSERT INTO public.payment_requests (
   requester_id,
   recipient_type,
   recipient_value,
-  amount_cents,
+  amount_minor,
+  currency,
   note,
   status,
   share_token,
@@ -216,6 +222,7 @@ INSERT INTO public.payment_requests (
   'email',
   'bob@test.com',
   2500,
+  'USD',
   'Coffee run',
   'pending',
   'a0101010-1010-1010-1010-101010101010',
@@ -229,6 +236,7 @@ INSERT INTO public.payment_requests (
   'phone',
   '+15559876543',
   2000,
+  'USD',
   'Dinner split',
   'paid',
   'a0202020-2020-2020-2020-202020202020',
@@ -242,6 +250,7 @@ INSERT INTO public.payment_requests (
   'email',
   'alice@test.com',
   2000,
+  'USD',
   'Concert tickets',
   'paid',
   'a1212121-2121-2121-2121-212121212121',
@@ -255,6 +264,7 @@ INSERT INTO public.payment_requests (
   'email',
   'bob@test.com',
   500,
+  'USD',
   NULL,
   'declined',
   'a0303030-3030-3030-3030-303030303030',
@@ -268,6 +278,7 @@ INSERT INTO public.payment_requests (
   'phone',
   '+15551234567',
   1500,
+  'USD',
   NULL,
   'canceled',
   'a0404040-4040-4040-4040-404040404040',
@@ -281,6 +292,7 @@ INSERT INTO public.payment_requests (
   'email',
   'alice@test.com',
   750,
+  'USD',
   'Old tab',
   'pending',
   'a0505050-5050-5050-5050-505050505050',
@@ -292,7 +304,8 @@ ON CONFLICT (id) DO UPDATE SET
   requester_id = EXCLUDED.requester_id,
   recipient_type = EXCLUDED.recipient_type,
   recipient_value = EXCLUDED.recipient_value,
-  amount_cents = EXCLUDED.amount_cents,
+  amount_minor = EXCLUDED.amount_minor,
+  currency = EXCLUDED.currency,
   note = EXCLUDED.note,
   status = EXCLUDED.status,
   share_token = EXCLUDED.share_token,
@@ -305,7 +318,8 @@ INSERT INTO public.payment_transactions (
   request_id,
   payer_id,
   recipient_id,
-  amount_cents,
+  amount_minor,
+  currency,
   funding_source_type,
   funding_source_id,
   status,
@@ -317,6 +331,7 @@ INSERT INTO public.payment_transactions (
   '22222222-2222-2222-2222-222222222222',
   '11111111-1111-1111-1111-111111111111',
   2000,
+  'USD',
   'wallet',
   'c2222222-2222-2222-2222-222222222222',
   'completed',
@@ -329,6 +344,7 @@ INSERT INTO public.payment_transactions (
   '11111111-1111-1111-1111-111111111111',
   '22222222-2222-2222-2222-222222222222',
   2000,
+  'USD',
   'wallet',
   'c1111111-1111-1111-1111-111111111111',
   'completed',
@@ -339,7 +355,8 @@ ON CONFLICT (id) DO UPDATE SET
   request_id = EXCLUDED.request_id,
   payer_id = EXCLUDED.payer_id,
   recipient_id = EXCLUDED.recipient_id,
-  amount_cents = EXCLUDED.amount_cents,
+  amount_minor = EXCLUDED.amount_minor,
+  currency = EXCLUDED.currency,
   funding_source_type = EXCLUDED.funding_source_type,
   funding_source_id = EXCLUDED.funding_source_id,
   status = EXCLUDED.status,

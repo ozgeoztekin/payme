@@ -3,7 +3,7 @@ import { z } from 'zod';
 import { supabaseAdmin } from '@/lib/db/client';
 import { createAuditLog } from '@/lib/services/audit-service';
 import { checkRateLimit, getClientIp } from '@/lib/rate-limit';
-import { MOCKED_BANK_BALANCE_CENTS } from '@/lib/constants';
+import { MOCKED_BANK_BALANCE_MINOR } from '@/lib/constants';
 import { ActorType, AuditAction } from '@/lib/types/domain';
 
 const guestBankSchema = z.object({
@@ -60,7 +60,7 @@ export async function POST(request: Request) {
       user_id: null,
       bank_name: bankName,
       account_number_masked: maskedNumber,
-      balance_cents: MOCKED_BANK_BALANCE_CENTS,
+      balance_minor: MOCKED_BANK_BALANCE_MINOR,
       is_guest: true,
     })
     .select()
@@ -92,7 +92,7 @@ export async function POST(request: Request) {
       guestBankId: bankAccount.id,
       bankName: bankAccount.bank_name,
       accountNumberMasked: bankAccount.account_number_masked,
-      balanceCents: bankAccount.balance_cents,
+      balanceMinor: bankAccount.balance_minor,
     },
   });
 }

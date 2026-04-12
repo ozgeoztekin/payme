@@ -144,7 +144,7 @@ export async function ensureProfile(user: User) {
   await supabaseAdmin.from('wallets').upsert(
     {
       user_id: user.id,
-      balance_cents: 0,
+      balance_minor: 0,
     },
     { onConflict: 'user_id' },
   );

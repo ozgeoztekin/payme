@@ -88,7 +88,7 @@ export async function POST(request: Request) {
 
   const { data: guestBank, error: bankError } = await supabaseAdmin
     .from('bank_accounts')
-    .select('id, balance_cents, is_guest')
+    .select('id, balance_minor, is_guest')
     .eq('id', guestBankId)
     .eq('is_guest', true)
     .single();
@@ -103,7 +103,7 @@ export async function POST(request: Request) {
     );
   }
 
-  if (guestBank.balance_cents < requestData.amount_cents) {
+  if (guestBank.balance_minor < requestData.amount_minor) {
     return NextResponse.json(
       {
         success: false,
@@ -150,7 +150,7 @@ export async function POST(request: Request) {
       transaction: {
         id: result.data.transactionId,
         type: 'payment',
-        amount_cents: requestData.amount_cents,
+        amount_minor: requestData.amount_minor,
         status: 'completed',
       },
       requestStatus: 'paid',

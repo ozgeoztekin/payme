@@ -1,7 +1,7 @@
 import { Card } from '@/components/ui/card';
 import { RequestStatusBadge } from '@/components/requests/request-status-badge';
 import { ExpirationCountdown } from '@/components/requests/expiration-countdown';
-import { formatCents } from '@/lib/utils';
+import { formatMinor } from '@/lib/utils';
 import type { PaymentRequestViewRow } from '@/lib/types/database';
 import type { RequestListEffectiveStatus } from '@/lib/types/api';
 
@@ -23,7 +23,7 @@ export function RequestDetail({ request, requesterName, readOnly = false }: Requ
           <div className="min-w-0">
             <p className="text-sm text-slate-500">Payment Request</p>
             <h1 className="mt-1 font-[family-name:var(--font-manrope)] text-3xl font-bold text-slate-900 tabular-nums">
-              {formatCents(request.amount_cents)}
+              {formatMinor(request.amount_minor, request.currency)}
             </h1>
           </div>
           <div className="flex flex-col items-end gap-1.5 shrink-0">

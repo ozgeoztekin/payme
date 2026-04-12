@@ -1,7 +1,7 @@
 'use client';
 
 import { Card } from '@/components/ui/card';
-import { formatCents } from '@/lib/utils';
+import { formatMinor } from '@/lib/utils';
 import type { WalletRow } from '@/lib/types/database';
 
 function WalletIcon() {
@@ -50,7 +50,7 @@ export function WalletBalance({ wallet }: { wallet: WalletRow }) {
             Wallet Balance
           </p>
           <p className="mt-1 text-3xl font-bold text-slate-900">
-            {formatCents(wallet.balance_cents)}
+            {formatMinor(wallet.balance_minor, wallet.currency)}
           </p>
           <p className="mt-1 text-xs text-slate-400">
             Updated {formatRelativeTime(wallet.updated_at)}

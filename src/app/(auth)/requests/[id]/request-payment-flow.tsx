@@ -12,7 +12,7 @@ import { RequestDetail } from '@/components/requests/request-detail';
 import { ShareableLink } from '@/components/requests/shareable-link';
 import { payRequest } from '@/lib/actions/payment-actions';
 import { declineRequest, cancelRequest } from '@/lib/actions/request-actions';
-import { formatCents } from '@/lib/utils';
+import { formatMinor } from '@/lib/utils';
 import type { PaymentRequestViewRow, WalletRow, BankAccountRow } from '@/lib/types/database';
 import type { FundingSourceType } from '@/lib/types/domain';
 
@@ -124,7 +124,7 @@ export function RequestPaymentFlow({
             Payment Successful!
           </h1>
           <p className="text-on-surface-variant">
-            You paid {formatCents(request.amount_cents)} to {requesterName}.
+            You paid {formatMinor(request.amount_minor, request.currency)} to {requesterName}.
           </p>
         </div>
         <Button variant="secondary" onClick={() => router.push('/dashboard')}>
@@ -156,7 +156,7 @@ export function RequestPaymentFlow({
             Request Declined
           </h1>
           <p className="text-on-surface-variant">
-            You declined the {formatCents(request.amount_cents)} request from {requesterName}.
+            You declined the {formatMinor(request.amount_minor, request.currency)} request from {requesterName}.
           </p>
         </div>
         <Button variant="secondary" onClick={() => router.push('/dashboard')}>
@@ -188,7 +188,7 @@ export function RequestPaymentFlow({
             Request Canceled
           </h1>
           <p className="text-on-surface-variant">
-            Your {formatCents(request.amount_cents)} request has been canceled.
+            Your {formatMinor(request.amount_minor, request.currency)} request has been canceled.
           </p>
         </div>
         <Button variant="secondary" onClick={() => router.push('/dashboard')}>
@@ -236,18 +236,19 @@ export function RequestPaymentFlow({
         <Card>
           <div className="space-y-6">
             <FundingSourceSelector
-              walletBalanceCents={wallet.balance_cents}
+              walletBalanceMinor={wallet.balance_minor}
               bankAccount={
                 bankAccount
                   ? {
                       id: bankAccount.id,
                       bankName: bankAccount.bank_name,
                       accountNumberMasked: bankAccount.account_number_masked,
-                      balanceCents: bankAccount.balance_cents,
+                      balanceMinor: bankAccount.balance_minor,
                     }
                   : null
               }
-              amountCents={request.amount_cents}
+              amountMinor={request.amount_minor}
+              currency={request.currency}
               selected={selectedSource}
               onSelect={setSelectedSource}
             />
@@ -260,7 +261,7 @@ export function RequestPaymentFlow({
                 disabled={!selectedSource}
                 onClick={() => setShowPayConfirm(true)}
               >
-                Pay {formatCents(request.amount_cents)}
+                Pay {formatMinor(request.amount_minor, request.currency)}
               </Button>
               <Button
                 variant="danger"
@@ -300,7 +301,8 @@ export function RequestPaymentFlow({
         onClose={() => setShowPayConfirm(false)}
         onConfirm={handlePay}
         loading={isPayPending}
-        amountCents={request.amount_cents}
+        amountMinor={request.amount_minor}
+        currency={request.currency}
         fundingSource={selectedSource ?? 'wallet'}
         fundingSourceLabel={fundingSourceLabel}
         recipientName={requesterName}
@@ -332,7 +334,7 @@ export function RequestPaymentFlow({
         }
       >
         <p>
-          Are you sure you want to decline this {formatCents(request.amount_cents)} request from{' '}
+          Are you sure you want to decline this {formatMinor(request.amount_minor, request.currency)} request from{' '}
           <span className="font-medium text-slate-900">{requesterName}</span>? This cannot be
           undone.
         </p>
@@ -364,7 +366,7 @@ export function RequestPaymentFlow({
         }
       >
         <p>
-          Are you sure you want to cancel your {formatCents(request.amount_cents)} request? This
+          Are you sure you want to cancel your {formatMinor(request.amount_minor, request.currency)} request? This
           cannot be undone.
         </p>
       </Modal>

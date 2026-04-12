@@ -6,14 +6,14 @@ import { supabaseAdmin } from '@/lib/db/client';
 import { topUpFromBank } from '@/lib/services/wallet-service';
 import { createAuditLog } from '@/lib/services/audit-service';
 import { AuditAction, ActorType } from '@/lib/types/domain';
-import { AMOUNT_MIN_CENTS } from '@/lib/constants';
+import { AMOUNT_MIN_MINOR } from '@/lib/constants';
 import type { ActionResult } from '@/lib/types/api';
 
 const topUpSchema = z.object({
-  amountCents: z
+  amountMinor: z
     .number()
     .int('Amount must be a whole number')
-    .min(AMOUNT_MIN_CENTS, 'Amount must be at least $0.01'),
+    .min(AMOUNT_MIN_MINOR, 'Amount must be at least $0.01'),
 });
 
 interface TopUpData {
@@ -23,7 +23,7 @@ interface TopUpData {
 }
 
 export async function topUpWallet(input: {
-  amountCents: number;
+  amountMinor: number;
 }): Promise<ActionResult<TopUpData>> {
   const supabase = await createClient();
   const {
@@ -75,7 +75,7 @@ export async function topUpWallet(input: {
 
   const { data: bank } = await supabaseAdmin
     .from('bank_accounts')
-    .select('id, balance_cents')
+    .select('id, balance_minor')
     .eq('user_id', user.id)
     .eq('is_guest', false)
     .single();
@@ -90,7 +90,7 @@ export async function topUpWallet(input: {
     };
   }
 
-  if (bank.balance_cents < parsed.data.amountCents) {
+  if (bank.balance_minor < parsed.data.amountMinor) {
     return {
       success: false,
       error: {
@@ -103,7 +103,7 @@ export async function topUpWallet(input: {
   const result = await topUpFromBank({
     userId: user.id,
     bankAccountId: bank.id,
-    amountCents: parsed.data.amountCents,
+    amountMinor: parsed.data.amountMinor,
   });
 
   if (!result.success) {
@@ -114,7 +114,7 @@ export async function topUpWallet(input: {
       targetType: 'wallet',
       targetId: user.id,
       metadata: {
-        amount_cents: parsed.data.amountCents,
+        amount_minor: parsed.data.amountMinor,
         bank_account_id: bank.id,
         error_code: result.error.code,
         error_message: result.error.message,
@@ -126,13 +126,13 @@ export async function topUpWallet(input: {
 
   const { data: updatedWallet } = await supabaseAdmin
     .from('wallets')
-    .select('balance_cents')
+    .select('balance_minor')
     .eq('user_id', user.id)
     .single();
 
   const { data: updatedBank } = await supabaseAdmin
     .from('bank_accounts')
-    .select('balance_cents')
+    .select('balance_minor')
     .eq('id', bank.id)
     .single();
 
@@ -140,8 +140,8 @@ export async function topUpWallet(input: {
     success: true,
     data: {
       transactionId: result.data.transactionId,
-      walletBalance: updatedWallet?.balance_cents ?? 0,
-      bankBalance: updatedBank?.balance_cents ?? 0,
+      walletBalance: updatedWallet?.balance_minor ?? 0,
+      bankBalance: updatedBank?.balance_minor ?? 0,
     },
   };
 }

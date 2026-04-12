@@ -1,12 +1,13 @@
 import { z } from 'zod';
-import { emailSchema, phoneSchema, amountCentsSchema, noteSchema } from './common-validators';
+import { emailSchema, phoneSchema, amountMinorSchema, currencySchema, noteSchema } from './common-validators';
 import type { ActionResult } from '@/lib/types/api';
 
 export const createRequestSchema = z
   .object({
     recipientType: z.enum(['email', 'phone']),
     recipientValue: z.string(),
-    amountCents: amountCentsSchema,
+    amountMinor: amountMinorSchema,
+    currency: currencySchema,
     note: noteSchema.or(z.literal('')).optional(),
   })
   .superRefine((data, ctx) => {

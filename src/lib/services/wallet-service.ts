@@ -5,7 +5,7 @@ import type { WalletRow } from '@/lib/types/database';
 interface TopUpParams {
   userId: string;
   bankAccountId: string;
-  amountCents: number;
+  amountMinor: number;
 }
 
 interface TopUpResult {
@@ -21,7 +21,7 @@ const ERROR_MAP: Record<string, { code: string; message: string }> = {
     code: 'NO_BANK_ACCOUNT',
     message: 'Bank account not found',
   },
-  'invalid amount_cents': {
+  'invalid amount_minor': {
     code: 'VALIDATION_ERROR',
     message: 'Amount must be greater than zero',
   },
@@ -38,7 +38,7 @@ export async function topUpFromBank(params: TopUpParams): Promise<ActionResult<T
   const { data, error } = await supabaseAdmin.rpc('process_top_up', {
     p_user_id: params.userId,
     p_bank_account_id: params.bankAccountId,
-    p_amount_cents: params.amountCents,
+    p_amount_minor: params.amountMinor,
   });
 
   if (error) {

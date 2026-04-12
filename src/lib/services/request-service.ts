@@ -16,7 +16,8 @@ interface CreateRequestParams {
   requesterId: string;
   recipientType: 'email' | 'phone';
   recipientValue: string;
-  amountCents: number;
+  amountMinor: number;
+  currency: string;
   note?: string;
 }
 
@@ -28,7 +29,7 @@ interface CreateRequestResult {
 export async function createRequest(
   params: CreateRequestParams,
 ): Promise<ActionResult<CreateRequestResult>> {
-  const { requesterId, recipientType, recipientValue, amountCents, note } = params;
+  const { requesterId, recipientType, recipientValue, amountMinor, currency, note } = params;
 
   const { data: request, error } = await supabaseAdmin
     .from('payment_requests')
@@ -36,7 +37,8 @@ export async function createRequest(
       requester_id: requesterId,
       recipient_type: recipientType,
       recipient_value: recipientValue.toLowerCase().trim(),
-      amount_cents: amountCents,
+      amount_minor: amountMinor,
+      currency,
       note: note || null,
     })
     .select()
@@ -64,7 +66,8 @@ export async function createRequest(
     metadata: {
       recipient_type: recipientType,
       recipient_value: recipientValue,
-      amount_cents: amountCents,
+      amount_minor: amountMinor,
+      currency,
     },
     outcome: 'success',
   });

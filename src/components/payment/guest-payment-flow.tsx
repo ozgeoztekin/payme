@@ -6,7 +6,7 @@ import { Input } from '@/components/ui/input';
 import { Select } from '@/components/ui/select';
 import { Card } from '@/components/ui/card';
 import { ErrorMessage } from '@/components/ui/error-message';
-import { formatCents, BANK_OPTIONS } from '@/lib/utils';
+import { formatMinor, BANK_OPTIONS } from '@/lib/utils';
 
 type Step = 'actions' | 'bank-select' | 'bank-confirm' | 'pay-confirm' | 'success' | 'declined';
 
@@ -14,18 +14,20 @@ interface GuestBankData {
   guestBankId: string;
   bankName: string;
   accountNumberMasked: string;
-  balanceCents: number;
+  balanceMinor: number;
 }
 
 interface GuestPaymentFlowProps {
   shareToken: string;
-  amountCents: number;
+  amountMinor: number;
+  currency: string;
   requesterName: string;
 }
 
 export function GuestPaymentFlow({
   shareToken,
-  amountCents,
+  amountMinor,
+  currency,
   requesterName,
 }: GuestPaymentFlowProps) {
   const [step, setStep] = useState<Step>('actions');
@@ -152,7 +154,7 @@ export function GuestPaymentFlow({
           <div>
             <p className="text-xl font-bold text-slate-900">Payment Successful</p>
             <p className="mt-2 text-sm text-slate-500">
-              You paid {formatCents(amountCents)} to {requesterName}.
+              You paid {formatMinor(amountMinor, currency)} to {requesterName}.
             </p>
           </div>
         </div>
@@ -195,7 +197,7 @@ export function GuestPaymentFlow({
             <dl className="space-y-3 text-sm">
               <div className="flex justify-between">
                 <dt className="text-slate-500">Amount</dt>
-                <dd className="font-semibold text-slate-900">{formatCents(amountCents)}</dd>
+                <dd className="font-semibold text-slate-900">{formatMinor(amountMinor, currency)}</dd>
               </div>
               <div className="flex justify-between">
                 <dt className="text-slate-500">To</dt>
@@ -228,8 +230,8 @@ export function GuestPaymentFlow({
             Back
           </Button>
           <Button className="flex-1" onClick={handlePayConfirm} loading={loading}>
-            Pay {formatCents(amountCents)}
-          </Button>
+          Pay {formatMinor(amountMinor, currency)}
+        </Button>
         </div>
       </Card>
     );
@@ -275,7 +277,7 @@ export function GuestPaymentFlow({
       <Card>
         <h3 className="text-lg font-semibold text-slate-900">Connect a Bank Account</h3>
         <p className="mt-1 text-sm text-slate-500">
-          Connect a bank account to pay {formatCents(amountCents)} to {requesterName}.
+          Connect a bank account to pay {formatMinor(amountMinor, currency)} to {requesterName}.
         </p>
         <div className="mt-6 space-y-4">
           <Select
@@ -334,7 +336,7 @@ export function GuestPaymentFlow({
     <Card>
       <h3 className="text-lg font-semibold text-slate-900">Respond to This Request</h3>
       <p className="mt-1 text-sm text-slate-500">
-        {requesterName} is requesting {formatCents(amountCents)} from you.
+        {requesterName} is requesting {formatMinor(amountMinor, currency)} from you.
       </p>
       {error && <ErrorMessage message={error} className="mt-4" />}
       <div className="mt-6 flex gap-3">
@@ -349,7 +351,7 @@ export function GuestPaymentFlow({
           }}
           disabled={loading}
         >
-          Pay {formatCents(amountCents)}
+          Pay {formatMinor(amountMinor, currency)}
         </Button>
       </div>
     </Card>

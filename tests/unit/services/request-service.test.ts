@@ -101,7 +101,8 @@ describe('request-service', () => {
         requester_id: 'user-1',
         recipient_type: 'email',
         recipient_value: 'bob@test.com',
-        amount_cents: 5000,
+        amount_minor: 5000,
+        currency: 'USD',
         note: 'Dinner',
         status: 'pending',
         share_token: 'token-abc',
@@ -124,7 +125,8 @@ describe('request-service', () => {
         requesterId: 'user-1',
         recipientType: 'email',
         recipientValue: 'bob@test.com',
-        amountCents: 5000,
+        amountMinor: 5000,
+        currency: 'USD',
         note: 'Dinner',
       });
 
@@ -155,7 +157,8 @@ describe('request-service', () => {
         requesterId: 'user-1',
         recipientType: 'email',
         recipientValue: 'bob@test.com',
-        amountCents: 5000,
+        amountMinor: 5000,
+        currency: 'USD',
       });
 
       expect(result.success).toBe(false);

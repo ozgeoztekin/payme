@@ -5,14 +5,16 @@ describe('createRequestSchema', () => {
   const validEmailInput = {
     recipientType: 'email' as const,
     recipientValue: 'recipient@example.com',
-    amountCents: 5000,
+    amountMinor: 5000,
+    currency: 'USD',
     note: 'Dinner split',
   };
 
   const validPhoneInput = {
     recipientType: 'phone' as const,
     recipientValue: '+15551234567',
-    amountCents: 1000,
+    amountMinor: 1000,
+    currency: 'USD',
   };
 
   describe('recipientType', () => {
@@ -81,19 +83,19 @@ describe('createRequestSchema', () => {
     });
   });
 
-  describe('amountCents', () => {
-    it('accepts minimum amount (1 cent)', () => {
+  describe('amountMinor', () => {
+    it('accepts minimum amount (1 minor unit)', () => {
       const result = createRequestSchema.safeParse({
         ...validEmailInput,
-        amountCents: 1,
+        amountMinor: 1,
       });
       expect(result.success).toBe(true);
     });
 
-    it('accepts maximum amount (1,000,000 cents)', () => {
+    it('accepts maximum amount (1,000,000 minor units)', () => {
       const result = createRequestSchema.safeParse({
         ...validEmailInput,
-        amountCents: 1_000_000,
+        amountMinor: 1_000_000,
       });
       expect(result.success).toBe(true);
     });
@@ -101,7 +103,7 @@ describe('createRequestSchema', () => {
     it('rejects zero', () => {
       const result = createRequestSchema.safeParse({
         ...validEmailInput,
-        amountCents: 0,
+        amountMinor: 0,
       });
       expect(result.success).toBe(false);
     });
@@ -109,7 +111,7 @@ describe('createRequestSchema', () => {
     it('rejects negative', () => {
       const result = createRequestSchema.safeParse({
         ...validEmailInput,
-        amountCents: -100,
+        amountMinor: -100,
       });
       expect(result.success).toBe(false);
     });
@@ -117,7 +119,7 @@ describe('createRequestSchema', () => {
     it('rejects above max', () => {
       const result = createRequestSchema.safeParse({
         ...validEmailInput,
-        amountCents: 1_000_001,
+        amountMinor: 1_000_001,
       });
       expect(result.success).toBe(false);
     });
@@ -125,7 +127,7 @@ describe('createRequestSchema', () => {
     it('rejects non-integer', () => {
       const result = createRequestSchema.safeParse({
         ...validEmailInput,
-        amountCents: 10.5,
+        amountMinor: 10.5,
       });
       expect(result.success).toBe(false);
     });
@@ -175,7 +177,8 @@ describe('validateCreateRequest', () => {
       {
         recipientType: 'email',
         recipientValue: 'alice@test.com',
-        amountCents: 1000,
+        amountMinor: 1000,
+        currency: 'USD',
       },
       { email: 'alice@test.com', phone: null },
     );
@@ -190,7 +193,8 @@ describe('validateCreateRequest', () => {
       {
         recipientType: 'phone',
         recipientValue: '+15551111111',
-        amountCents: 1000,
+        amountMinor: 1000,
+        currency: 'USD',
       },
       { email: null, phone: '+15551111111' },
     );
@@ -205,7 +209,8 @@ describe('validateCreateRequest', () => {
       {
         recipientType: 'email',
         recipientValue: 'alice@test.com',
-        amountCents: 1000,
+        amountMinor: 1000,
+        currency: 'USD',
       },
       { email: 'alice@test.com', phone: '+15551111111' },
     );
@@ -220,7 +225,8 @@ describe('validateCreateRequest', () => {
       {
         recipientType: 'email',
         recipientValue: 'bob@test.com',
-        amountCents: 1000,
+        amountMinor: 1000,
+        currency: 'USD',
       },
       { email: 'alice@test.com', phone: '+15551111111' },
     );
@@ -232,7 +238,8 @@ describe('validateCreateRequest', () => {
       {
         recipientType: 'email',
         recipientValue: 'bad-email',
-        amountCents: 0,
+        amountMinor: 0,
+        currency: 'USD',
       },
       { email: 'alice@test.com', phone: null },
     );
