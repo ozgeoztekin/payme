@@ -57,8 +57,10 @@ export default function NewRequestPage() {
             </h1>
             <p className="text-on-surface-variant break-all">
               We&apos;ve created your request for{' '}
-              <strong className="text-foreground">{formatMinor(successData.amountMinor, successData.currency)}</strong> to{' '}
-              <strong className="text-foreground">{successData.recipientValue}</strong>.
+              <strong className="text-foreground">
+                {formatMinor(successData.amountMinor, successData.currency)}
+              </strong>{' '}
+              to <strong className="text-foreground">{successData.recipientValue}</strong>.
             </p>
           </div>
 

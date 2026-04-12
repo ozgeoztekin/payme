@@ -1,5 +1,10 @@
 import { z } from 'zod';
-import { AMOUNT_MIN_MINOR, AMOUNT_MAX_MINOR, NOTE_MAX_LENGTH, SUPPORTED_CURRENCIES } from '@/lib/constants';
+import {
+  AMOUNT_MIN_MINOR,
+  AMOUNT_MAX_MINOR,
+  NOTE_MAX_LENGTH,
+  SUPPORTED_CURRENCIES,
+} from '@/lib/constants';
 
 export const emailSchema = z.string().email('Invalid email format');
 

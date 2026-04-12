@@ -31,10 +31,10 @@ npm test && npm run lint
 TypeScript 5.x: Follow standard conventions
 
 ## Recent Changes
+- 005-ci-github-workflow: Added [if applicable, e.g., PostgreSQL, CoreData, files or N/A]
 - 004-currency-safe-money: Added TypeScript 5.x + Next.js 15 (App Router), React 19, Supabase (Auth + Postgres), Tailwind CSS 4, Zod
 - 003-user-profile: Added TypeScript 5.x + Next.js 15 (App Router), React 19, Supabase (Auth + Postgres), Tailwind CSS 4, Zod
 
-- 002-remove-settings: Remove Settings page, consolidate bank management into Wallet page, update navigation and redirects
 
 <!-- MANUAL ADDITIONS START -->
 <!-- MANUAL ADDITIONS END -->

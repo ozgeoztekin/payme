@@ -197,7 +197,9 @@ export function GuestPaymentFlow({
             <dl className="space-y-3 text-sm">
               <div className="flex justify-between">
                 <dt className="text-slate-500">Amount</dt>
-                <dd className="font-semibold text-slate-900">{formatMinor(amountMinor, currency)}</dd>
+                <dd className="font-semibold text-slate-900">
+                  {formatMinor(amountMinor, currency)}
+                </dd>
               </div>
               <div className="flex justify-between">
                 <dt className="text-slate-500">To</dt>
@@ -230,8 +232,8 @@ export function GuestPaymentFlow({
             Back
           </Button>
           <Button className="flex-1" onClick={handlePayConfirm} loading={loading}>
-          Pay {formatMinor(amountMinor, currency)}
-        </Button>
+            Pay {formatMinor(amountMinor, currency)}
+          </Button>
         </div>
       </Card>
     );

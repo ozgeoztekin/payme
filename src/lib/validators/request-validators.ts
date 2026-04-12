@@ -1,5 +1,11 @@
 import { z } from 'zod';
-import { emailSchema, phoneSchema, amountMinorSchema, currencySchema, noteSchema } from './common-validators';
+import {
+  emailSchema,
+  phoneSchema,
+  amountMinorSchema,
+  currencySchema,
+  noteSchema,
+} from './common-validators';
 import type { ActionResult } from '@/lib/types/api';
 
 export const createRequestSchema = z

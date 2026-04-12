@@ -156,7 +156,8 @@ export function RequestPaymentFlow({
             Request Declined
           </h1>
           <p className="text-on-surface-variant">
-            You declined the {formatMinor(request.amount_minor, request.currency)} request from {requesterName}.
+            You declined the {formatMinor(request.amount_minor, request.currency)} request from{' '}
+            {requesterName}.
           </p>
         </div>
         <Button variant="secondary" onClick={() => router.push('/dashboard')}>
@@ -334,7 +335,8 @@ export function RequestPaymentFlow({
         }
       >
         <p>
-          Are you sure you want to decline this {formatMinor(request.amount_minor, request.currency)} request from{' '}
+          Are you sure you want to decline this{' '}
+          {formatMinor(request.amount_minor, request.currency)} request from{' '}
           <span className="font-medium text-slate-900">{requesterName}</span>? This cannot be
           undone.
         </p>
@@ -366,8 +368,8 @@ export function RequestPaymentFlow({
         }
       >
         <p>
-          Are you sure you want to cancel your {formatMinor(request.amount_minor, request.currency)} request? This
-          cannot be undone.
+          Are you sure you want to cancel your {formatMinor(request.amount_minor, request.currency)}{' '}
+          request? This cannot be undone.
         </p>
       </Modal>
     </>

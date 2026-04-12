@@ -45,9 +45,7 @@ interface PageHeaderProps {
 export function PageHeader({ title, subtitle, actions, className }: PageHeaderProps) {
   if (actions) {
     return (
-      <div
-        className={cn('flex items-start justify-between gap-4', className)}
-      >
+      <div className={cn('flex items-start justify-between gap-4', className)}>
         <div>
           <h1 className="font-[family-name:var(--font-manrope)] text-2xl font-bold tracking-tight text-foreground sm:text-3xl">
             {title}

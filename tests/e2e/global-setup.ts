@@ -48,8 +48,18 @@ export default async function globalSetup() {
 async function resetSeedData(supabase: any) {
   await supabase.from('wallets').upsert(
     [
-      { id: 'c1111111-1111-1111-1111-111111111111', user_id: ALICE_ID, balance_minor: 10000, currency: 'USD' },
-      { id: 'c2222222-2222-2222-2222-222222222222', user_id: BOB_ID, balance_minor: 5000, currency: 'USD' },
+      {
+        id: 'c1111111-1111-1111-1111-111111111111',
+        user_id: ALICE_ID,
+        balance_minor: 10000,
+        currency: 'USD',
+      },
+      {
+        id: 'c2222222-2222-2222-2222-222222222222',
+        user_id: BOB_ID,
+        balance_minor: 5000,
+        currency: 'USD',
+      },
     ],
     { onConflict: 'user_id' },
   );

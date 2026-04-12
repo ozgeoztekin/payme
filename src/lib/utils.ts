@@ -63,10 +63,7 @@ const STATUS_LABELS: Record<string, string> = {
   expired: 'expired',
 };
 
-export function getEmptyStateTitle(
-  tab: 'incoming' | 'outgoing',
-  status: string,
-): string {
+export function getEmptyStateTitle(tab: 'incoming' | 'outgoing', status: string): string {
   const label = status !== 'all' ? STATUS_LABELS[status] : null;
   if (label) return `No ${label} requests`;
   return tab === 'incoming' ? 'No incoming requests' : 'No outgoing requests';
