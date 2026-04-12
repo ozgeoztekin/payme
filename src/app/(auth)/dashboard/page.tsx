@@ -136,12 +136,35 @@ export default function DashboardPage() {
           aria-label="Account summary"
         >
           <div className="flex-1">
-            <p className="text-xs font-medium uppercase tracking-wider text-on-surface-variant">
-              Total Available Balance
-            </p>
-            <p className="mt-1 font-[family-name:var(--font-manrope)] text-3xl font-extrabold tracking-tighter text-indigo-700 sm:text-4xl">
-              {formatCents(wallet.balance_cents)}
-            </p>
+            <div className="flex items-center justify-between gap-3 md:block">
+              <div>
+                <p className="text-xs font-medium uppercase tracking-wider text-on-surface-variant">
+                  Total Available Balance
+                </p>
+                <p className="mt-1 font-[family-name:var(--font-manrope)] text-3xl font-extrabold tracking-tighter text-indigo-700 sm:text-4xl">
+                  {formatCents(wallet.balance_cents)}
+                </p>
+              </div>
+              <Link
+                href="/requests/new"
+                className="flex shrink-0 items-center gap-2 rounded-full bg-indigo-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-indigo-700 active:bg-indigo-800 md:hidden"
+              >
+                <svg
+                  className="h-4 w-4"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2.5"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  aria-hidden
+                >
+                  <line x1="12" y1="5" x2="12" y2="19" />
+                  <line x1="5" y1="12" x2="19" y2="12" />
+                </svg>
+                Create Request
+              </Link>
+            </div>
           </div>
 
           {bankAccount ? (
@@ -318,6 +341,26 @@ export default function DashboardPage() {
           </div>
         ) : null}
       </section>
+
+      <Link
+        href="/requests/new"
+        className="fixed bottom-8 right-8 z-20 hidden h-14 w-14 items-center justify-center rounded-full bg-indigo-700 text-white shadow-lg transition-all hover:bg-indigo-800 hover:shadow-xl active:scale-95 md:flex"
+        aria-label="Create new request"
+      >
+        <svg
+          className="h-7 w-7"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2.5"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          aria-hidden
+        >
+          <line x1="12" y1="5" x2="12" y2="19" />
+          <line x1="5" y1="12" x2="19" y2="12" />
+        </svg>
+      </Link>
     </PageContainer>
   );
 }
