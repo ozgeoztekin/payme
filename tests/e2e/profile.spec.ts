@@ -30,7 +30,7 @@ async function setAlicePhone(page: import('@playwright/test').Page, phone: strin
 test.describe('Profile (US1–US4)', () => {
   test.describe.configure({ mode: 'serial' });
 
-  test('displays email read-only on profile page', async ({ page }) => {
+  test('displays display name, email read-only on profile page', async ({ page }) => {
     await setAlicePhone(page, null);
     await signIn(page);
     await page.goto('/profile');
@@ -38,10 +38,20 @@ test.describe('Profile (US1–US4)', () => {
     const main = page.getByRole('main');
     await expect(main.getByRole('heading', { name: 'Profile' })).toBeVisible();
     await expect(main.getByText('Account Information')).toBeVisible();
+    await expect(main.getByText('Name')).toBeVisible();
+    await expect(main.getByText('Alice', { exact: true })).toBeVisible();
     await expect(main.getByText(ALICE_EMAIL)).toBeVisible();
 
     const emailInputs = main.locator(`input[value="${ALICE_EMAIL}"]`);
     await expect(emailInputs).toHaveCount(0);
+  });
+
+  test('displays display name in sidebar on all pages', async ({ page }) => {
+    await signIn(page);
+    await page.goto('/requests/new');
+
+    const sidebar = page.locator('aside');
+    await expect(sidebar.getByText('Alice')).toBeVisible();
   });
 
   test('displays existing phone number read-only', async ({ page }) => {

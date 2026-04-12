@@ -3,7 +3,6 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { cn } from '@/lib/utils';
-import type { User } from '@supabase/supabase-js';
 
 const NAV_ITEMS = [
   { href: '/dashboard', label: 'Dashboard', icon: 'grid' },
@@ -134,11 +133,11 @@ export function MobileBottomNav() {
   );
 }
 
-export function AppSidebar({ user }: { user: User }) {
+export function AppSidebar({ displayName }: { displayName: string }) {
   const pathname = usePathname();
 
   return (
-    <aside className="hidden md:flex md:w-64 flex-col bg-white">
+    <aside className="hidden md:flex md:w-64 flex-col bg-white md:sticky md:top-0 md:h-screen">
       <div className="p-6">
         <AppLogo />
       </div>
@@ -165,10 +164,10 @@ export function AppSidebar({ user }: { user: User }) {
       <div className="p-4">
         <div className="flex items-center gap-3 px-4 py-3">
           <div className="w-8 h-8 rounded-full bg-indigo-100 flex items-center justify-center text-indigo-700 text-sm font-bold">
-            {user.email?.[0]?.toUpperCase() ?? '?'}
+            {displayName[0]?.toUpperCase() ?? '?'}
           </div>
           <div className="flex-1 min-w-0">
-            <p className="text-sm font-medium text-slate-900 truncate">{user.email}</p>
+            <p className="text-sm font-medium text-slate-900 truncate">{displayName}</p>
           </div>
         </div>
       </div>

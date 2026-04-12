@@ -51,6 +51,7 @@ describe('profile-service', () => {
         expect(result.data.email).toBe('alice@example.com');
         expect(result.data.phone).toBe('+15551234567');
         expect(result.data.status).toBe('active');
+        expect(result.data.display_name).toBe('Alice');
       }
     });
 
@@ -64,6 +65,7 @@ describe('profile-service', () => {
       if (result.success) {
         expect(result.data.email).toBe('bob@example.com');
         expect(result.data.phone).toBeNull();
+        expect(result.data.display_name).toBe('Bob');
       }
     });
 

@@ -6,6 +6,11 @@ export function ProfileInfo({ profile }: { profile: UserRow }) {
       <h2 className="text-lg font-semibold text-slate-900">Account Information</h2>
 
       <div>
+        <p className="text-xs font-medium text-slate-500 uppercase tracking-wide mb-1">Name</p>
+        <p className="text-sm text-slate-900">{profile.display_name}</p>
+      </div>
+
+      <div>
         <p className="text-xs font-medium text-slate-500 uppercase tracking-wide mb-1">Email</p>
         <p className="text-sm text-slate-900">{profile.email}</p>
       </div>
