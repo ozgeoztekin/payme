@@ -24,7 +24,7 @@ test.describe('Wallet Top-Up (US6)', () => {
 
     await expect(page.getByText('Wallet Balance')).toBeVisible();
 
-    await expect(page.getByRole('heading', { name: 'Top Up Wallet' })).toBeVisible({
+    await expect(page.getByRole('heading', { name: 'Top Up' })).toBeVisible({
       timeout: 10000,
     });
 
@@ -42,7 +42,7 @@ test.describe('Wallet Top-Up (US6)', () => {
     await signIn(page, ALICE_EMAIL);
     await page.goto('/wallet');
 
-    await expect(page.getByRole('heading', { name: 'Top Up Wallet' })).toBeVisible({
+    await expect(page.getByRole('heading', { name: 'Top Up' })).toBeVisible({
       timeout: 10000,
     });
 
