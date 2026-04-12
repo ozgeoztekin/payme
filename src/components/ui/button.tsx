@@ -10,6 +10,7 @@ const variantClasses = {
   secondary: 'bg-slate-100 hover:bg-slate-200 text-slate-900',
   danger: 'bg-rose-600 hover:bg-rose-700 text-white',
   ghost: 'bg-transparent hover:bg-slate-100 text-slate-700',
+  'danger-ghost': 'bg-transparent hover:bg-rose-50 text-rose-600',
 } as const;
 
 const sizeClasses = {
@@ -19,7 +20,7 @@ const sizeClasses = {
 } as const;
 
 export type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
-  variant?: 'primary' | 'secondary' | 'danger' | 'ghost';
+  variant?: 'primary' | 'secondary' | 'danger' | 'ghost' | 'danger-ghost';
   size?: 'sm' | 'md' | 'lg';
   loading?: boolean;
 };

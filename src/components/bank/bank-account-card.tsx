@@ -62,6 +62,9 @@ export function BankAccountCard({
             <p className="text-lg font-semibold text-slate-900">{bankAccount.bank_name}</p>
             <p className="text-sm text-slate-500">{bankAccount.account_number_masked}</p>
           </div>
+          <Button variant="danger-ghost" size="sm" onClick={() => setShowConfirm(true)}>
+            Disconnect
+          </Button>
         </div>
         <div className="mt-4 rounded-xl bg-slate-50 px-4 py-3">
           <p className="text-xs font-medium uppercase tracking-wide text-slate-500">
@@ -70,11 +73,6 @@ export function BankAccountCard({
           <p className="mt-1 text-2xl font-bold text-slate-900">
             {formatCents(bankAccount.balance_cents)}
           </p>
-        </div>
-        <div className="mt-4">
-          <Button variant="danger" size="sm" onClick={() => setShowConfirm(true)}>
-            Disconnect
-          </Button>
         </div>
       </Card>
 

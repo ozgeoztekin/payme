@@ -72,8 +72,7 @@ export function TopUpForm({
 
   return (
     <Card>
-      <h3 className="text-lg font-semibold text-slate-900">Top Up Wallet</h3>
-      <p className="mt-1 text-sm text-slate-500">
+      <p className="text-sm text-slate-500">
         Transfer funds from <strong>{bankAccount.bank_name}</strong> (
         {bankAccount.account_number_masked}) to your wallet.
       </p>
