@@ -32,7 +32,7 @@ on:
 ### Job: `build`
 - **Runs on**: `ubuntu-latest`
 - **Node**: 20.x
-- **Environment variables**: `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`, `NEXT_PUBLIC_APP_URL`
+- **Environment variables**: `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`, `SUPABASE_SERVICE_ROLE_KEY`, `NEXT_PUBLIC_APP_URL`
 - **Steps**: `npm ci` → `npm run build`
 - **Expected exit 0 when**: Next.js build compiles without errors
 

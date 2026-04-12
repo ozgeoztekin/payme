@@ -33,7 +33,7 @@ Push a commit to `main` or open a PR targeting `main`. Verify:
 
 1. **Lint job** (`CI / lint`): ESLint and Prettier checks pass — runs in parallel with unit tests and build
 2. **Unit test job** (`CI / unit-test`): Vitest runs all unit tests
-3. **Build job** (`CI / build`): `next build` succeeds (requires the three `NEXT_PUBLIC_*` / URL secrets above)
+3. **Build job** (`CI / build`): `next build` succeeds (set `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`, `NEXT_PUBLIC_APP_URL`, and `SUPABASE_SERVICE_ROLE_KEY` — the service role is required when Next evaluates server code that uses the admin Supabase client)
 4. **E2E test job** (`CI / e2e-test`): Playwright tests run against hosted Supabase — runs after `build` succeeds; requires all four secrets
 
 ### 4. Review Failed Runs
