@@ -1,6 +1,8 @@
+import { PageContainer } from '@/components/layout/page-layout';
+
 export default function WalletLoading() {
   return (
-    <div className="mx-auto max-w-2xl space-y-8 animate-pulse">
+    <PageContainer className="animate-pulse">
       <div>
         <div className="h-8 w-28 rounded-lg bg-surface-container-high" />
         <div className="mt-2 h-4 w-64 rounded bg-surface-container" />
@@ -46,6 +48,6 @@ export default function WalletLoading() {
           </div>
         </div>
       </div>
-    </div>
+    </PageContainer>
   );
 }

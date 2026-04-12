@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { RequestForm } from '@/components/requests/request-form';
 import { ShareableLink } from '@/components/requests/shareable-link';
 import { Button } from '@/components/ui/button';
+import { PageContainer, PageHeader } from '@/components/layout/page-layout';
 import { createRequest } from '@/lib/actions/request-actions';
 import { formatCents } from '@/lib/utils';
 import type { CreateRequestInput } from '@/lib/types/api';
@@ -33,12 +34,11 @@ export default function NewRequestPage() {
 
   if (successData) {
     return (
-      <div className="flex flex-col items-center gap-12 pt-8 sm:pt-12">
-        <div className="flex flex-col items-center gap-6 text-center">
-          {/* Success checkmark */}
-          <div className="w-20 h-20 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center">
+      <PageContainer>
+        <div className="flex items-start gap-5">
+          <div className="w-16 h-16 shrink-0 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center">
             <svg
-              className="w-10 h-10"
+              className="w-8 h-8"
               viewBox="0 0 24 24"
               fill="none"
               stroke="currentColor"
@@ -49,55 +49,39 @@ export default function NewRequestPage() {
               <polyline points="20 6 9 17 4 12" />
             </svg>
           </div>
-          <div className="space-y-2">
-            <h1 className="font-[family-name:var(--font-manrope)] font-bold text-2xl sm:text-3xl text-slate-900">
+          <div className="space-y-1">
+            <h1 className="font-[family-name:var(--font-manrope)] text-2xl font-bold tracking-tight text-foreground sm:text-3xl">
               Request Sent!
             </h1>
-            <p className="text-slate-500 max-w-sm">
+            <p className="text-on-surface-variant">
               We&apos;ve created your request for{' '}
-              <strong className="text-slate-900">{formatCents(successData.amountCents)}</strong> to{' '}
-              <strong className="text-slate-900">{successData.recipientValue}</strong>.
+              <strong className="text-foreground">{formatCents(successData.amountCents)}</strong> to{' '}
+              <strong className="text-foreground">{successData.recipientValue}</strong>.
             </p>
           </div>
         </div>
 
-        <div className="w-full max-w-md">
-          <ShareableLink url={successData.shareUrl} />
-        </div>
+        <ShareableLink url={successData.shareUrl} />
 
-        <div className="w-full max-w-md space-y-3">
-          <Button
-            variant="secondary"
-            size="lg"
-            className="w-full"
-            onClick={() => setSuccessData(null)}
-          >
+        <div className="flex gap-3">
+          <Button variant="secondary" size="lg" onClick={() => setSuccessData(null)}>
             Create Another Request
           </Button>
-          <Button
-            variant="ghost"
-            size="lg"
-            className="w-full"
-            onClick={() => router.push('/dashboard')}
-          >
+          <Button variant="ghost" size="lg" onClick={() => router.push('/dashboard')}>
             Back to Dashboard
           </Button>
         </div>
-      </div>
+      </PageContainer>
     );
   }
 
   return (
-    <div className="flex flex-col items-center gap-8 sm:gap-12 pt-4 sm:pt-8">
-      <div className="text-center space-y-2">
-        <h1 className="font-[family-name:var(--font-manrope)] font-bold text-2xl sm:text-3xl tracking-tight text-slate-900">
-          Request Funds
-        </h1>
-        <p className="text-slate-500 text-base sm:text-lg">
-          Send a secure payment request to anyone instantly.
-        </p>
-      </div>
+    <PageContainer>
+      <PageHeader
+        title="Request Funds"
+        subtitle="Send a secure payment request to anyone instantly."
+      />
       <RequestForm onSubmit={handleSubmit} />
-    </div>
+    </PageContainer>
   );
 }

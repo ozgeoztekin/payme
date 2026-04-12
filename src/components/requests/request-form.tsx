@@ -80,18 +80,18 @@ export function RequestForm({ onSubmit }: RequestFormProps) {
   }
 
   return (
-    <div className="w-full max-w-xl mx-auto flex flex-col gap-8">
+    <div className="w-full flex flex-col gap-6">
       {generalError && (
         <ErrorMessage message={generalError} onDismiss={() => setGeneralError('')} />
       )}
 
       {/* Amount Input — editorial style inspired by Stitch design */}
-      <div className="bg-white p-8 sm:p-10 rounded-[2rem] shadow-sm flex flex-col items-start gap-4">
+      <div className="bg-white p-5 sm:p-6 rounded-2xl shadow-sm flex flex-col items-start gap-3">
         <label className="text-xs font-medium uppercase tracking-wide text-slate-500">
           Amount to request
         </label>
-        <div className="flex items-baseline gap-2 w-full">
-          <span className="font-[family-name:var(--font-manrope)] font-extrabold text-4xl text-indigo-600">
+        <div className="flex items-center gap-1.5 w-full">
+          <span className="font-[family-name:var(--font-manrope)] font-bold text-2xl sm:text-3xl text-indigo-600 leading-none">
             $
           </span>
           <input
@@ -103,7 +103,7 @@ export function RequestForm({ onSubmit }: RequestFormProps) {
             aria-label="Amount in dollars"
             aria-invalid={!!fieldErrors.amountCents}
             className={cn(
-              'w-full bg-transparent border-none p-0 font-[family-name:var(--font-manrope)] font-extrabold text-5xl sm:text-[3.5rem] text-slate-900 focus:ring-0 focus:outline-none placeholder:text-slate-200',
+              'w-full bg-transparent border-none p-0 font-[family-name:var(--font-manrope)] font-bold text-2xl sm:text-3xl leading-none text-foreground focus:ring-0 focus:outline-none placeholder:text-outline-variant',
               fieldErrors.amountCents && 'text-rose-600',
             )}
           />
@@ -119,7 +119,7 @@ export function RequestForm({ onSubmit }: RequestFormProps) {
       <div className="bg-surface-container-low p-6 sm:p-8 rounded-[2rem] space-y-6">
         {/* Recipient Type Toggle */}
         <div className="space-y-3">
-          <label className="text-xs font-medium uppercase tracking-wide text-slate-500">
+          <label className="text-xs font-medium uppercase tracking-wide text-slate-500 pb-1 block">
             Send request to
           </label>
           <div className="flex gap-2">
@@ -207,29 +207,15 @@ export function RequestForm({ onSubmit }: RequestFormProps) {
         </div>
       </div>
 
-      {/* Submit Button */}
       <Button
         type="button"
         variant="primary"
         size="lg"
         loading={isPending}
         onClick={handleSubmit}
-        className="w-full h-16 rounded-full text-lg font-bold shadow-lg shadow-indigo-600/20"
+        className="w-full h-14 rounded-full text-lg font-bold shadow-lg shadow-indigo-600/20"
       >
         Request Funds
-        {!isPending && (
-          <svg
-            className="w-5 h-5"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          >
-            <path d="M5 12h14M12 5l7 7-7 7" />
-          </svg>
-        )}
       </Button>
     </div>
   );

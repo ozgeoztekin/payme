@@ -104,7 +104,7 @@ export function RequestPaymentFlow({
 
   if (paid) {
     return (
-      <div className="flex flex-col items-center gap-8 pt-8">
+      <div className="flex flex-col items-center gap-8 pt-8 text-center">
         <div className="flex h-20 w-20 items-center justify-center rounded-full bg-emerald-100 text-emerald-600">
           <svg
             className="h-10 w-10"
@@ -119,11 +119,11 @@ export function RequestPaymentFlow({
             <polyline points="20 6 9 17 4 12" />
           </svg>
         </div>
-        <div className="text-center space-y-2">
-          <h1 className="font-[family-name:var(--font-manrope)] text-2xl font-bold text-slate-900">
+        <div className="space-y-2">
+          <h1 className="font-[family-name:var(--font-manrope)] text-2xl font-bold tracking-tight text-foreground sm:text-3xl">
             Payment Successful!
           </h1>
-          <p className="text-slate-500">
+          <p className="text-on-surface-variant">
             You paid {formatCents(request.amount_cents)} to {requesterName}.
           </p>
         </div>
@@ -136,7 +136,7 @@ export function RequestPaymentFlow({
 
   if (declined) {
     return (
-      <div className="flex flex-col items-center gap-8 pt-8">
+      <div className="flex flex-col items-center gap-8 pt-8 text-center">
         <div className="flex h-20 w-20 items-center justify-center rounded-full bg-slate-100 text-slate-500">
           <svg
             className="h-10 w-10"
@@ -151,11 +151,11 @@ export function RequestPaymentFlow({
             <path d="M18 6L6 18M6 6l12 12" />
           </svg>
         </div>
-        <div className="text-center space-y-2">
-          <h1 className="font-[family-name:var(--font-manrope)] text-2xl font-bold text-slate-900">
+        <div className="space-y-2">
+          <h1 className="font-[family-name:var(--font-manrope)] text-2xl font-bold tracking-tight text-foreground sm:text-3xl">
             Request Declined
           </h1>
-          <p className="text-slate-500">
+          <p className="text-on-surface-variant">
             You declined the {formatCents(request.amount_cents)} request from {requesterName}.
           </p>
         </div>
@@ -168,7 +168,7 @@ export function RequestPaymentFlow({
 
   if (canceled) {
     return (
-      <div className="flex flex-col items-center gap-8 pt-8">
+      <div className="flex flex-col items-center gap-8 pt-8 text-center">
         <div className="flex h-20 w-20 items-center justify-center rounded-full bg-slate-100 text-slate-500">
           <svg
             className="h-10 w-10"
@@ -183,11 +183,11 @@ export function RequestPaymentFlow({
             <path d="M18 6L6 18M6 6l12 12" />
           </svg>
         </div>
-        <div className="text-center space-y-2">
-          <h1 className="font-[family-name:var(--font-manrope)] text-2xl font-bold text-slate-900">
+        <div className="space-y-2">
+          <h1 className="font-[family-name:var(--font-manrope)] text-2xl font-bold tracking-tight text-foreground sm:text-3xl">
             Request Canceled
           </h1>
-          <p className="text-slate-500">
+          <p className="text-on-surface-variant">
             Your {formatCents(request.amount_cents)} request has been canceled.
           </p>
         </div>

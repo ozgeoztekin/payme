@@ -6,6 +6,7 @@ import { useRequests, type RequestStatusFilterChoice } from '@/hooks/use-request
 import type { RequestListTab } from '@/lib/types/api';
 import { RequestList } from '@/components/requests/request-list';
 import { ErrorMessage } from '@/components/ui/error-message';
+import { PageContainer, PageHeader, SectionTitle } from '@/components/layout/page-layout';
 import { cn } from '@/lib/utils';
 
 const STATUS_FILTERS: { value: RequestStatusFilterChoice; label: string }[] = [
@@ -73,23 +74,19 @@ export default function DashboardPage() {
         };
 
   return (
-    <div className="mx-auto max-w-5xl space-y-10">
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
-        <div>
-          <h1 className="font-[family-name:var(--font-manrope)] text-2xl font-bold tracking-tight text-foreground sm:text-3xl">
-            Dashboard
-          </h1>
-          <p className="mt-2 text-slate-500">
-            Incoming and outgoing payment requests, with search and filters.
-          </p>
-        </div>
-        <Link
-          href="/requests/new"
-          className="inline-flex min-h-11 shrink-0 items-center justify-center rounded-full bg-indigo-600 px-5 text-sm font-semibold text-white transition-colors hover:bg-indigo-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-600 focus-visible:ring-offset-2"
-        >
-          New payment request
-        </Link>
-      </div>
+    <PageContainer size="lg">
+      <PageHeader
+        title="Dashboard"
+        subtitle="Incoming and outgoing payment requests, with search and filters."
+        actions={
+          <Link
+            href="/requests/new"
+            className="inline-flex min-h-11 shrink-0 items-center justify-center rounded-full bg-indigo-600 px-5 text-sm font-semibold text-white transition-colors hover:bg-indigo-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-600 focus-visible:ring-offset-2"
+          >
+            New payment request
+          </Link>
+        }
+      />
 
       <div className="rounded-2xl bg-surface-container-low p-6 shadow-sm ring-1 ring-outline-variant/15">
         <div className="flex flex-col gap-6">
@@ -180,9 +177,9 @@ export default function DashboardPage() {
 
       <section className="space-y-4" aria-live="polite">
         <div className="flex flex-wrap items-center justify-between gap-3 px-1">
-          <h2 className="font-[family-name:var(--font-manrope)] text-xl font-bold text-foreground">
+          <SectionTitle>
             {tab === 'incoming' ? 'Incoming requests' : 'Outgoing requests'}
-          </h2>
+          </SectionTitle>
           {tab === 'incoming' && pending_action_count != null && pending_action_count > 0 ? (
             <span className="rounded-full bg-indigo-100 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wide text-indigo-800">
               {pending_action_count} action required
@@ -227,6 +224,6 @@ export default function DashboardPage() {
           </div>
         ) : null}
       </section>
-    </div>
+    </PageContainer>
   );
 }

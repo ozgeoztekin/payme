@@ -7,44 +7,34 @@ import { BankAccountCard } from '@/components/bank/bank-account-card';
 import { BankConnectFlow } from '@/components/bank/bank-connect-flow';
 import { Spinner } from '@/components/ui/spinner';
 import { ErrorMessage } from '@/components/ui/error-message';
+import { PageContainer, PageHeader, SectionTitle } from '@/components/layout/page-layout';
 
 export default function WalletPage() {
   const { wallet, bankAccount, loading, error, refetch } = useWallet();
 
   if (loading) {
     return (
-      <div className="mx-auto max-w-2xl">
-        <div>
-          <h1 className="text-2xl font-bold text-slate-900 sm:text-3xl">Wallet</h1>
-          <p className="mt-1 text-slate-500">Manage your balance, bank account, and top-ups.</p>
-        </div>
-        <div className="mt-8 flex items-center justify-center py-12">
+      <PageContainer>
+        <PageHeader title="Wallet" subtitle="Manage your balance, bank account, and top-ups." />
+        <div className="flex items-center justify-center py-12">
           <Spinner size="lg" />
         </div>
-      </div>
+      </PageContainer>
     );
   }
 
   if (error) {
     return (
-      <div className="mx-auto max-w-2xl">
-        <div>
-          <h1 className="text-2xl font-bold text-slate-900 sm:text-3xl">Wallet</h1>
-          <p className="mt-1 text-slate-500">Manage your balance, bank account, and top-ups.</p>
-        </div>
-        <div className="mt-8">
-          <ErrorMessage message={error} />
-        </div>
-      </div>
+      <PageContainer>
+        <PageHeader title="Wallet" subtitle="Manage your balance, bank account, and top-ups." />
+        <ErrorMessage message={error} />
+      </PageContainer>
     );
   }
 
   return (
-    <div className="mx-auto max-w-2xl space-y-8">
-      <div>
-        <h1 className="text-2xl font-bold text-slate-900 sm:text-3xl">Wallet</h1>
-        <p className="mt-1 text-slate-500">Manage your balance, bank account, and top-ups.</p>
-      </div>
+    <PageContainer>
+      <PageHeader title="Wallet" subtitle="Manage your balance, bank account, and top-ups." />
 
       {wallet && (
         <section>
@@ -54,8 +44,8 @@ export default function WalletPage() {
 
       {bankAccount ? (
         <>
-          <section>
-            <h2 className="mb-4 text-lg font-semibold text-slate-900">Top Up</h2>
+          <section className="space-y-4">
+            <SectionTitle>Top Up</SectionTitle>
             <TopUpForm
               bankAccount={bankAccount}
               onSuccess={() => {
@@ -64,8 +54,8 @@ export default function WalletPage() {
             />
           </section>
 
-          <section>
-            <h2 className="mb-4 text-lg font-semibold text-slate-900">Connected Bank</h2>
+          <section className="space-y-4">
+            <SectionTitle>Connected Bank</SectionTitle>
             <div className="space-y-6">
               <BankAccountCard
                 bankAccount={bankAccount}
@@ -74,7 +64,7 @@ export default function WalletPage() {
                 }}
               />
               <div>
-                <p className="mb-3 text-sm font-medium text-slate-700">
+                <p className="mb-3 text-sm font-medium text-on-surface-variant">
                   Replace with a different bank
                 </p>
                 <BankConnectFlow onConnected={() => refetch()} />
@@ -83,11 +73,11 @@ export default function WalletPage() {
           </section>
         </>
       ) : (
-        <section>
-          <h2 className="mb-4 text-lg font-semibold text-slate-900">Bank Account</h2>
+        <section className="space-y-4">
+          <SectionTitle>Bank Account</SectionTitle>
           <BankConnectFlow onConnected={() => refetch()} />
         </section>
       )}
-    </div>
+    </PageContainer>
   );
 }

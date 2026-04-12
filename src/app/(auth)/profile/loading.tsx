@@ -1,23 +1,25 @@
+import { PageContainer } from '@/components/layout/page-layout';
+
 export default function ProfileLoading() {
   return (
-    <div className="max-w-lg mx-auto space-y-8 animate-pulse">
+    <PageContainer size="sm" className="animate-pulse">
       <div>
-        <div className="h-8 w-40 bg-slate-200 rounded mb-6" />
-        <div className="space-y-4 rounded-xl border border-slate-100 bg-white p-6">
-          <div>
-            <div className="h-4 w-16 bg-slate-200 rounded mb-2" />
-            <div className="h-5 w-48 bg-slate-100 rounded" />
-          </div>
-          <div>
-            <div className="h-4 w-24 bg-slate-200 rounded mb-2" />
-            <div className="h-5 w-40 bg-slate-100 rounded" />
-          </div>
+        <div className="h-8 w-40 bg-surface-container-high rounded" />
+      </div>
+      <div className="space-y-4 rounded-xl border border-outline-variant/20 bg-white p-6">
+        <div>
+          <div className="h-4 w-16 bg-surface-container-high rounded mb-2" />
+          <div className="h-5 w-48 bg-surface-container rounded" />
+        </div>
+        <div>
+          <div className="h-4 w-24 bg-surface-container-high rounded mb-2" />
+          <div className="h-5 w-40 bg-surface-container rounded" />
         </div>
       </div>
-      <div className="space-y-4 rounded-xl border border-slate-100 bg-white p-6">
-        <div className="h-10 w-full bg-slate-100 rounded" />
-        <div className="h-10 w-full bg-slate-200 rounded" />
+      <div className="space-y-4 rounded-xl border border-outline-variant/20 bg-white p-6">
+        <div className="h-10 w-full bg-surface-container rounded" />
+        <div className="h-10 w-full bg-surface-container-high rounded" />
       </div>
-    </div>
+    </PageContainer>
   );
 }

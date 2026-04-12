@@ -5,6 +5,7 @@ import { ProfileInfo } from '@/components/profile/profile-info';
 import { AddPhoneForm } from '@/components/profile/add-phone-form';
 import { LogoutButton } from '@/components/profile/logout-button';
 import { SuccessBanner } from '@/components/profile/success-banner';
+import { PageContainer, PageHeader } from '@/components/layout/page-layout';
 
 export default async function ProfilePage({
   searchParams,
@@ -27,12 +28,12 @@ export default async function ProfilePage({
 
   if (!profileResult.success) {
     return (
-      <div className="max-w-lg mx-auto">
-        <h1 className="text-2xl font-bold text-slate-900 mb-6">Profile</h1>
+      <PageContainer size="sm">
+        <PageHeader title="Profile" />
         <div className="rounded-xl border border-red-100 bg-red-50 p-6">
           <p className="text-sm text-red-700">Unable to load profile. Please try again later.</p>
         </div>
-      </div>
+      </PageContainer>
     );
   }
 
@@ -41,14 +42,11 @@ export default async function ProfilePage({
   const showAddPhone = profile.status === 'active' && profile.phone === null;
 
   return (
-    <div className="max-w-lg mx-auto space-y-6">
-      <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold text-slate-900">Profile</h1>
-        <LogoutButton />
-      </div>
+    <PageContainer size="sm">
+      <PageHeader title="Profile" actions={<LogoutButton />} />
       {phoneAdded && <SuccessBanner message="Phone number added successfully." />}
       <ProfileInfo profile={profile} />
       {showAddPhone && <AddPhoneForm />}
-    </div>
+    </PageContainer>
   );
 }

@@ -1,6 +1,7 @@
 'use client';
 
 import { Button } from '@/components/ui/button';
+import { PageContainer } from '@/components/layout/page-layout';
 
 export default function AuthError({
   error,
@@ -10,7 +11,7 @@ export default function AuthError({
   reset: () => void;
 }) {
   return (
-    <div className="mx-auto flex max-w-md flex-col items-center justify-center px-4 py-20 text-center">
+    <PageContainer centered className="justify-center px-4 py-20">
       <div className="flex h-16 w-16 items-center justify-center rounded-full bg-rose-100">
         <svg
           className="h-8 w-8 text-rose-600"
@@ -27,17 +28,21 @@ export default function AuthError({
           <line x1="12" y1="16" x2="12.01" y2="16" />
         </svg>
       </div>
-      <h1 className="mt-6 text-xl font-bold text-slate-900">Something went wrong</h1>
-      <p className="mt-2 text-sm text-slate-500">
-        An unexpected error occurred. Please try again or return to the dashboard.
-      </p>
-      {error.digest && <p className="mt-2 text-xs text-slate-400">Error ID: {error.digest}</p>}
-      <div className="mt-6 flex gap-3">
+      <div className="space-y-2">
+        <h1 className="font-[family-name:var(--font-manrope)] text-2xl font-bold tracking-tight text-foreground sm:text-3xl">
+          Something went wrong
+        </h1>
+        <p className="text-on-surface-variant">
+          An unexpected error occurred. Please try again or return to the dashboard.
+        </p>
+        {error.digest && <p className="text-xs text-outline">Error ID: {error.digest}</p>}
+      </div>
+      <div className="flex gap-3">
         <Button variant="secondary" onClick={reset}>
           Try Again
         </Button>
         <Button onClick={() => (window.location.href = '/dashboard')}>Go to Dashboard</Button>
       </div>
-    </div>
+    </PageContainer>
   );
 }

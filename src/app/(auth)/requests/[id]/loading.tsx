@@ -1,6 +1,8 @@
+import { PageContainer } from '@/components/layout/page-layout';
+
 export default function RequestDetailLoading() {
   return (
-    <div className="mx-auto max-w-2xl space-y-8 pt-4 animate-pulse">
+    <PageContainer className="animate-pulse">
       <div className="rounded-2xl bg-white p-6 shadow-sm ring-1 ring-outline-variant/15 sm:p-8">
         <div className="space-y-6">
           <div className="flex items-center justify-between">
@@ -38,6 +40,6 @@ export default function RequestDetailLoading() {
           </div>
         </div>
       </div>
-    </div>
+    </PageContainer>
   );
 }

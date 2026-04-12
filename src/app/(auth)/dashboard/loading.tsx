@@ -1,6 +1,8 @@
+import { PageContainer } from '@/components/layout/page-layout';
+
 export default function DashboardLoading() {
   return (
-    <div className="mx-auto max-w-5xl space-y-10 animate-pulse">
+    <PageContainer size="lg" className="animate-pulse">
       <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
         <div>
           <div className="h-8 w-40 rounded-lg bg-surface-container-high" />
@@ -49,6 +51,6 @@ export default function DashboardLoading() {
           </div>
         </div>
       </div>
-    </div>
+    </PageContainer>
   );
 }

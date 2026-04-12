@@ -2,6 +2,7 @@ import { notFound } from 'next/navigation';
 import { createClient } from '@/lib/supabase/server';
 import { supabaseAdmin } from '@/lib/db/client';
 import type { PaymentRequestViewRow, WalletRow, BankAccountRow } from '@/lib/types/database';
+import { PageContainer } from '@/components/layout/page-layout';
 import { RequestPaymentFlow } from './request-payment-flow';
 
 interface Props {
@@ -90,7 +91,7 @@ export default async function RequestDetailPage({ params }: Props) {
   const shareUrl = `${appUrl}/pay/${typedRequest.share_token}`;
 
   return (
-    <div className="mx-auto max-w-2xl space-y-8 pt-4">
+    <PageContainer>
       <RequestPaymentFlow
         request={typedRequest}
         requesterName={requesterProfile?.display_name ?? 'Unknown'}
@@ -100,6 +101,6 @@ export default async function RequestDetailPage({ params }: Props) {
         bankAccount={bankAccount}
         shareUrl={shareUrl}
       />
-    </div>
+    </PageContainer>
   );
 }
