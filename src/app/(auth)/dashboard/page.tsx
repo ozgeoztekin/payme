@@ -7,7 +7,7 @@ import { useWallet } from '@/hooks/use-wallet';
 import type { RequestListTab } from '@/lib/types/api';
 import { RequestList } from '@/components/requests/request-list';
 import { ErrorMessage } from '@/components/ui/error-message';
-import { PageContainer, PageHeader, SectionTitle } from '@/components/layout/page-layout';
+import { PageContainer, SectionTitle } from '@/components/layout/page-layout';
 import { cn, formatCents, getEmptyStateTitle } from '@/lib/utils';
 
 const STATUS_FILTERS: { value: RequestStatusFilterChoice; label: string }[] = [
@@ -128,19 +128,6 @@ export default function DashboardPage() {
 
   return (
     <PageContainer size="lg">
-      <PageHeader
-        title="Dashboard"
-        subtitle="Incoming and outgoing payment requests, with search and filters."
-        actions={
-          <Link
-            href="/requests/new"
-            className="inline-flex min-h-11 shrink-0 items-center justify-center rounded-full bg-indigo-600 px-5 text-sm font-semibold text-white transition-colors hover:bg-indigo-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-600 focus-visible:ring-offset-2"
-          >
-            New payment request
-          </Link>
-        }
-      />
-
       {walletLoading ? (
         <BalanceHeroSkeleton />
       ) : wallet ? (
