@@ -37,6 +37,23 @@ export function sanitizeAmountInput(value: string): string | null {
   return cleaned;
 }
 
+const STATUS_LABELS: Record<string, string> = {
+  pending: 'pending',
+  paid: 'paid',
+  declined: 'declined',
+  canceled: 'canceled',
+  expired: 'expired',
+};
+
+export function getEmptyStateTitle(
+  tab: 'incoming' | 'outgoing',
+  status: string,
+): string {
+  const label = status !== 'all' ? STATUS_LABELS[status] : null;
+  if (label) return `No ${label} requests`;
+  return tab === 'incoming' ? 'No incoming requests' : 'No outgoing requests';
+}
+
 export const BANK_OPTIONS = [
   { value: '', label: 'Select a bank' },
   { value: 'Chase', label: 'Chase' },

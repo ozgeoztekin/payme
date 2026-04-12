@@ -1,15 +1,13 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
 
 export function SuccessBanner({ message }: { message: string }) {
   const [visible, setVisible] = useState(true);
-  const router = useRouter();
 
   useEffect(() => {
-    router.replace('/profile', { scroll: false });
-  }, [router]);
+    window.history.replaceState(null, '', '/profile');
+  }, []);
 
   useEffect(() => {
     const timer = setTimeout(() => setVisible(false), 6000);

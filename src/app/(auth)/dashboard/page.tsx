@@ -7,7 +7,7 @@ import type { RequestListTab } from '@/lib/types/api';
 import { RequestList } from '@/components/requests/request-list';
 import { ErrorMessage } from '@/components/ui/error-message';
 import { PageContainer, PageHeader, SectionTitle } from '@/components/layout/page-layout';
-import { cn } from '@/lib/utils';
+import { cn, getEmptyStateTitle } from '@/lib/utils';
 
 const STATUS_FILTERS: { value: RequestStatusFilterChoice; label: string }[] = [
   { value: 'all', label: 'All' },
@@ -60,18 +60,13 @@ export default function DashboardPage() {
 
   const totalPages = limit > 0 ? Math.max(1, Math.ceil(total / limit)) : 1;
 
-  const emptyCopy =
-    tab === 'incoming'
-      ? {
-          title: 'No incoming requests',
-          description:
-            'When someone sends you a payment request, it will show up here. You can also create your own request to get paid.',
-        }
-      : {
-          title: 'No outgoing requests',
-          description:
-            'Requests you create appear here. Start by sending your first payment request.',
-        };
+  const emptyCopy = {
+    title: getEmptyStateTitle(tab, status),
+    description:
+      tab === 'incoming'
+        ? 'When someone sends you a payment request, it will show up here. You can also create your own request to get paid.'
+        : 'Requests you create appear here. Start by sending your first payment request.',
+  };
 
   return (
     <PageContainer size="lg">
