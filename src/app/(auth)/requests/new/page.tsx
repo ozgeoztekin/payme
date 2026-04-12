@@ -34,44 +34,44 @@ export default function NewRequestPage() {
 
   if (successData) {
     return (
-      <PageContainer>
-        <div className="flex items-start gap-5">
-          <div className="w-16 h-16 shrink-0 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center">
-            <svg
-              className="w-8 h-8"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2.5"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            >
-              <polyline points="20 6 9 17 4 12" />
-            </svg>
-          </div>
-          <div className="space-y-1">
+      <div className="flex w-full min-h-[calc(100dvh-10rem)] items-center justify-center md:min-h-[calc(100dvh-6rem)]">
+        <PageContainer centered className="w-full">
+          <div className="flex flex-col items-center gap-4">
+            <div className="w-16 h-16 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center">
+              <svg
+                className="w-8 h-8"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <polyline points="20 6 9 17 4 12" />
+              </svg>
+            </div>
             <h1 className="font-[family-name:var(--font-manrope)] text-2xl font-bold tracking-tight text-foreground sm:text-3xl">
               Request Sent!
             </h1>
-            <p className="text-on-surface-variant">
+            <p className="text-on-surface-variant break-all">
               We&apos;ve created your request for{' '}
               <strong className="text-foreground">{formatCents(successData.amountCents)}</strong> to{' '}
               <strong className="text-foreground">{successData.recipientValue}</strong>.
             </p>
           </div>
-        </div>
 
-        <ShareableLink url={successData.shareUrl} />
+          <ShareableLink url={successData.shareUrl} />
 
-        <div className="flex gap-3">
-          <Button variant="secondary" size="lg" onClick={() => setSuccessData(null)}>
-            Create Another Request
-          </Button>
-          <Button variant="ghost" size="lg" onClick={() => router.push('/dashboard')}>
-            Back to Dashboard
-          </Button>
-        </div>
-      </PageContainer>
+          <div className="flex w-full flex-col gap-3 sm:flex-row sm:justify-center">
+            <Button variant="primary" size="lg" onClick={() => setSuccessData(null)}>
+              Create Another Request
+            </Button>
+            <Button variant="secondary" size="lg" onClick={() => router.push('/dashboard')}>
+              Back to Dashboard
+            </Button>
+          </div>
+        </PageContainer>
+      </div>
     );
   }
 
