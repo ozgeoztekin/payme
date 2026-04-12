@@ -3,6 +3,7 @@
 import { useState, useTransition } from 'react';
 import Link from 'next/link';
 import { signUp } from '@/lib/actions/auth-actions';
+import { AppIcon } from '@/components/ui/app-icon';
 
 export default function SignUpPage() {
   const [showPassword, setShowPassword] = useState(false);
@@ -41,20 +42,7 @@ export default function SignUpPage() {
         <div className="w-full max-w-md">
           <div className="mb-12 text-center">
             <div className="inline-flex items-center justify-center p-4 bg-indigo-600 rounded-2xl shadow-lg mb-6">
-              <svg
-                className="w-8 h-8 text-white"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              >
-                <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
-                <circle cx="9" cy="7" r="4" />
-                <line x1="19" y1="8" x2="19" y2="14" />
-                <line x1="22" y1="11" x2="16" y2="11" />
-              </svg>
+              <AppIcon variant="onDark" />
             </div>
             <h1 className="text-[1.75rem] font-bold text-foreground tracking-tight leading-tight font-[family-name:var(--font-manrope)]">
               Create Account
@@ -220,21 +208,7 @@ export default function SignUpPage() {
                           />
                         </svg>
                       ) : (
-                        <>
-                          Create Account
-                          <svg
-                            className="w-5 h-5"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            stroke="currentColor"
-                            strokeWidth="2"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                          >
-                            <line x1="5" y1="12" x2="19" y2="12" />
-                            <polyline points="12 5 19 12 12 19" />
-                          </svg>
-                        </>
+                        'Create Account'
                       )}
                     </button>
                   </div>

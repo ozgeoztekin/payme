@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { cn } from '@/lib/utils';
+import { AppIcon } from '@/components/ui/app-icon';
 
 const NAV_ITEMS = [
   { href: '/dashboard', label: 'Dashboard', icon: 'grid' },
@@ -86,10 +87,7 @@ function NavIcon({ icon, className }: { icon: string; className?: string }) {
 function AppLogo() {
   return (
     <Link href="/dashboard" className="flex items-center gap-3">
-      <svg className="w-8 h-8 text-indigo-600" viewBox="0 0 24 24" fill="currentColor">
-        <rect x="3" y="3" width="18" height="18" rx="4" opacity="0.15" />
-        <path d="M12 7a2 2 0 0 0-2 2v2H8a1 1 0 0 0 0 2h2v2a1 1 0 0 0 2 0v-2h2a1 1 0 0 0 0-2h-2V9a2 2 0 0 0-2-2z" />
-      </svg>
+      <AppIcon />
       <span className="font-bold text-xl tracking-tight font-[family-name:var(--font-manrope)]">
         PayMe
       </span>

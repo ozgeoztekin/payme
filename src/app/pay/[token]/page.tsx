@@ -3,6 +3,7 @@ import { supabaseAdmin } from '@/lib/db/client';
 import type { PaymentRequestViewRow } from '@/lib/types/database';
 import { RequestDetail } from '@/components/requests/request-detail';
 import { GuestPaymentFlow } from '@/components/payment/guest-payment-flow';
+import { AppIcon } from '@/components/ui/app-icon';
 
 interface Props {
   params: Promise<{ token: string }>;
@@ -35,9 +36,12 @@ export default async function PublicPaymentPage({ params }: Props) {
   return (
     <div className="mx-auto flex min-h-screen max-w-2xl flex-col px-4 py-8 sm:px-6 sm:py-12">
       <div className="mb-6 text-center">
-        <h1 className="font-[family-name:var(--font-manrope)] text-2xl font-bold text-slate-900 sm:text-3xl">
-          PayMe
-        </h1>
+        <div className="inline-flex items-center justify-center gap-2 mb-1">
+          <AppIcon size="lg" />
+          <h1 className="font-[family-name:var(--font-manrope)] text-2xl font-bold text-slate-900 sm:text-3xl">
+            PayMe
+          </h1>
+        </div>
         <p className="mt-1 text-sm text-slate-500">Payment Request</p>
       </div>
 

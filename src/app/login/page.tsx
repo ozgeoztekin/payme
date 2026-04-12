@@ -4,6 +4,7 @@ import { Suspense, useState, useTransition } from 'react';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import { signIn } from '@/lib/actions/auth-actions';
+import { AppIcon } from '@/components/ui/app-icon';
 
 export default function LoginPage() {
   return (
@@ -40,16 +41,7 @@ function LoginContent() {
         <div className="w-full max-w-md">
           <div className="mb-12 text-center">
             <div className="inline-flex items-center justify-center p-4 bg-indigo-600 rounded-2xl shadow-lg mb-6">
-              <svg className="w-8 h-8 text-white" viewBox="0 0 24 24" fill="currentColor">
-                <rect x="5" y="11" width="14" height="10" rx="2" />
-                <path
-                  d="M8 11V7a4 4 0 1 1 8 0v4"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                />
-              </svg>
+              <AppIcon variant="onDark" />
             </div>
             <h1 className="text-[1.75rem] font-bold text-foreground tracking-tight leading-tight font-[family-name:var(--font-manrope)]">
               PayMe
@@ -162,21 +154,7 @@ function LoginContent() {
                       />
                     </svg>
                   ) : (
-                    <>
-                      Sign In
-                      <svg
-                        className="w-5 h-5"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth="2"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      >
-                        <line x1="5" y1="12" x2="19" y2="12" />
-                        <polyline points="12 5 19 12 12 19" />
-                      </svg>
-                    </>
+                    'Sign In'
                   )}
                 </button>
               </div>
