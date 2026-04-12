@@ -11,6 +11,16 @@ export default function DashboardLoading() {
         <div className="h-11 w-48 rounded-full bg-surface-container-high" />
       </div>
 
+      <div className="flex flex-col gap-6 lg:flex-row lg:items-center">
+        <div className="flex-1">
+          <div className="h-3 w-36 rounded bg-surface-container" />
+          <div className="mt-3 h-12 w-56 rounded-lg bg-surface-container-high" />
+        </div>
+        <div className="w-full lg:w-72">
+          <div className="h-20 rounded-2xl bg-surface-container-low ring-1 ring-outline-variant/15" />
+        </div>
+      </div>
+
       <div className="rounded-2xl bg-surface-container-low p-6 shadow-sm ring-1 ring-outline-variant/15">
         <div className="flex flex-col gap-6">
           <div className="h-12 w-full max-w-md rounded-full bg-surface-container" />

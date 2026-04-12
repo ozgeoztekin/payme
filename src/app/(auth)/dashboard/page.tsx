@@ -3,11 +3,12 @@
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { useRequests, type RequestStatusFilterChoice } from '@/hooks/use-requests';
+import { useWallet } from '@/hooks/use-wallet';
 import type { RequestListTab } from '@/lib/types/api';
 import { RequestList } from '@/components/requests/request-list';
 import { ErrorMessage } from '@/components/ui/error-message';
 import { PageContainer, PageHeader, SectionTitle } from '@/components/layout/page-layout';
-import { cn, getEmptyStateTitle } from '@/lib/utils';
+import { cn, formatCents, getEmptyStateTitle } from '@/lib/utils';
 
 const STATUS_FILTERS: { value: RequestStatusFilterChoice; label: string }[] = [
   { value: 'all', label: 'All' },
@@ -17,6 +18,62 @@ const STATUS_FILTERS: { value: RequestStatusFilterChoice; label: string }[] = [
   { value: 'canceled', label: 'Canceled' },
   { value: 'expired', label: 'Expired' },
 ];
+
+function WalletIcon() {
+  return (
+    <svg
+      className="h-6 w-6 text-indigo-600"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden
+    >
+      <path d="M21 12V7H5a2 2 0 0 1 0-4h14v4" />
+      <path d="M3 5v14a2 2 0 0 0 2 2h16v-5" />
+      <path d="M18 12a2 2 0 0 0 0 4h4v-4Z" />
+    </svg>
+  );
+}
+
+function BankIcon() {
+  return (
+    <svg
+      className="h-6 w-6 text-indigo-600"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden
+    >
+      <path d="M3 21h18" />
+      <path d="M3 10h18" />
+      <path d="M12 3l9 7H3l9-7z" />
+      <path d="M5 10v8" />
+      <path d="M9.5 10v8" />
+      <path d="M14.5 10v8" />
+      <path d="M19 10v8" />
+    </svg>
+  );
+}
+
+function BalanceHeroSkeleton() {
+  return (
+    <section className="flex animate-pulse flex-col gap-6 lg:flex-row lg:items-center">
+      <div className="flex-1">
+        <div className="h-3 w-36 rounded bg-surface-container" />
+        <div className="mt-3 h-12 w-56 rounded-lg bg-surface-container-high" />
+      </div>
+      <div className="w-full lg:w-72">
+        <div className="h-20 rounded-2xl bg-surface-container-low ring-1 ring-outline-variant/15" />
+      </div>
+    </section>
+  );
+}
 
 function ListSkeleton() {
   return (
@@ -53,6 +110,7 @@ export default function DashboardPage() {
 
   const { requests, total, limit, loading, error, pending_action_count, debouncedSearch } =
     useRequests({ tab, status, search, page });
+  const { wallet, bankAccount, loading: walletLoading } = useWallet();
 
   useEffect(() => {
     setPage(1);
@@ -82,6 +140,60 @@ export default function DashboardPage() {
           </Link>
         }
       />
+
+      {walletLoading ? (
+        <BalanceHeroSkeleton />
+      ) : wallet ? (
+        <section
+          className="flex flex-col gap-6 lg:flex-row lg:items-center"
+          aria-label="Account summary"
+        >
+          <div className="flex-1">
+            <p className="text-xs font-medium uppercase tracking-wider text-on-surface-variant">
+              Total Available Balance
+            </p>
+            <p className="mt-1 font-[family-name:var(--font-manrope)] text-3xl font-extrabold tracking-tighter text-indigo-700 sm:text-4xl">
+              {formatCents(wallet.balance_cents)}
+            </p>
+          </div>
+
+          {bankAccount ? (
+            <Link href="/wallet" className="block w-full transition-all hover:opacity-90 lg:w-72">
+              <div className="flex items-center gap-4 rounded-2xl bg-surface-container-low p-5 shadow-sm ring-1 ring-outline-variant/15 transition-colors hover:bg-surface-container-lowest">
+                <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-indigo-50">
+                  <BankIcon />
+                </div>
+                <div className="min-w-0">
+                  <p className="text-xs font-medium uppercase tracking-wider text-on-surface-variant">
+                    Primary Bank
+                  </p>
+                  <p className="truncate font-semibold text-on-surface">{bankAccount.bank_name}</p>
+                  <div className="mt-1 flex items-center gap-1.5">
+                    <span className="h-2 w-2 rounded-full bg-emerald-500" />
+                    <span className="text-[10px] font-semibold uppercase text-emerald-600">
+                      Connected
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </Link>
+          ) : (
+            <Link href="/wallet" className="block w-full transition-all hover:opacity-90 lg:w-72">
+              <div className="flex items-center gap-4 rounded-2xl bg-surface-container-low p-5 shadow-sm ring-1 ring-outline-variant/15 transition-colors hover:bg-surface-container-lowest">
+                <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-slate-100">
+                  <WalletIcon />
+                </div>
+                <div className="min-w-0">
+                  <p className="text-xs font-medium uppercase tracking-wider text-on-surface-variant">
+                    Bank Account
+                  </p>
+                  <p className="text-sm font-medium text-indigo-600">Connect a bank &rarr;</p>
+                </div>
+              </div>
+            </Link>
+          )}
+        </section>
+      ) : null}
 
       <div className="rounded-2xl bg-surface-container-low p-6 shadow-sm ring-1 ring-outline-variant/15">
         <div className="flex flex-col gap-6">
