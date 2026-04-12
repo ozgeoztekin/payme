@@ -12,6 +12,8 @@ Auto-generated from all feature plans. Last updated: 2026-04-13
 - TypeScript 5.x + Next.js 15 (App Router), React 19, Supabase (Auth + Postgres), Tailwind CSS 4, Zod (003-user-profile)
 - Supabase Postgres — existing `public.users` table with `phone text UNIQUE`, `email text UNIQUE`, `CHECK (email IS NOT NULL OR phone IS NOT NULL)`, and `status CHECK IN ('active', 'inactive')` (003-user-profile)
 - Supabase Postgres (hosted) — tables: `wallets`, `bank_accounts`, `payment_requests`, `payment_transactions`, `audit_logs` (004-currency-safe-money)
+- TypeScript 5.x + `@playwright/test ^1.59.1`, `dotenv` (006-parallel-e2e-tests)
+- Supabase Postgres (hosted) — `wallets`, `bank_accounts`, `payment_requests`, `users` (006-parallel-e2e-tests)
 
 - TypeScript 5.x + Next.js 15 (App Router), React 19, Supabase (Auth + Postgres), Tailwind CSS 4 (001-p2p-payment-requests)
 
@@ -31,9 +33,9 @@ npm test && npm run lint
 TypeScript 5.x: Follow standard conventions
 
 ## Recent Changes
+- 006-parallel-e2e-tests: Added TypeScript 5.x + `@playwright/test ^1.59.1`, `dotenv`
+- 006-parallel-e2e-tests: Added [if applicable, e.g., PostgreSQL, CoreData, files or N/A]
 - 005-ci-github-workflow: Added [if applicable, e.g., PostgreSQL, CoreData, files or N/A]
-- 004-currency-safe-money: Added TypeScript 5.x + Next.js 15 (App Router), React 19, Supabase (Auth + Postgres), Tailwind CSS 4, Zod
-- 003-user-profile: Added TypeScript 5.x + Next.js 15 (App Router), React 19, Supabase (Auth + Postgres), Tailwind CSS 4, Zod
 
 
 <!-- MANUAL ADDITIONS START -->

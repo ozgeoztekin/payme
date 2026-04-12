@@ -47,6 +47,8 @@ async function createRequestAndGetId(
 }
 
 test.describe('Pay with Bank Account (US2)', () => {
+  test.describe.configure({ mode: 'serial' });
+
   test('pays a pending request with bank account', async ({ page }) => {
     await signIn(page, ALICE_EMAIL);
     const requestId = await createRequestAndGetId(page, BOB_EMAIL, '15.00');

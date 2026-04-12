@@ -103,8 +103,17 @@ async function setExpiresAt(
   }
 }
 
+/** Dashboard is client-rendered; under parallel e2e load the dev server may be slow to respond. */
+async function openOutgoingOnDashboard(page: import('@playwright/test').Page) {
+  await page.goto('/dashboard', { waitUntil: 'load' });
+  await expect(page.getByRole('tablist', { name: 'Request direction' })).toBeVisible({
+    timeout: 45_000,
+  });
+  await page.getByRole('tab', { name: /outgoing/i }).click();
+}
+
 test.describe('Request Expiration (US9)', () => {
-  test.describe.configure({ mode: 'serial' });
+  test.describe.configure({ mode: 'serial', timeout: 90_000 });
 
   test('expired request blocks payment on detail page', async ({ page }) => {
     await signIn(page, ALICE_EMAIL);
@@ -135,9 +144,7 @@ test.describe('Request Expiration (US9)', () => {
     await expireRequest(page, requestId);
 
     await signIn(page, ALICE_EMAIL);
-    await page.goto('/dashboard');
-
-    await page.getByRole('tab', { name: /outgoing/i }).click();
+    await openOutgoingOnDashboard(page);
 
     const requestCard = page.locator(`a[href="/requests/${requestId}"]`);
     await expect(requestCard).toBeVisible({ timeout: 10000 });
@@ -173,9 +180,7 @@ test.describe('Request Expiration (US9)', () => {
     const nearExpiry = new Date(Date.now() + 12 * 60 * 60 * 1000).toISOString();
     await setExpiresAt(page, requestId, nearExpiry);
 
-    await page.goto('/dashboard');
-
-    await page.getByRole('tab', { name: /outgoing/i }).click();
+    await openOutgoingOnDashboard(page);
 
     const requestCard = page.locator(`a[href="/requests/${requestId}"]`);
     await expect(requestCard).toBeVisible({ timeout: 10000 });

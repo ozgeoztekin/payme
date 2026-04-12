@@ -7,10 +7,9 @@ dotenv.config({ path: path.resolve(__dirname, '.env.local') });
 export default defineConfig({
   testDir: './tests/e2e',
   globalSetup: './tests/e2e/global-setup.ts',
-  fullyParallel: true,
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 2 : 0,
-  workers: 1,
+  workers: process.env.CI ? 2 : 4,
   reporter: 'html',
   use: {
     baseURL: 'http://localhost:3000',
@@ -19,12 +18,33 @@ export default defineConfig({
   },
   projects: [
     {
-      name: 'chromium',
+      name: 'parallel',
+      fullyParallel: true,
+      testMatch: [
+        '**/dashboard-balance.spec.ts',
+        '**/dashboard-empty-state.spec.ts',
+        '**/create-request.spec.ts',
+        '**/decline-cancel.spec.ts',
+        '**/expiration.spec.ts',
+        '**/profile.spec.ts',
+        '**/public-payment.spec.ts',
+      ],
+      use: { ...devices['Desktop Chrome'] },
+    },
+    {
+      name: 'serial-financial',
+      fullyParallel: false,
+      testMatch: [
+        '**/pay-with-wallet.spec.ts',
+        '**/pay-with-bank.spec.ts',
+        '**/wallet-topup.spec.ts',
+      ],
       use: { ...devices['Desktop Chrome'] },
     },
   ],
+  // Webpack dev server avoids Turbopack RSC manifest races when many workers hit the app at once.
   webServer: {
-    command: 'npm run dev',
+    command: 'npm run dev:e2e',
     url: 'http://localhost:3000',
     reuseExistingServer: !process.env.CI,
   },

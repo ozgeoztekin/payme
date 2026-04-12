@@ -47,6 +47,8 @@ async function createRequestAndGetId(
 }
 
 test.describe('Pay with Wallet (US2)', () => {
+  test.describe.configure({ mode: 'serial' });
+
   test('pays a pending request with wallet', async ({ page }) => {
     await signIn(page, ALICE_EMAIL);
     const requestId = await createRequestAndGetId(page, BOB_EMAIL, '10.00');
