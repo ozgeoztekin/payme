@@ -6,6 +6,15 @@ on:
   pull_request:
     branches: [main]
 
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   lint:
     runs-on: ubuntu-latest
@@ -72,23 +81,34 @@ jobs:
             test-results/
           retention-days: 30
           if-no-files-found: ignore
-      - name: E2E report — view locally with show-report
+      - name: Upload Playwright report to Pages
+        if: ${{ !cancelled() }}
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: playwright-report/
+      - name: E2E report summary
         if: always()
         run: |
           cat >> "$GITHUB_STEP_SUMMARY" << 'EOF'
           ## E2E Playwright report
 
-          1. Open this job in the Actions UI and download the **`e2e-playwright-artifacts`** ZIP from **Artifacts**.
-          2. Extract the archive. You should see **`playwright-report/`** and **`test-results/`** (videos, traces) at the top level.
-          3. From the directory that contains `playwright-report`, run:
+          The report is deployed to **GitHub Pages** after the `deploy-report` job completes.
+
+          You can also download the **`e2e-playwright-artifacts`** ZIP from **Artifacts** and view locally:
 
           ```bash
           npx playwright show-report playwright-report
           ```
-
-          Traces and videos in `test-results/` are linked from the HTML report; keep both folders next to each other after extract.
-
-          ### Optional: host the report in a browser
-
-          You could publish `playwright-report/` to GitHub Pages or other static hosting for a shareable URL without a local server. Only do this if the exposure is acceptable: reports may include screenshots, URLs, or other data from the test run.
           EOF
+
+  deploy-report:
+    runs-on: ubuntu-latest
+    needs: [e2e-test]
+    if: ${{ !cancelled() }}
+    environment:
+      name: github-pages
+      url: ${{ steps.deploy.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deploy
+        uses: actions/deploy-pages@v4
