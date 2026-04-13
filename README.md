@@ -44,14 +44,13 @@ Full authentication is working — you can **sign up with your own account** usi
 For convenience, test users are also pre-seeded with wallet balances and connected bank accounts so you can explore the full payment flow right away:
 
 | User  | Email          | Password        |
-|-------|----------------|-----------------|
+| ----- | -------------- | --------------- |
 | Alice | alice@test.com | testpassword123 |
 | Bob   | bob@test.com   | testpassword123 |
 
 ---
 
 ## Features
-
 
 | Feature                     | Description                                                                          |
 | --------------------------- | ------------------------------------------------------------------------------------ |
@@ -69,13 +68,11 @@ For convenience, test users are also pre-seeded with wallet balances and connect
 | **Audit Logging**           | Every critical action logged with actor, action, target, timestamp, and outcome      |
 | **Responsive Design**       | Fully usable from 320px mobile through large desktop viewports                       |
 
-
 ---
 
 ## Tech Stack & AI Tools Used
 
 ### Tech Stack
-
 
 | Layer               | Technology                                                                     |
 | ------------------- | ------------------------------------------------------------------------------ |
@@ -91,17 +88,14 @@ For convenience, test users are also pre-seeded with wallet balances and connect
 | **Linting**         | ESLint 9 + Prettier                                                            |
 | **Package Manager** | npm                                                                            |
 
-
 ### AI Tools
 
-
-| Tool                                               | Role                                                                                                        |
-| -------------------------------------------------- | ----------------------------------------------------------------------------------------------------------- |
-| **[Cursor](https://cursor.com/)**                  | Primary AI coding tool — used for spec writing, implementation, debugging, and test authoring               |
-| **[GitHub Spec-Kit](https://github.com/spec-kit)** | Spec-driven workflow — generated specs, plans, task breakdowns, API contracts, checklists, and constitution |
-| **[ChatGPT](https://chatgpt.com/)**                | Research, brainstorming, and problem-solving assistant throughout development                                |
-| **[Google Stitch](https://stitch.withgoogle.com/)** | Design reference — used for UI/UX inspiration and visual design direction                                  |
-
+| Tool                                                | Role                                                                                                        |
+| --------------------------------------------------- | ----------------------------------------------------------------------------------------------------------- |
+| **[Cursor](https://cursor.com/)**                   | Primary AI coding tool — used for spec writing, implementation, debugging, and test authoring               |
+| **[GitHub Spec-Kit](https://github.com/spec-kit)**  | Spec-driven workflow — generated specs, plans, task breakdowns, API contracts, checklists, and constitution |
+| **[ChatGPT](https://chatgpt.com/)**                 | Research, brainstorming, and problem-solving assistant throughout development                               |
+| **[Google Stitch](https://stitch.withgoogle.com/)** | Design reference — used for UI/UX inspiration and visual design direction                                   |
 
 Cursor was used throughout the entire development lifecycle: writing the initial spec, generating implementation plans, breaking down tasks, implementing features, writing tests, and iterating on feedback. All AI-generated code was reviewed against the project constitution before acceptance.
 
@@ -204,7 +198,6 @@ This project follows the **GitHub Spec-Kit** methodology. All features were spec
 
 The project constitution defines 8 core principles that govern all development:
 
-
 | #    | Principle                     | Summary                                                                             |
 | ---- | ----------------------------- | ----------------------------------------------------------------------------------- |
 | I    | Financial Integrity           | Integer minor units only, no floating-point money, internal consistency             |
@@ -216,13 +209,11 @@ The project constitution defines 8 core principles that govern all development:
 | VII  | Simplicity & Maintainability  | Simplest correct architecture, no speculative abstractions                          |
 | VIII | Documentation & AI Discipline | Specs are source of truth, AI output reviewed against constitution                  |
 
-
 **File**: `[.specify/memory/constitution.md](.specify/memory/constitution.md)`
 
 ### Feature Specifications
 
 Each feature goes through a structured lifecycle: **Spec → Clarification → Plan → Tasks → Implementation → Checklist**.
-
 
 | #   | Feature              | Spec                                           | Plan                                           | Tasks                                            | Data Model                                                 | API Contract                                                         | Checklist                                                              |
 | --- | -------------------- | ---------------------------------------------- | ---------------------------------------------- | ------------------------------------------------ | ---------------------------------------------------------- | -------------------------------------------------------------------- | ---------------------------------------------------------------------- |
@@ -233,7 +224,6 @@ Each feature goes through a structured lifecycle: **Spec → Clarification → P
 | 005 | CI/GitHub Workflow   | [spec](specs/005-ci-github-workflow/spec.md)   | [plan](specs/005-ci-github-workflow/plan.md)   | [tasks](specs/005-ci-github-workflow/tasks.md)   | [data-model](specs/005-ci-github-workflow/data-model.md)   | [ci-workflow](specs/005-ci-github-workflow/contracts/ci-workflow.md) | —                                                                      |
 | 006 | Parallel E2E Tests   | [spec](specs/006-parallel-e2e-tests/spec.md)   | [plan](specs/006-parallel-e2e-tests/plan.md)   | [tasks](specs/006-parallel-e2e-tests/tasks.md)   | [data-model](specs/006-parallel-e2e-tests/data-model.md)   | —                                                                    | —                                                                      |
 | 007 | Unit Test Coverage   | —                                              | [plan](specs/007-unit-test-coverage/plan.md)   | [tasks](specs/007-unit-test-coverage/tasks.md)   | —                                                          | —                                                                    | —                                                                      |
-
 
 ---
 
@@ -309,15 +299,12 @@ The E2E test suite uses **Playwright** with **automated video recording** enable
 
 Tests are split into two Playwright projects to balance speed and correctness:
 
-
 | Project              | Tests                                                                          | Parallelism       | Why                                                                           |
 | -------------------- | ------------------------------------------------------------------------------ | ----------------- | ----------------------------------------------------------------------------- |
 | **parallel**         | Dashboard, create request, decline/cancel, expiration, profile, public payment | Fully parallel    | Read-heavy or isolated mutations — safe to run concurrently                   |
 | **serial-financial** | Pay with wallet, pay with bank, wallet top-up                                  | Serial (1 worker) | Balance-dependent assertions — must run sequentially to avoid race conditions |
 
-
 ### E2E Test Files
-
 
 | Test File                       | Coverage                                                                 |
 | ------------------------------- | ------------------------------------------------------------------------ |
@@ -331,7 +318,6 @@ Tests are split into two Playwright projects to balance speed and correctness:
 | `dashboard-balance.spec.ts`     | Dashboard wallet balance display, bank account card                      |
 | `dashboard-empty-state.spec.ts` | Empty state rendering for incoming/outgoing tabs                         |
 | `profile.spec.ts`               | Display name, email, and phone profile management                        |
-
 
 ### GitHub Actions workflow
 
@@ -396,7 +382,6 @@ The same unit test and lint steps run in CI on every push/PR to `main`; see [Git
 
 ## Key Design Decisions
 
-
 | Decision                          | Rationale                                                                                                                                                                                                        |
 | --------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | **Integer minor units for money** | Eliminates floating-point rounding errors. All amounts stored as `bigint` cents (e.g., $25.00 = 2500). Formatting happens only at the presentation layer.                                                        |
@@ -408,7 +393,6 @@ The same unit test and lint steps run in CI on every push/PR to `main`; see [Git
 | **Guest payment flow**            | Public shareable links allow non-users to pay via inline bank connection, extending the product's reach beyond registered users.                                                                                 |
 | **IP-based rate limiting**        | Guest endpoints are rate-limited to prevent abuse on unauthenticated flows.                                                                                                                                      |
 | **Comprehensive audit logging**   | Every critical action (create, pay, decline, cancel, top-up, bank connect) generates a structured audit log entry with actor, action, target, timestamp, and outcome.                                            |
-
 
 ---
 

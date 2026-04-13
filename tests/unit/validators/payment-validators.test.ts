@@ -35,8 +35,9 @@ describe('payRequestSchema', () => {
     });
 
     it('rejects missing requestId', () => {
-      const { requestId: _requestId, ...noId } = validWalletInput;
-      const result = payRequestSchema.safeParse(noId);
+      const result = payRequestSchema.safeParse({
+        fundingSource: validWalletInput.fundingSource,
+      });
       expect(result.success).toBe(false);
     });
   });
@@ -61,8 +62,9 @@ describe('payRequestSchema', () => {
     });
 
     it('rejects missing fundingSource', () => {
-      const { fundingSource: _fundingSource, ...noSource } = validWalletInput;
-      const result = payRequestSchema.safeParse(noSource);
+      const result = payRequestSchema.safeParse({
+        requestId: validWalletInput.requestId,
+      });
       expect(result.success).toBe(false);
     });
   });

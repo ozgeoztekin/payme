@@ -140,8 +140,12 @@ describe('createRequestSchema', () => {
     });
 
     it('accepts undefined note', () => {
-      const { note: _note, ...noNote } = validEmailInput;
-      const result = createRequestSchema.safeParse(noNote);
+      const result = createRequestSchema.safeParse({
+        recipientType: validEmailInput.recipientType,
+        recipientValue: validEmailInput.recipientValue,
+        amountMinor: validEmailInput.amountMinor,
+        currency: validEmailInput.currency,
+      });
       expect(result.success).toBe(true);
     });
 
