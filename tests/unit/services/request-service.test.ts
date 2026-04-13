@@ -163,5 +163,330 @@ describe('request-service', () => {
 
       expect(result.success).toBe(false);
     });
+
+    it('returns error when insert returns no data (null) without explicit error', async () => {
+      const { supabaseAdmin } = await import('@/lib/db/client');
+
+      const mockFrom = vi.fn().mockReturnValue({
+        insert: vi.fn().mockReturnValue({
+          select: vi.fn().mockReturnValue({
+            single: vi.fn().mockResolvedValue({ data: null, error: null }),
+          }),
+        }),
+      });
+      vi.mocked(supabaseAdmin).from = mockFrom;
+
+      const { createRequest } = await import('@/lib/services/request-service');
+      const result = await createRequest({
+        requesterId: 'user-1',
+        recipientType: 'email',
+        recipientValue: 'bob@test.com',
+        amountMinor: 5000,
+        currency: 'USD',
+      });
+
+      expect(result.success).toBe(false);
+      if (!result.success) {
+        expect(result.error.code).toBe('CREATE_FAILED');
+      }
+    });
+  });
+
+  describe('declineRequest', () => {
+    it('successfully declines a pending request', async () => {
+      const { supabaseAdmin } = await import('@/lib/db/client');
+
+      const now = new Date().toISOString();
+      const mockFrom = vi.fn().mockImplementation((table: string) => {
+        if (table === 'payment_requests_view') {
+          return {
+            select: vi.fn().mockReturnValue({
+              eq: vi.fn().mockReturnValue({
+                single: vi.fn().mockResolvedValue({
+                  data: {
+                    id: 'req-d1',
+                    requester_id: 'user-a',
+                    status: 'pending',
+                    effective_status: 'pending',
+                    expires_at: new Date(Date.now() + 86_400_000).toISOString(),
+                  },
+                  error: null,
+                }),
+              }),
+            }),
+          };
+        }
+        if (table === 'payment_requests') {
+          return {
+            update: vi.fn().mockReturnValue({
+              eq: vi.fn().mockReturnValue({
+                eq: vi.fn().mockReturnValue({
+                  gt: vi.fn().mockReturnValue({
+                    select: vi.fn().mockReturnValue({
+                      single: vi.fn().mockResolvedValue({
+                        data: { id: 'req-d1', status: 'declined', resolved_at: now },
+                        error: null,
+                      }),
+                    }),
+                  }),
+                }),
+              }),
+            }),
+          };
+        }
+        return { insert: vi.fn().mockResolvedValue({ error: null }) };
+      });
+      vi.mocked(supabaseAdmin).from = mockFrom;
+
+      const { declineRequest } = await import('@/lib/services/request-service');
+      const result = await declineRequest('req-d1', 'user-b');
+
+      expect(result.success).toBe(true);
+      if (result.success) {
+        expect(result.data.request.status).toBe('declined');
+      }
+    });
+
+    it('returns REQUEST_NOT_FOUND when request does not exist', async () => {
+      const { supabaseAdmin } = await import('@/lib/db/client');
+
+      const mockFrom = vi.fn().mockImplementation((table: string) => {
+        if (table === 'payment_requests_view') {
+          return {
+            select: vi.fn().mockReturnValue({
+              eq: vi.fn().mockReturnValue({
+                single: vi.fn().mockResolvedValue({ data: null, error: { message: 'not found' } }),
+              }),
+            }),
+          };
+        }
+        return {};
+      });
+      vi.mocked(supabaseAdmin).from = mockFrom;
+
+      const { declineRequest } = await import('@/lib/services/request-service');
+      const result = await declineRequest('nonexistent', 'user-b');
+
+      expect(result.success).toBe(false);
+      if (!result.success) {
+        expect(result.error.code).toBe('REQUEST_NOT_FOUND');
+      }
+    });
+
+    it('returns UPDATE_FAILED when update returns no data', async () => {
+      const { supabaseAdmin } = await import('@/lib/db/client');
+
+      const mockFrom = vi.fn().mockImplementation((table: string) => {
+        if (table === 'payment_requests_view') {
+          return {
+            select: vi.fn().mockReturnValue({
+              eq: vi.fn().mockReturnValue({
+                single: vi.fn().mockResolvedValue({
+                  data: {
+                    id: 'req-d2',
+                    status: 'pending',
+                    effective_status: 'pending',
+                    expires_at: new Date(Date.now() + 86_400_000).toISOString(),
+                  },
+                  error: null,
+                }),
+              }),
+            }),
+          };
+        }
+        if (table === 'payment_requests') {
+          return {
+            update: vi.fn().mockReturnValue({
+              eq: vi.fn().mockReturnValue({
+                eq: vi.fn().mockReturnValue({
+                  gt: vi.fn().mockReturnValue({
+                    select: vi.fn().mockReturnValue({
+                      single: vi.fn().mockResolvedValue({ data: null, error: { message: 'race' } }),
+                    }),
+                  }),
+                }),
+              }),
+            }),
+          };
+        }
+        return {};
+      });
+      vi.mocked(supabaseAdmin).from = mockFrom;
+
+      const { declineRequest } = await import('@/lib/services/request-service');
+      const result = await declineRequest('req-d2', 'user-b');
+
+      expect(result.success).toBe(false);
+      if (!result.success) {
+        expect(result.error.code).toBe('UPDATE_FAILED');
+      }
+    });
+  });
+
+  describe('cancelRequest', () => {
+    it('successfully cancels own pending request', async () => {
+      const { supabaseAdmin } = await import('@/lib/db/client');
+
+      const now = new Date().toISOString();
+      const mockFrom = vi.fn().mockImplementation((table: string) => {
+        if (table === 'payment_requests_view') {
+          return {
+            select: vi.fn().mockReturnValue({
+              eq: vi.fn().mockReturnValue({
+                single: vi.fn().mockResolvedValue({
+                  data: {
+                    id: 'req-c1',
+                    requester_id: 'user-a',
+                    status: 'pending',
+                    effective_status: 'pending',
+                    expires_at: new Date(Date.now() + 86_400_000).toISOString(),
+                  },
+                  error: null,
+                }),
+              }),
+            }),
+          };
+        }
+        if (table === 'payment_requests') {
+          return {
+            update: vi.fn().mockReturnValue({
+              eq: vi.fn().mockReturnValue({
+                eq: vi.fn().mockReturnValue({
+                  gt: vi.fn().mockReturnValue({
+                    select: vi.fn().mockReturnValue({
+                      single: vi.fn().mockResolvedValue({
+                        data: { id: 'req-c1', status: 'canceled', resolved_at: now },
+                        error: null,
+                      }),
+                    }),
+                  }),
+                }),
+              }),
+            }),
+          };
+        }
+        return { insert: vi.fn().mockResolvedValue({ error: null }) };
+      });
+      vi.mocked(supabaseAdmin).from = mockFrom;
+
+      const { cancelRequest } = await import('@/lib/services/request-service');
+      const result = await cancelRequest('req-c1', 'user-a');
+
+      expect(result.success).toBe(true);
+      if (result.success) {
+        expect(result.data.request.status).toBe('canceled');
+      }
+    });
+
+    it('rejects cancel by non-requester', async () => {
+      const { supabaseAdmin } = await import('@/lib/db/client');
+
+      const mockFrom = vi.fn().mockImplementation((table: string) => {
+        if (table === 'payment_requests_view') {
+          return {
+            select: vi.fn().mockReturnValue({
+              eq: vi.fn().mockReturnValue({
+                single: vi.fn().mockResolvedValue({
+                  data: {
+                    id: 'req-c2',
+                    requester_id: 'user-a',
+                    status: 'pending',
+                    effective_status: 'pending',
+                    expires_at: new Date(Date.now() + 86_400_000).toISOString(),
+                  },
+                  error: null,
+                }),
+              }),
+            }),
+          };
+        }
+        return {};
+      });
+      vi.mocked(supabaseAdmin).from = mockFrom;
+
+      const { cancelRequest } = await import('@/lib/services/request-service');
+      const result = await cancelRequest('req-c2', 'user-b');
+
+      expect(result.success).toBe(false);
+      if (!result.success) {
+        expect(result.error.code).toBe('NOT_REQUESTER');
+      }
+    });
+
+    it('returns REQUEST_NOT_FOUND when request does not exist', async () => {
+      const { supabaseAdmin } = await import('@/lib/db/client');
+
+      const mockFrom = vi.fn().mockImplementation((table: string) => {
+        if (table === 'payment_requests_view') {
+          return {
+            select: vi.fn().mockReturnValue({
+              eq: vi.fn().mockReturnValue({
+                single: vi.fn().mockResolvedValue({ data: null, error: { message: 'not found' } }),
+              }),
+            }),
+          };
+        }
+        return {};
+      });
+      vi.mocked(supabaseAdmin).from = mockFrom;
+
+      const { cancelRequest } = await import('@/lib/services/request-service');
+      const result = await cancelRequest('nonexistent', 'user-a');
+
+      expect(result.success).toBe(false);
+      if (!result.success) {
+        expect(result.error.code).toBe('REQUEST_NOT_FOUND');
+      }
+    });
+
+    it('returns UPDATE_FAILED when cancel update returns no data', async () => {
+      const { supabaseAdmin } = await import('@/lib/db/client');
+
+      const mockFrom = vi.fn().mockImplementation((table: string) => {
+        if (table === 'payment_requests_view') {
+          return {
+            select: vi.fn().mockReturnValue({
+              eq: vi.fn().mockReturnValue({
+                single: vi.fn().mockResolvedValue({
+                  data: {
+                    id: 'req-c3',
+                    requester_id: 'user-a',
+                    status: 'pending',
+                    effective_status: 'pending',
+                    expires_at: new Date(Date.now() + 86_400_000).toISOString(),
+                  },
+                  error: null,
+                }),
+              }),
+            }),
+          };
+        }
+        if (table === 'payment_requests') {
+          return {
+            update: vi.fn().mockReturnValue({
+              eq: vi.fn().mockReturnValue({
+                eq: vi.fn().mockReturnValue({
+                  gt: vi.fn().mockReturnValue({
+                    select: vi.fn().mockReturnValue({
+                      single: vi.fn().mockResolvedValue({ data: null, error: null }),
+                    }),
+                  }),
+                }),
+              }),
+            }),
+          };
+        }
+        return {};
+      });
+      vi.mocked(supabaseAdmin).from = mockFrom;
+
+      const { cancelRequest } = await import('@/lib/services/request-service');
+      const result = await cancelRequest('req-c3', 'user-a');
+
+      expect(result.success).toBe(false);
+      if (!result.success) {
+        expect(result.error.code).toBe('UPDATE_FAILED');
+      }
+    });
   });
 });

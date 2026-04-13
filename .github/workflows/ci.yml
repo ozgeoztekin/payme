@@ -36,7 +36,37 @@ jobs:
           node-version: '20'
           cache: npm
       - run: npm ci
-      - run: npm test
+      - run: npm run test:coverage
+      - name: Upload coverage report
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: unit-test-coverage
+          path: coverage/
+          retention-days: 30
+          if-no-files-found: ignore
+      - name: Coverage summary
+        if: always()
+        run: |
+          if [ -f coverage/coverage-summary.json ]; then
+            STATEMENTS=$(jq '.total.statements.pct' coverage/coverage-summary.json)
+            BRANCHES=$(jq '.total.branches.pct' coverage/coverage-summary.json)
+            FUNCTIONS=$(jq '.total.functions.pct' coverage/coverage-summary.json)
+            LINES=$(jq '.total.lines.pct' coverage/coverage-summary.json)
+            cat >> "$GITHUB_STEP_SUMMARY" << EOF
+          ## Unit Test Coverage
+
+          | Metric     | Coverage |
+          |------------|----------|
+          | Statements | ${STATEMENTS}% |
+          | Branches   | ${BRANCHES}% |
+          | Functions  | ${FUNCTIONS}% |
+          | Lines      | ${LINES}% |
+          EOF
+          else
+            echo "## Unit Test Coverage" >> "$GITHUB_STEP_SUMMARY"
+            echo "Coverage summary not available." >> "$GITHUB_STEP_SUMMARY"
+          fi
 
   build:
     runs-on: ubuntu-latest

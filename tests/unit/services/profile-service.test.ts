@@ -171,5 +171,106 @@ describe('profile-service', () => {
         expect(result.error.code).toBe('NOT_FOUND');
       }
     });
+
+    it('returns PHONE_ALREADY_SET when update returns no data and no unique error', async () => {
+      mockSingle.mockResolvedValueOnce({ data: activeUserNoPhone, error: null });
+      mockUpdateSingle.mockResolvedValueOnce({ data: null, error: null });
+
+      const { addPhoneNumber } = await import('@/lib/services/profile-service');
+      const result = await addPhoneNumber('user-2', '+19998887777');
+
+      expect(result.success).toBe(false);
+      if (!result.success) {
+        expect(result.error.code).toBe('PHONE_ALREADY_SET');
+      }
+    });
+
+    it('returns INTERNAL_ERROR for non-unique db error with no data', async () => {
+      mockSingle.mockResolvedValueOnce({ data: activeUserNoPhone, error: null });
+      mockUpdateSingle.mockResolvedValueOnce({
+        data: null,
+        error: { message: 'connection timeout', code: '57014' },
+      });
+
+      const { addPhoneNumber } = await import('@/lib/services/profile-service');
+      const result = await addPhoneNumber('user-2', '+19998887777');
+
+      expect(result.success).toBe(false);
+      if (!result.success) {
+        expect(result.error.code).toBe('INTERNAL_ERROR');
+      }
+    });
+  });
+
+  describe('ensureProfile', () => {
+    const mockUpsert = vi.fn().mockResolvedValue({ error: null });
+
+    beforeEach(() => {
+      mockFrom.mockImplementation(() => ({
+        select: mockSelect,
+        upsert: mockUpsert,
+      }));
+      mockSelect.mockReturnValue({ eq: mockEq });
+      mockEq.mockReturnValue({ single: mockSingle });
+    });
+
+    it('does nothing when profile already exists', async () => {
+      mockSingle.mockResolvedValueOnce({ data: { id: 'user-1' }, error: null });
+
+      const { ensureProfile } = await import('@/lib/services/profile-service');
+      await ensureProfile({
+        id: 'user-1',
+        email: 'test@test.com',
+        user_metadata: {},
+      } as Parameters<typeof ensureProfile>[0]);
+
+      expect(mockUpsert).not.toHaveBeenCalled();
+    });
+
+    it('creates profile and wallet when user does not exist', async () => {
+      mockSingle.mockResolvedValueOnce({ data: null, error: null });
+
+      const { ensureProfile } = await import('@/lib/services/profile-service');
+      await ensureProfile({
+        id: 'user-new',
+        email: 'new@test.com',
+        phone: '+15551234567',
+        user_metadata: { display_name: 'New User' },
+      } as Parameters<typeof ensureProfile>[0]);
+
+      expect(mockUpsert).toHaveBeenCalledTimes(2);
+    });
+
+    it('uses email username as display name fallback', async () => {
+      mockSingle.mockResolvedValueOnce({ data: null, error: null });
+
+      const { ensureProfile } = await import('@/lib/services/profile-service');
+      await ensureProfile({
+        id: 'user-email',
+        email: 'alice@example.com',
+        user_metadata: {},
+      } as Parameters<typeof ensureProfile>[0]);
+
+      expect(mockUpsert).toHaveBeenCalledWith(
+        expect.objectContaining({ display_name: 'alice' }),
+        expect.anything(),
+      );
+    });
+
+    it('falls back to "User" when no email or display_name', async () => {
+      mockSingle.mockResolvedValueOnce({ data: null, error: null });
+
+      const { ensureProfile } = await import('@/lib/services/profile-service');
+      await ensureProfile({
+        id: 'user-noemail',
+        email: undefined,
+        user_metadata: {},
+      } as Parameters<typeof ensureProfile>[0]);
+
+      expect(mockUpsert).toHaveBeenCalledWith(
+        expect.objectContaining({ display_name: 'User' }),
+        expect.anything(),
+      );
+    });
   });
 });
