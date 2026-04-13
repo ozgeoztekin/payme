@@ -10,7 +10,7 @@
     "test": "vitest run",
     "test:coverage": "vitest run --coverage",
     "test:watch": "vitest",
-    "test:e2e": "playwright test --project=parallel && playwright test --project=serial-financial --workers=1",
+    "test:e2e": "bash scripts/run-e2e.sh",
     "test:e2e:parallel": "playwright test --project=parallel",
     "test:e2e:serial": "playwright test --project=serial-financial --workers=1",
     "reset:e2e-data": "node scripts/reset-e2e-data.mjs",
