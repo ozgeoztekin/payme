@@ -1,16 +1,11 @@
 import { test, expect } from '@playwright/test';
+import { signInAs } from './auth-helpers';
 
 const ALICE_EMAIL = 'alice@test.com';
 const BOB_EMAIL = 'bob@test.com';
-const TEST_PASSWORD = 'testpassword123';
 
 async function signIn(page: import('@playwright/test').Page, email: string) {
-  await page.context().clearCookies();
-  await page.goto('/login');
-  await page.getByLabel(/email/i).fill(email);
-  await page.getByLabel(/password/i).fill(TEST_PASSWORD);
-  await page.getByRole('button', { name: /sign in|log in/i }).click();
-  await page.waitForURL(/\/dashboard/);
+  await signInAs(page, email, { clearCookiesFirst: true });
 }
 
 interface RequestInfo {
@@ -30,15 +25,19 @@ async function createRequestAndGetInfo(
   await page.getByRole('button', { name: /request funds/i }).click();
   await expect(page.getByText('Request Sent!')).toBeVisible({ timeout: 10000 });
 
-  const linkElement = page.getByText(/\/pay\//);
-  const linkText = await linkElement.textContent();
-  const shareToken = linkText!.split('/pay/')[1]?.trim() ?? '';
+  const linkDiv = page.locator('div.select-all').filter({ hasText: /\/pay\// });
+  await expect(linkDiv).toBeVisible({ timeout: 5000 });
+  const linkText = await linkDiv.textContent();
+  const shareToken = linkText?.split('/pay/')[1]?.trim() ?? '';
+  if (!shareToken) {
+    throw new Error(`Could not parse share token from success URL: ${linkText ?? ''}`);
+  }
 
   const sbUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
   const sbKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
 
   const res = await page.request.get(
-    `${sbUrl}/rest/v1/payment_requests?share_token=eq.${shareToken}&select=id`,
+    `${sbUrl}/rest/v1/payment_requests?share_token=eq.${encodeURIComponent(shareToken)}&select=id`,
     {
       headers: {
         apikey: sbKey,
@@ -46,8 +45,14 @@ async function createRequestAndGetInfo(
       },
     },
   );
-  const requests = await res.json();
-  return { id: requests[0].id, shareToken };
+  const requests = (await res.json()) as { id: string }[];
+  const id = requests?.[0]?.id;
+  if (!id) {
+    throw new Error(
+      `No payment_requests row for share_token (status ${res.status()}): ${JSON.stringify(requests)}`,
+    );
+  }
+  return { id, shareToken };
 }
 
 async function expireRequest(

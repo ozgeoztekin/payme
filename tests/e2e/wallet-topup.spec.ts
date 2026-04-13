@@ -1,4 +1,5 @@
 import { test, expect } from '@playwright/test';
+import { getPublicUserIdByEmail } from './supabase-test-helpers';
 
 const ALICE_EMAIL = 'alice@test.com';
 const TEST_PASSWORD = 'testpassword123';
@@ -59,7 +60,7 @@ test.describe('Wallet Top-Up (US6)', () => {
   test('shows guidance when no bank account is connected', async ({ page }) => {
     const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
     const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
-    const aliceId = '11111111-1111-1111-1111-111111111111';
+    const aliceId = await getPublicUserIdByEmail(page.request, ALICE_EMAIL);
 
     await signIn(page, ALICE_EMAIL);
 

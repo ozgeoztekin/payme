@@ -2,7 +2,6 @@ import { test, expect } from '@playwright/test';
 
 const ALICE_EMAIL = 'alice@test.com';
 const TEST_PASSWORD = 'testpassword123';
-const ALICE_ID = '11111111-1111-1111-1111-111111111111';
 
 async function signIn(page: import('@playwright/test').Page) {
   await page.goto('/login');
@@ -16,15 +15,18 @@ async function setAlicePhone(page: import('@playwright/test').Page, phone: strin
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
   const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
 
-  await page.request.patch(`${supabaseUrl}/rest/v1/users?id=eq.${ALICE_ID}`, {
-    headers: {
-      apikey: serviceKey,
-      Authorization: `Bearer ${serviceKey}`,
-      'Content-Type': 'application/json',
-      Prefer: 'return=minimal',
+  await page.request.patch(
+    `${supabaseUrl}/rest/v1/users?email=eq.${encodeURIComponent(ALICE_EMAIL)}`,
+    {
+      headers: {
+        apikey: serviceKey,
+        Authorization: `Bearer ${serviceKey}`,
+        'Content-Type': 'application/json',
+        Prefer: 'return=minimal',
+      },
+      data: { phone },
     },
-    data: { phone },
-  });
+  );
 }
 
 test.describe('Profile (US1–US4)', () => {

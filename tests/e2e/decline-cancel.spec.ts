@@ -1,16 +1,8 @@
 import { test, expect } from '@playwright/test';
+import { signInAs } from './auth-helpers';
 
 const ALICE_EMAIL = 'alice@test.com';
 const BOB_EMAIL = 'bob@test.com';
-const TEST_PASSWORD = 'testpassword123';
-
-async function signIn(page: import('@playwright/test').Page, email: string) {
-  await page.goto('/login');
-  await page.getByLabel(/email/i).fill(email);
-  await page.getByLabel(/password/i).fill(TEST_PASSWORD);
-  await page.getByRole('button', { name: /sign in|log in/i }).click();
-  await page.waitForURL(/\/dashboard/);
-}
 
 async function createRequestAndGetId(
   page: import('@playwright/test').Page,
@@ -24,9 +16,13 @@ async function createRequestAndGetId(
   await page.getByRole('button', { name: /request funds/i }).click();
   await expect(page.getByText('Request Sent!')).toBeVisible({ timeout: 10000 });
 
-  const linkElement = page.getByText(/\/pay\//);
-  const linkText = await linkElement.textContent();
-  const shareToken = linkText!.split('/pay/')[1]?.trim();
+  const linkDiv = page.locator('div.select-all').filter({ hasText: /\/pay\// });
+  await expect(linkDiv).toBeVisible({ timeout: 5000 });
+  const linkText = await linkDiv.textContent();
+  const shareToken = linkText?.split('/pay/')[1]?.trim();
+  if (!shareToken) {
+    throw new Error(`Could not parse share token from success URL: ${linkText ?? ''}`);
+  }
 
   await page.context().clearCookies();
 
@@ -34,7 +30,7 @@ async function createRequestAndGetId(
   const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
 
   const res = await page.request.get(
-    `${supabaseUrl}/rest/v1/payment_requests?share_token=eq.${shareToken}&select=id`,
+    `${supabaseUrl}/rest/v1/payment_requests?share_token=eq.${encodeURIComponent(shareToken)}&select=id`,
     {
       headers: {
         apikey: serviceKey,
@@ -42,18 +38,24 @@ async function createRequestAndGetId(
       },
     },
   );
-  const requests = await res.json();
-  return requests[0].id;
+  const requests = (await res.json()) as { id: string }[];
+  const id = requests?.[0]?.id;
+  if (!id) {
+    throw new Error(
+      `No payment_requests row for share_token (status ${res.status()}): ${JSON.stringify(requests)}`,
+    );
+  }
+  return id;
 }
 
 test.describe('Decline and Cancel Requests (US8)', () => {
   test.describe.configure({ mode: 'serial' });
 
   test('recipient declines a pending request', async ({ page }) => {
-    await signIn(page, ALICE_EMAIL);
+    await signInAs(page, ALICE_EMAIL);
     const requestId = await createRequestAndGetId(page, BOB_EMAIL, '20.00');
 
-    await signIn(page, BOB_EMAIL);
+    await signInAs(page, BOB_EMAIL);
     await page.goto(`/requests/${requestId}`);
 
     await expect(page.getByRole('heading', { level: 1, name: '$20.00' })).toBeVisible({
@@ -76,10 +78,10 @@ test.describe('Decline and Cancel Requests (US8)', () => {
   });
 
   test('requester cancels their own pending request', async ({ page }) => {
-    await signIn(page, ALICE_EMAIL);
+    await signInAs(page, ALICE_EMAIL);
     const requestId = await createRequestAndGetId(page, BOB_EMAIL, '30.00');
 
-    await signIn(page, ALICE_EMAIL);
+    await signInAs(page, ALICE_EMAIL);
     await page.goto(`/requests/${requestId}`);
 
     await expect(page.getByRole('heading', { level: 1, name: '$30.00' })).toBeVisible({
@@ -101,10 +103,10 @@ test.describe('Decline and Cancel Requests (US8)', () => {
   });
 
   test('requester cannot decline their own request', async ({ page }) => {
-    await signIn(page, ALICE_EMAIL);
+    await signInAs(page, ALICE_EMAIL);
     const requestId = await createRequestAndGetId(page, BOB_EMAIL, '12.00');
 
-    await signIn(page, ALICE_EMAIL);
+    await signInAs(page, ALICE_EMAIL);
     await page.goto(`/requests/${requestId}`);
 
     await expect(page.getByRole('heading', { level: 1, name: '$12.00' })).toBeVisible({
@@ -116,10 +118,10 @@ test.describe('Decline and Cancel Requests (US8)', () => {
   });
 
   test('recipient cannot cancel a request they received', async ({ page }) => {
-    await signIn(page, ALICE_EMAIL);
+    await signInAs(page, ALICE_EMAIL);
     const requestId = await createRequestAndGetId(page, BOB_EMAIL, '18.00');
 
-    await signIn(page, BOB_EMAIL);
+    await signInAs(page, BOB_EMAIL);
     await page.goto(`/requests/${requestId}`);
 
     await expect(page.getByRole('heading', { level: 1, name: '$18.00' })).toBeVisible({
@@ -131,11 +133,11 @@ test.describe('Decline and Cancel Requests (US8)', () => {
   });
 
   test('cannot decline an already-declined request', async ({ page }) => {
-    await signIn(page, ALICE_EMAIL);
+    await signInAs(page, ALICE_EMAIL);
     const requestId = await createRequestAndGetId(page, BOB_EMAIL, '8.00');
 
     // Bob declines the request
-    await signIn(page, BOB_EMAIL);
+    await signInAs(page, BOB_EMAIL);
     await page.goto(`/requests/${requestId}`);
     await expect(page.getByRole('heading', { level: 1, name: '$8.00' })).toBeVisible({
       timeout: 10000,
@@ -163,11 +165,11 @@ test.describe('Decline and Cancel Requests (US8)', () => {
   });
 
   test('cannot cancel an already-canceled request', async ({ page }) => {
-    await signIn(page, ALICE_EMAIL);
+    await signInAs(page, ALICE_EMAIL);
     const requestId = await createRequestAndGetId(page, BOB_EMAIL, '7.00');
 
     // Alice cancels her own request
-    await signIn(page, ALICE_EMAIL);
+    await signInAs(page, ALICE_EMAIL);
     await page.goto(`/requests/${requestId}`);
     await expect(page.getByRole('heading', { level: 1, name: '$7.00' })).toBeVisible({
       timeout: 10000,
@@ -193,10 +195,10 @@ test.describe('Decline and Cancel Requests (US8)', () => {
   });
 
   test('decline confirmation modal can be dismissed', async ({ page }) => {
-    await signIn(page, ALICE_EMAIL);
+    await signInAs(page, ALICE_EMAIL);
     const requestId = await createRequestAndGetId(page, BOB_EMAIL, '14.00');
 
-    await signIn(page, BOB_EMAIL);
+    await signInAs(page, BOB_EMAIL);
     await page.goto(`/requests/${requestId}`);
     await expect(page.getByRole('heading', { level: 1, name: '$14.00' })).toBeVisible({
       timeout: 10000,

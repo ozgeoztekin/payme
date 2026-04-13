@@ -4,13 +4,11 @@ const ALICE_EMAIL = 'alice@test.com';
 const BOB_EMAIL = 'bob@test.com';
 const TEST_PASSWORD = 'testpassword123';
 
-const ALICE_ID = '11111111-1111-1111-1111-111111111111';
-const BOB_ID = '22222222-2222-2222-2222-222222222222';
+const TEST_USER_EMAILS = [ALICE_EMAIL, BOB_EMAIL] as const;
 
-const TEST_USERS = [
-  { email: ALICE_EMAIL, id: ALICE_ID },
-  { email: BOB_EMAIL, id: BOB_ID },
-];
+/** Stable primary keys for seeded bank rows (tests may restore these ids). */
+const ALICE_BANK_ID = 'd1111111-1111-1111-1111-111111111111';
+const BOB_BANK_ID = 'd2222222-2222-2222-2222-222222222222';
 
 export default async function globalSetup() {
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
@@ -26,50 +24,84 @@ export default async function globalSetup() {
 
   const { data: existingUsers } = await supabase.auth.admin.listUsers();
 
-  for (const testUser of TEST_USERS) {
-    const exists = existingUsers?.users?.some((u) => u.email === testUser.email);
+  for (const email of TEST_USER_EMAILS) {
+    const exists = existingUsers?.users?.some((u) => u.email === email);
     if (!exists) {
       const { error } = await supabase.auth.admin.createUser({
-        email: testUser.email,
+        email,
         password: TEST_PASSWORD,
         email_confirm: true,
       });
       if (error) {
-        throw new Error(`Failed to create test user ${testUser.email}: ${error.message}`);
+        throw new Error(`Failed to create test user ${email}: ${error.message}`);
       }
-      console.log(`Created test user: ${testUser.email}`);
+      console.log(`Created test user: ${email}`);
     }
   }
 
-  await resetSeedData(supabase);
+  const aliceId = await getAuthUserIdByEmail(supabase, ALICE_EMAIL);
+  const bobId = await getAuthUserIdByEmail(supabase, BOB_EMAIL);
+
+  await resetSeedData(supabase, aliceId, bobId);
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-async function resetSeedData(supabase: any) {
-  await supabase.from('wallets').upsert(
+async function getAuthUserIdByEmail(supabase: any, email: string): Promise<string> {
+  const perPage = 200;
+  for (let page = 1; ; page += 1) {
+    const { data, error } = await supabase.auth.admin.listUsers({ page, perPage });
+    if (error) {
+      throw new Error(`listUsers failed: ${error.message}`);
+    }
+    const user = data.users.find(
+      (u: { email?: string | null }) => u.email?.toLowerCase() === email.toLowerCase(),
+    );
+    if (user) {
+      return user.id;
+    }
+    if (data.users.length < perPage) {
+      break;
+    }
+  }
+  throw new Error(`Auth user not found for email: ${email}`);
+}
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+async function resetSeedData(supabase: any, aliceId: string, bobId: string) {
+  await supabase.from('users').upsert(
     [
       {
-        id: 'c1111111-1111-1111-1111-111111111111',
-        user_id: ALICE_ID,
-        balance_minor: 10000,
-        currency: 'USD',
+        id: aliceId,
+        display_name: 'Alice',
+        email: ALICE_EMAIL,
+        phone: '+15551234567',
+        status: 'active',
       },
       {
-        id: 'c2222222-2222-2222-2222-222222222222',
-        user_id: BOB_ID,
-        balance_minor: 5000,
-        currency: 'USD',
+        id: bobId,
+        display_name: 'Bob',
+        email: BOB_EMAIL,
+        phone: '+15559876543',
+        status: 'active',
       },
+    ],
+    { onConflict: 'id' },
+  );
+
+  await supabase.from('wallets').upsert(
+    [
+      { user_id: aliceId, balance_minor: 10000, currency: 'USD' },
+      { user_id: bobId, balance_minor: 5000, currency: 'USD' },
     ],
     { onConflict: 'user_id' },
   );
 
-  await supabase.from('bank_accounts').delete().in('user_id', [ALICE_ID, BOB_ID]);
+  await supabase.from('bank_accounts').delete().in('user_id', [aliceId, bobId]);
 
-  await supabase.from('bank_accounts').upsert([
+  const { error: bankError } = await supabase.from('bank_accounts').upsert([
     {
-      id: 'd1111111-1111-1111-1111-111111111111',
-      user_id: ALICE_ID,
+      id: ALICE_BANK_ID,
+      user_id: aliceId,
       bank_name: 'Test Bank',
       account_number_masked: '••••1001',
       balance_minor: 1000000,
@@ -77,8 +109,8 @@ async function resetSeedData(supabase: any) {
       is_guest: false,
     },
     {
-      id: 'd2222222-2222-2222-2222-222222222222',
-      user_id: BOB_ID,
+      id: BOB_BANK_ID,
+      user_id: bobId,
       bank_name: 'Test Bank',
       account_number_masked: '••••2002',
       balance_minor: 1000000,
@@ -86,4 +118,8 @@ async function resetSeedData(supabase: any) {
       is_guest: false,
     },
   ]);
+
+  if (bankError) {
+    throw new Error(`bank_accounts seed failed: ${bankError.message}`);
+  }
 }
