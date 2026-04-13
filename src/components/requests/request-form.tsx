@@ -1,10 +1,11 @@
 'use client';
 
-import { useState, useTransition } from 'react';
+import { useRef, useState, useTransition } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { MoneyInput } from '@/components/ui/money-input';
 import { ErrorMessage } from '@/components/ui/error-message';
-import { cn, parseAmountToMinor, sanitizeAmountInput } from '@/lib/utils';
+import { cn } from '@/lib/utils';
 import {
   NOTE_MAX_LENGTH,
   AMOUNT_MIN_MINOR,
@@ -26,27 +27,17 @@ export function RequestForm({ onSubmit }: RequestFormProps) {
   const [recipientType, setRecipientType] = useState<RecipientType>('email');
   const [recipientValue, setRecipientValue] = useState('');
   const [amountDisplay, setAmountDisplay] = useState('');
+  const amountMinorRef = useRef(0);
   const [note, setNote] = useState('');
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
   const [generalError, setGeneralError] = useState('');
   const [isPending, startTransition] = useTransition();
 
-  function handleAmountChange(value: string) {
-    const sanitized = sanitizeAmountInput(value);
-    if (sanitized === null) return;
-    setAmountDisplay(sanitized);
-    setFieldErrors((prev) => {
-      const next = { ...prev };
-      delete next.amountMinor;
-      return next;
-    });
-  }
-
   function handleSubmit() {
     setFieldErrors({});
     setGeneralError('');
 
-    const amountMinor = parseAmountToMinor(amountDisplay);
+    const amountMinor = amountMinorRef.current;
 
     if (amountMinor < AMOUNT_MIN_MINOR) {
       setFieldErrors({ amountMinor: 'Minimum amount is $0.01' });
@@ -91,34 +82,24 @@ export function RequestForm({ onSubmit }: RequestFormProps) {
         <ErrorMessage message={generalError} onDismiss={() => setGeneralError('')} />
       )}
 
-      {/* Amount Input — editorial style inspired by Stitch design */}
-      <div className="bg-white p-5 sm:p-6 rounded-2xl shadow-sm flex flex-col items-start gap-3">
-        <label className="text-xs font-medium uppercase tracking-wide text-slate-500">
-          Amount to request
-        </label>
-        <div className="flex items-center gap-1.5 w-full">
-          <span className="font-[family-name:var(--font-manrope)] font-bold text-2xl sm:text-3xl text-indigo-600 leading-none">
-            $
-          </span>
-          <input
-            type="text"
-            inputMode="decimal"
-            placeholder="0.00"
-            value={amountDisplay}
-            onChange={(e) => handleAmountChange(e.target.value)}
-            aria-label="Amount in dollars"
-            aria-invalid={!!fieldErrors.amountMinor}
-            className={cn(
-              'w-full bg-transparent border-none p-0 font-[family-name:var(--font-manrope)] font-bold text-2xl sm:text-3xl leading-none text-foreground focus:ring-0 focus:outline-none placeholder:text-outline-variant',
-              fieldErrors.amountMinor && 'text-rose-600',
-            )}
-          />
-        </div>
-        {fieldErrors.amountMinor && (
-          <p className="text-sm text-rose-600" role="alert">
-            {fieldErrors.amountMinor}
-          </p>
-        )}
+      <div className="bg-white p-5 sm:p-6 rounded-2xl shadow-sm">
+        <MoneyInput
+          variant="hero"
+          label="Amount to request"
+          value={amountDisplay}
+          onValueChange={(v) => {
+            setAmountDisplay(v);
+            setFieldErrors((prev) => {
+              const next = { ...prev };
+              delete next.amountMinor;
+              return next;
+            });
+          }}
+          onMinorChange={(cents) => {
+            amountMinorRef.current = cents;
+          }}
+          error={fieldErrors.amountMinor}
+        />
       </div>
 
       {/* Form Fields */}

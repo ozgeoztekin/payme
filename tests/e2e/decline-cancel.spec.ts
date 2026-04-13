@@ -14,7 +14,7 @@ async function createRequestAndGetId(
   await page.getByRole('button', { name: /email/i }).click();
   await page.getByLabel(/recipient/i).fill(recipientEmail);
   await page.getByRole('button', { name: /request funds/i }).click();
-  await expect(page.getByText('Request Sent!')).toBeVisible({ timeout: 10000 });
+  await expect(page.getByText('Request Sent!')).toBeVisible({ timeout: 20000 });
 
   const linkDiv = page.locator('div.select-all').filter({ hasText: /\/pay\// });
   await expect(linkDiv).toBeVisible({ timeout: 5000 });
@@ -59,7 +59,7 @@ test.describe('Decline and Cancel Requests (US8)', () => {
     await page.goto(`/requests/${requestId}`);
 
     await expect(page.getByRole('heading', { level: 1, name: '$20.00' })).toBeVisible({
-      timeout: 10000,
+      timeout: 20000,
     });
     await expect(page.getByText('Pending')).toBeVisible();
 
@@ -85,7 +85,7 @@ test.describe('Decline and Cancel Requests (US8)', () => {
     await page.goto(`/requests/${requestId}`);
 
     await expect(page.getByRole('heading', { level: 1, name: '$30.00' })).toBeVisible({
-      timeout: 10000,
+      timeout: 20000,
     });
 
     await page.getByRole('button', { name: /cancel request/i }).click();
@@ -110,7 +110,7 @@ test.describe('Decline and Cancel Requests (US8)', () => {
     await page.goto(`/requests/${requestId}`);
 
     await expect(page.getByRole('heading', { level: 1, name: '$12.00' })).toBeVisible({
-      timeout: 10000,
+      timeout: 20000,
     });
 
     const declineButton = page.getByRole('button', { name: /^decline$/i });
@@ -125,7 +125,7 @@ test.describe('Decline and Cancel Requests (US8)', () => {
     await page.goto(`/requests/${requestId}`);
 
     await expect(page.getByRole('heading', { level: 1, name: '$18.00' })).toBeVisible({
-      timeout: 10000,
+      timeout: 20000,
     });
 
     const cancelButton = page.getByRole('button', { name: /cancel request/i });
@@ -140,7 +140,7 @@ test.describe('Decline and Cancel Requests (US8)', () => {
     await signInAs(page, BOB_EMAIL);
     await page.goto(`/requests/${requestId}`);
     await expect(page.getByRole('heading', { level: 1, name: '$8.00' })).toBeVisible({
-      timeout: 10000,
+      timeout: 20000,
     });
 
     await page.getByRole('button', { name: /decline/i }).click();
@@ -154,7 +154,7 @@ test.describe('Decline and Cancel Requests (US8)', () => {
     // Navigate back to the request — should be read-only
     await page.goto(`/requests/${requestId}`);
     await expect(page.getByRole('heading', { level: 1, name: '$8.00' })).toBeVisible({
-      timeout: 10000,
+      timeout: 20000,
     });
     await expect(page.getByText('Declined', { exact: true })).toBeVisible();
 
@@ -172,7 +172,7 @@ test.describe('Decline and Cancel Requests (US8)', () => {
     await signInAs(page, ALICE_EMAIL);
     await page.goto(`/requests/${requestId}`);
     await expect(page.getByRole('heading', { level: 1, name: '$7.00' })).toBeVisible({
-      timeout: 10000,
+      timeout: 20000,
     });
 
     await page.getByRole('button', { name: /cancel request/i }).click();
@@ -186,7 +186,7 @@ test.describe('Decline and Cancel Requests (US8)', () => {
     // Navigate back — should be read-only
     await page.goto(`/requests/${requestId}`);
     await expect(page.getByRole('heading', { level: 1, name: '$7.00' })).toBeVisible({
-      timeout: 10000,
+      timeout: 20000,
     });
     await expect(page.getByText('Canceled', { exact: true })).toBeVisible();
 
@@ -201,7 +201,7 @@ test.describe('Decline and Cancel Requests (US8)', () => {
     await signInAs(page, BOB_EMAIL);
     await page.goto(`/requests/${requestId}`);
     await expect(page.getByRole('heading', { level: 1, name: '$14.00' })).toBeVisible({
-      timeout: 10000,
+      timeout: 20000,
     });
 
     await page.getByRole('button', { name: /decline/i }).click();

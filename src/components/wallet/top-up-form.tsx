@@ -1,12 +1,13 @@
 'use client';
 
-import { useState, useTransition } from 'react';
+import { useRef, useState, useTransition } from 'react';
 import { Card } from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
+import { MoneyInput } from '@/components/ui/money-input';
 import { Button } from '@/components/ui/button';
 import { ErrorMessage } from '@/components/ui/error-message';
 import { topUpWallet } from '@/lib/actions/wallet-actions';
-import { formatMinor, parseAmountToMinor, sanitizeAmountInput } from '@/lib/utils';
+import { formatMinor } from '@/lib/utils';
+import { formatUsdBlur } from '@/lib/money';
 import type { BankAccountRow } from '@/lib/types/database';
 
 const QUICK_AMOUNTS = [1000, 2500, 5000, 10000];
@@ -19,20 +20,15 @@ export function TopUpForm({
   onSuccess?: (data: { walletBalance: number; bankBalance: number }) => void;
 }) {
   const [amountStr, setAmountStr] = useState('');
+  const amountMinorRef = useRef(0);
   const [error, setError] = useState<string | null>(null);
   const [successMsg, setSuccessMsg] = useState<string | null>(null);
   const [isPending, startTransition] = useTransition();
 
-  function handleAmountChange(value: string) {
-    const sanitized = sanitizeAmountInput(value);
-    if (sanitized === null) return;
-    setAmountStr(sanitized);
-    setError(null);
-    setSuccessMsg(null);
-  }
-
   function setQuickAmount(cents: number) {
-    setAmountStr((cents / 100).toFixed(2));
+    const display = formatUsdBlur((cents / 100).toFixed(2));
+    setAmountStr(display);
+    amountMinorRef.current = cents;
     setError(null);
     setSuccessMsg(null);
   }
@@ -41,7 +37,7 @@ export function TopUpForm({
     setError(null);
     setSuccessMsg(null);
 
-    const amountMinor = parseAmountToMinor(amountStr);
+    const amountMinor = amountMinorRef.current;
 
     if (amountMinor < 1) {
       setError('Please enter a valid amount (minimum $0.01)');
@@ -92,14 +88,19 @@ export function TopUpForm({
       </div>
 
       <div className="mt-4">
-        <Input
+        <MoneyInput
+          variant="field"
           label="Amount"
           name="topUpAmount"
-          type="text"
-          inputMode="decimal"
-          placeholder="0.00"
           value={amountStr}
-          onChange={(e) => handleAmountChange(e.target.value)}
+          onValueChange={(v) => {
+            setAmountStr(v);
+            setError(null);
+            setSuccessMsg(null);
+          }}
+          onMinorChange={(cents) => {
+            amountMinorRef.current = cents;
+          }}
           disabled={isPending}
           helpText={`Available: ${formatMinor(bankAccount.balance_minor, bankAccount.currency)}`}
         />

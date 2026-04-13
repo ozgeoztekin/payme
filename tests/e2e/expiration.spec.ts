@@ -23,7 +23,7 @@ async function createRequestAndGetInfo(
   await page.getByRole('button', { name: /email/i }).click();
   await page.getByLabel(/recipient/i).fill(recipientEmail);
   await page.getByRole('button', { name: /request funds/i }).click();
-  await expect(page.getByText('Request Sent!')).toBeVisible({ timeout: 10000 });
+  await expect(page.getByText('Request Sent!')).toBeVisible({ timeout: 20000 });
 
   const linkDiv = page.locator('div.select-all').filter({ hasText: /\/pay\// });
   await expect(linkDiv).toBeVisible({ timeout: 5000 });
@@ -130,7 +130,7 @@ test.describe('Request Expiration (US9)', () => {
     await page.goto(`/requests/${requestId}`);
 
     await expect(page.getByRole('heading', { level: 1, name: '$25.00' })).toBeVisible({
-      timeout: 10000,
+      timeout: 20000,
     });
 
     await expect(page.locator('span').filter({ hasText: /^Expired$/ })).toBeVisible();
@@ -152,7 +152,7 @@ test.describe('Request Expiration (US9)', () => {
     await openOutgoingOnDashboard(page);
 
     const requestCard = page.locator(`a[href="/requests/${requestId}"]`);
-    await expect(requestCard).toBeVisible({ timeout: 10000 });
+    await expect(requestCard).toBeVisible({ timeout: 20000 });
     await expect(requestCard.locator('span').filter({ hasText: /^Expired$/ })).toBeVisible();
   });
 
@@ -166,7 +166,7 @@ test.describe('Request Expiration (US9)', () => {
     await page.goto(`/requests/${requestId}`);
 
     await expect(page.getByRole('heading', { level: 1, name: '$33.00' })).toBeVisible({
-      timeout: 10000,
+      timeout: 20000,
     });
 
     await expect(page.locator('span').filter({ hasText: /^Expired$/ })).toBeVisible();

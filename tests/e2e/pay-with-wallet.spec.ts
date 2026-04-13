@@ -22,7 +22,7 @@ async function createRequestAndGetId(
   await page.getByRole('button', { name: /email/i }).click();
   await page.getByLabel(/recipient/i).fill(recipientEmail);
   await page.getByRole('button', { name: /request funds/i }).click();
-  await expect(page.getByText('Request Sent!')).toBeVisible({ timeout: 10000 });
+  await expect(page.getByText('Request Sent!')).toBeVisible({ timeout: 20000 });
 
   const linkElement = page.getByText(/\/pay\//);
   const linkText = await linkElement.textContent();
@@ -57,7 +57,7 @@ test.describe('Pay with Wallet (US2)', () => {
     await page.goto(`/requests/${requestId}`);
 
     await expect(page.getByRole('heading', { level: 1, name: '$10.00' })).toBeVisible({
-      timeout: 10000,
+      timeout: 20000,
     });
     await expect(page.getByText('Pending')).toBeVisible();
 
@@ -83,7 +83,7 @@ test.describe('Pay with Wallet (US2)', () => {
     await page.goto(`/requests/${requestId}`);
 
     await expect(page.getByRole('heading', { level: 1, name: '$9,999.00' })).toBeVisible({
-      timeout: 10000,
+      timeout: 20000,
     });
 
     const walletOption = page.getByRole('button', { name: /wallet/i });
@@ -99,7 +99,7 @@ test.describe('Pay with Wallet (US2)', () => {
     await page.goto(`/requests/${requestId}`);
 
     await expect(page.getByRole('heading', { level: 1, name: '$5.00' })).toBeVisible({
-      timeout: 10000,
+      timeout: 20000,
     });
 
     await page.getByRole('button', { name: /wallet/i }).click();

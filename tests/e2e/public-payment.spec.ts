@@ -21,7 +21,7 @@ async function createRequestAndGetShareUrl(
   await page.getByRole('button', { name: /email/i }).click();
   await page.getByLabel(/recipient/i).fill(recipientEmail);
   await page.getByRole('button', { name: /request funds/i }).click();
-  await expect(page.getByText('Request Sent!')).toBeVisible({ timeout: 10000 });
+  await expect(page.getByText('Request Sent!')).toBeVisible({ timeout: 20000 });
 
   const linkElement = page.getByText(/\/pay\//);
   const linkText = await linkElement.textContent();

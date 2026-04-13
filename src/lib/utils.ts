@@ -1,4 +1,9 @@
 import { CURRENCY_EXPONENTS, DEFAULT_CURRENCY } from '@/lib/constants';
+import {
+  parseAmountToMinor as _parseAmountToMinor,
+  normalizeMoneyInput,
+  validateUsdInput,
+} from '@/lib/money';
 
 const formatterCache = new Map<string, Intl.NumberFormat>();
 
@@ -31,28 +36,23 @@ export function cn(...classes: (string | boolean | undefined | null)[]): string 
 }
 
 /**
- * Parse a display-string (e.g. "12.50") to integer minor units for the
- * given currency. Returns 0 for unparseable input.
+ * Parse a display-string (e.g. "12.50", "1,000.50", "1.000,50") to integer
+ * minor units for the given currency. Delegates to the locale-aware money
+ * module. Returns 0 for unparseable input.
  */
 export function parseAmountToMinor(value: string, currency: string = DEFAULT_CURRENCY): number {
-  const cleaned = value.replace(/[^0-9.]/g, '');
-  const major = parseFloat(cleaned);
-  if (isNaN(major)) return 0;
-  const exponent = CURRENCY_EXPONENTS[currency] ?? 2;
-  return Math.round(major * 10 ** exponent);
+  return _parseAmountToMinor(value, currency);
 }
 
 /**
- * Sanitise a free-text amount input: strip non-numeric chars except
- * a single decimal point, and limit to 2 decimal places.
- * Returns the cleaned string (or the previous value if the edit is invalid).
+ * Sanitise a free-text amount input: normalize mixed-locale separators,
+ * allow at most one decimal point and 2 fractional digits.
+ * Returns the cleaned canonical string, or `null` to reject the edit.
  */
 export function sanitizeAmountInput(value: string): string | null {
-  const cleaned = value.replace(/[^0-9.]/g, '');
-  const parts = cleaned.split('.');
-  if (parts.length > 2) return null;
-  if (parts[1] && parts[1].length > 2) return null;
-  return cleaned;
+  const canonical = normalizeMoneyInput(value);
+  if (canonical === null) return null;
+  return validateUsdInput(canonical);
 }
 
 const STATUS_LABELS: Record<string, string> = {
